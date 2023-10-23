@@ -29,9 +29,8 @@ type SDTxt2ImgArgs struct {
 	CFGScale       int64  `json:"cfg_scale"`
 }
 
-func postSDTxt2Img(paras SDTxt2ImgArgs) (jmap, error) {
+func PostSDTxt2Img(paras SDTxt2ImgArgs) (jmap, error) {
 	r := make(jmap)
-	url := ""
 
 	requestBody, err := json.Marshal(paras)
 	if err != nil {
@@ -39,25 +38,41 @@ func postSDTxt2Img(paras SDTxt2ImgArgs) (jmap, error) {
 		return nil, err
 	}
 
-	response, err := http.Post(url, "application/json", bytes.NewBuffer(requestBody))
+	response, err := http.Post(Text2ImgURL, "application/json", bytes.NewBuffer(requestBody))
 	if err != nil {
 		fmt.Println("HTTP POST request failed:", err)
 		return nil, err
 	}
 	defer response.Body.Close()
 
-	responseData := make([]byte, 4096)
-	_, err = response.Body.Read(responseData)
+	err = json.NewDecoder(response.Body).Decode(&r)
 	if err != nil {
-		fmt.Println("Error reading response:", err)
-		return nil, err
-	}
-	err = json.Unmarshal(responseData, &r)
-	if err != nil {
-		fmt.Println("Error Unmarshal response:", err)
+		fmt.Println("Error decoding JSON response:", err)
 		return nil, err
 	}
 
 	return r, nil
+}
 
+func GetLoras() (jmap, error) {
+	var (
+		loras jarray
+	)
+	r := make(jmap)
+	response, err := http.Get(LoraURL)
+	if err != nil {
+		fmt.Println("HTTP Get request failed:", err)
+		return nil, err
+	}
+	defer response.Body.Close()
+
+	err = json.NewDecoder(response.Body).Decode(&loras)
+	if err != nil {
+		fmt.Println("Error decoding JSON response:", err)
+		return nil, err
+	}
+	r["loras"] = loras
+	r["count"] = len(loras)
+
+	return r, nil
 }

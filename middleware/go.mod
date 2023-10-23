@@ -6,7 +6,11 @@ require github.com/beego/beego/v2 v2.1.0
 
 require github.com/smartystreets/goconvey v1.8.1
 
+require gopkg.in/yaml.v2 v2.4.0 // indirect
+
 require (
+	github.com/astaxie/beego v1.12.3
+	github.com/beego/beego v1.12.12
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/cespare/xxhash/v2 v2.2.0 // indirect
 	github.com/golang/protobuf v1.5.3 // indirect

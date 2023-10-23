@@ -1,37 +1,33 @@
 package models
 
 import (
-	"bytes"
-	"encoding/json"
+	"context"
 	"fmt"
-	"net/http"
+
+	openai "github.com/sashabaranov/go-openai"
 )
 
-func postChatGPT(query string) (error, jmap) {
+func PostGPT3Dot5Turbo(query string) (jmap, error) {
 	r := make(jmap)
-	// 创建一个 JSON 数据作为请求体
-	requestBody := []byte(`{"key1": "value1", "key2": "value2"}`)
 
-	// 发送 POST 请求
-	response, err := http.Post("https://example.com/api/endpoint", "application/json", bytes.NewBuffer(requestBody))
-	if err != nil {
-		fmt.Println("HTTP POST request failed:", err)
-		return err, nil
-	}
-	defer response.Body.Close()
+	resp, err := OpenAIClient.CreateChatCompletion(
+		context.Background(),
+		openai.ChatCompletionRequest{
+			Model: openai.GPT3Dot5Turbo,
+			Messages: []openai.ChatCompletionMessage{
+				{
+					Role:    openai.ChatMessageRoleUser,
+					Content: query,
+				},
+			},
+		},
+	)
 
-	// 读取响应
-	responseData := make([]byte, 4096)
-	_, err = response.Body.Read(responseData)
 	if err != nil {
-		fmt.Println("Error reading response:", err)
-		return err, nil
-	}
-	err = json.Unmarshal(responseData, &r)
-	if err != nil {
-		fmt.Println("Error Unmarshal response:", err)
-		return err, nil
+		fmt.Printf("ChatCompletion error: %v\n", err)
+		return nil, err
 	}
 
-	return nil, r
+	r["chat"] = resp.Choices[0].Message.Content
+	return r, nil
 }

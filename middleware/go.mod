@@ -25,6 +25,7 @@ require (
 	github.com/prometheus/client_model v0.3.0 // indirect
 	github.com/prometheus/common v0.42.0 // indirect
 	github.com/prometheus/procfs v0.9.0 // indirect
+	github.com/sashabaranov/go-openai v1.16.0
 	github.com/shiena/ansicolor v0.0.0-20200904210342-c7312218db18 // indirect
 	github.com/smarty/assertions v1.15.0 // indirect
 	golang.org/x/crypto v0.14.0 // indirect

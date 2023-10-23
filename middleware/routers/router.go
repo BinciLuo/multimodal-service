@@ -14,6 +14,12 @@ func init() {
 				&controllers.PicturesController{},
 			),
 		),
+
+		beego.NSNamespace("/chat",
+			beego.NSInclude(
+				&controllers.ChatController{},
+			),
+		),
 	)
 
 	beego.AddNamespace(ns)

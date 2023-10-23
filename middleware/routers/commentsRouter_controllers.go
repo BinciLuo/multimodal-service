@@ -12,7 +12,7 @@ func init() {
 
 	log.Println("---- LSPOPRUNENV: ", os.Getenv("LSPOPRUNENV"))
 	/*
-		/pics/txt2img
+		/pics
 	*/
 
 	beego.GlobalControllerRouter["middleware/controllers:PicturesController"] = append(beego.GlobalControllerRouter["middleware/controllers:PicturesController"],
@@ -29,6 +29,18 @@ func init() {
 			Method:           "GetLoras",
 			Router:           "/loras",
 			AllowHTTPMethods: []string{"get"},
+			MethodParams:     param.Make(),
+			Filters:          nil,
+			Params:           nil})
+	/*
+		/chat
+	*/
+
+	beego.GlobalControllerRouter["middleware/controllers:ChatController"] = append(beego.GlobalControllerRouter["middleware/controllers:ChatController"],
+		beego.ControllerComments{
+			Method:           "PostGPT3Dot5Turbo",
+			Router:           "/gpt3dot5turbo",
+			AllowHTTPMethods: []string{"post"},
 			MethodParams:     param.Make(),
 			Filters:          nil,
 			Params:           nil})

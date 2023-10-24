@@ -1,16 +1,11 @@
 package routers
 
 import (
-	"log"
-	"os"
-
 	beego "github.com/beego/beego/v2/server/web"
 	"github.com/beego/beego/v2/server/web/context/param"
 )
 
 func init() {
-
-	log.Println("---- LSPOPRUNENV: ", os.Getenv("LSPOPRUNENV"))
 	/*
 		/pics
 	*/

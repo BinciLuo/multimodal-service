@@ -10,9 +10,7 @@ type jmap = map[string]interface{}
 type jset = map[string]bool
 
 var (
-	ChatBotURL   string
-	ChatBotAK    string
-	ChatBotSK    string
+	GlmChatURL   string
 	Text2ImgURL  string
 	LoraURL      string
 	OpenAIClient *openai.Client

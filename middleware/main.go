@@ -15,5 +15,7 @@ func main() {
 	models.LoraURL = SDURL + "/sdapi/v1/loras"
 	OpenAIToken, _ := config.String("OpenAIToken")
 	models.OpenAIClient = openai.NewClient(OpenAIToken)
+	GlmServer, _ := config.String("GLMSERVER")
+	models.GlmChatURL = GlmServer + "/chat/chatglm2-6b"
 	beego.Run()
 }

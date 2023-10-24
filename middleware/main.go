@@ -13,7 +13,11 @@ func main() {
 	SDURL, _ := config.String("SDURL")
 	models.Text2ImgURL = SDURL + "/sdapi/v1/txt2img"
 	models.LoraURL = SDURL + "/sdapi/v1/loras"
-	OpenAIToken, _ := config.String("OpenAIToken")
+	OpenAIToken1, _ := config.String("OpenAIToken1")
+	OpenAIToken2, _ := config.String("OpenAIToken2")
+	OpenAIToken3, _ := config.String("OpenAIToken3")
+	OpenAIToken := OpenAIToken1 + OpenAIToken2 + OpenAIToken3
+
 	models.OpenAIClient = openai.NewClient(OpenAIToken)
 	GlmServer, _ := config.String("GLMSERVER")
 	models.GlmChatURL = GlmServer + "/chat/chatglm2-6b"

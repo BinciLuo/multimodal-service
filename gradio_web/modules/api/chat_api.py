@@ -2,7 +2,9 @@ import json
 import requests
 
 
-def chat(model_name: str, query: str, model_info: dict, sever_url:str) -> (str, Exception):
+def chat(model_name: str, query: str, sever_url:str) -> (str, Exception):
+    with open("config/chat_models.json", 'r') as json_file:
+                model_info:dict = json.load(json_file)
     if model_name not in model_info.keys():
         return "",Exception("model_name not found")
     if "route" not in model_info[model_name].keys():
@@ -16,6 +18,7 @@ def chat(model_name: str, query: str, model_info: dict, sever_url:str) -> (str, 
         return response_json["chat"],None
     
     except Exception as e:
+        print("chat error",type(e))
         return "", e
     
     

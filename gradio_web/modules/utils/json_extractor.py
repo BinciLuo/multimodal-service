@@ -32,7 +32,6 @@ def extract_jarray(process_string:str):
             continue
         if sum > 0:
             match_str+=char
-    
     for each in match_strs:
         try:
             jarray_item = json.loads(each)

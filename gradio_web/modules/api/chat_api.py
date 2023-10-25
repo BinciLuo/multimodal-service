@@ -12,13 +12,15 @@ def chat(model_name: str, query: str, sever_url:str) -> (str, Exception):
     
     post_data = {"query": query}
 
+    response=requests.post(sever_url+model_info[model_name]["route"], data=json.dumps(post_data))
+    if response.status_code != 200:
+        return "",Exception(f"server is not running, status code : {response.status_code}") 
     try:
-        response=requests.post(sever_url+model_info[model_name]["route"], data=json.dumps(post_data))
         response_json = response.json()
         return response_json["chat"],None
     
     except Exception as e:
-        print("chat error",type(e))
+        print("chat error",e)
         return "", e
     
     

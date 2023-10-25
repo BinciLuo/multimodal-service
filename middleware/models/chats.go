@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"strconv"
 
 	openai "github.com/sashabaranov/go-openai"
 )
@@ -50,6 +51,10 @@ func PostChatGLM2_6B(params jmap) (jmap, error) {
 	}
 	defer response.Body.Close()
 
+	if response.StatusCode != 200 {
+		r["chat"] = " PostChatGLM2_6B not avliable, status code : " + strconv.Itoa(response.StatusCode)
+		return r, nil
+	}
 	err = json.NewDecoder(response.Body).Decode(&r)
 	if err != nil {
 		log.Println("[models/PostChatGLM2_6] Error decoding JSON response:", err)

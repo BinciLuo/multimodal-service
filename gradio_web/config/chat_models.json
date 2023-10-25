@@ -1,0 +1,10 @@
+{
+    "gpt3dot5turbo":
+    {
+        "route":"/v1/chat/gpt3dot5turbo"
+    },
+    "glm2_6b":
+    {
+        "route":"/v1/chat/glm2_6b"
+    }
+}

@@ -26,5 +26,12 @@
         "paras_enum" : null,
         "paras_min":0.0,
         "paras_max":1.0
+    },
+    "others":
+    {
+        "paras_type" : "<class 'str'>",
+        "paras_enum" : null,
+        "paras_min":null,
+        "paras_max":null
     }
 }

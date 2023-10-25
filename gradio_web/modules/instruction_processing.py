@@ -35,12 +35,24 @@ def check_instruction(pattern_dict:dict,instruction:dict):
     return True
 
 def extract_instructions(pattern_file_path:str, string:str):
+    """
+    This method extract checked instructions from string
+
+    Args:
+        pattern_file_path(str) : path of the pattern file
+        string(str) : string to extract
+
+    Returns:
+        List[dict] : extracted instructions
+    """
     instructions = []
     jarrays_list = extract_jarray(string)
 
     with open(pattern_file_path, 'r') as json_file:
-        pattern_dict = json.load(json_file)
-    
+        pattern_dict:dict = json.load(json_file)
+
+    # TODO : Check if the pattern_dict invalid
+
     for instraction_list in jarrays_list:
         if type(instraction_list) != list:
             continue

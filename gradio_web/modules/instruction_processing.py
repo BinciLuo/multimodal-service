@@ -1,4 +1,4 @@
-from utils.json_extractor import extract_jarray
+from modules.utils.json_extractor import extract_jarray
 import json
 
 def check_instruction(pattern_dict:dict,instruction:dict):

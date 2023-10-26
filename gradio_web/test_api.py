@@ -9,4 +9,5 @@
 
 import tests.test_api as test_package
 
-test_package.test()
+test_package.test_chat()
+test_package.test_txt2img()

@@ -1,0 +1,6 @@
+{
+    "txt2img" :
+    {
+        "route":"/v1/pics/txt2img"
+    }
+}

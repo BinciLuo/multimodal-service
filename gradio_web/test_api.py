@@ -11,3 +11,5 @@ import tests.test_api as test_package
 
 test_package.test_chat()
 test_package.test_txt2img()
+test_package.test_loras()
+test_package.test_img2img()

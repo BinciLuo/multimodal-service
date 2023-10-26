@@ -12,6 +12,7 @@ import (
 func main() {
 	SDURL, _ := config.String("SDURL")
 	models.Text2ImgURL = SDURL + "/sdapi/v1/txt2img"
+	models.Img2ImgURL = SDURL + "/sdapi/v1/img2img"
 	models.LoraURL = SDURL + "/sdapi/v1/loras"
 	OpenAIToken1, _ := config.String("OpenAIToken1")
 	OpenAIToken2, _ := config.String("OpenAIToken2")

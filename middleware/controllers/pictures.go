@@ -32,6 +32,26 @@ func (c *PicturesController) PostSDTxt2Img() {
 
 }
 
+func (c *PicturesController) PostSDImg2Img() {
+	var (
+		body models.SDImg2ImgArgs
+	)
+
+	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &body); err != nil {
+		fmt.Println(err)
+		c.Abort("RequestParams")
+	}
+
+	r, err := models.PostSDImg2Img(body)
+	if err != nil {
+		c.Abort("PicturesControllerError")
+	}
+
+	c.Data["json"] = r
+	c.ServeJSON()
+
+}
+
 func (c *PicturesController) GetLoras() {
 	r, err := models.GetLoras()
 	if err != nil {

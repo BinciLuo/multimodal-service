@@ -1,8 +1,12 @@
+import base64
 import gradio as gr
 import json
 import mdtex2html
 from modules.api.chat_api import chat
 from modules.instruction_processing import extract_instructions
+from modules.api.pics_api import txt2img
+from PIL import Image
+from io import BytesIO
 # 加载全局变量
 """
 
@@ -23,6 +27,9 @@ commands = []
 """
 
 def chat_process(inputs, model_name, chatbot):
+    """
+    submitBtn process function
+    """
     infer_text = inputs
     chatbot.append((input,""))
     answer, e = chat(model_name, infer_text, SERVER_URL)
@@ -30,18 +37,33 @@ def chat_process(inputs, model_name, chatbot):
 
     yield chatbot, None
 
-def extract_chat(chatbot,command_dropdown):
+def extract_chat_process(chatbot,command_dropdown):
+    """
+    extractBtn process function
+    """
     ori_last_chat = chatbot[-1]
     extracted_commands = extract_instructions(PATTERN_FILE_PATH,ori_last_chat[1])
     commands.extend([json.dumps(cmd) for cmd in extracted_commands])
     chatbot.append(("",""))
-    extracted_commands_string = json.dumps(extracted_commands,ensure_ascii=False)
+    extracted_commands_string = ""
+    for cmd in extracted_commands:
+        extracted_commands_string += f'操作为: {cmd["command"]} 参数为: {cmd["paras"]}\n'
+    #extracted_commands_string = json.dumps(extracted_commands,ensure_ascii=False)
+
+    
     chatbot[-1] = ("抽取的指令如下",extracted_commands_string)
     print(commands)
-    command_dropdown = gr.Dropdown(choices=commands, type='value', label="command", multiselect=True)
+    command_dropdown = gr.Dropdown(choices=[f'操作为: {json.loads(cmd)["command"]} 参数为: {json.loads(cmd)["paras"]}' for cmd in commands], type='index', label="command", multiselect=True)
     
 
     yield chatbot, command_dropdown
+
+def generate_pic_process(query: str, loras:list[str]=[], width:int=512, height:int = 512):
+    pic_string, e = txt2img(query, loras=[], width=512, height=512)
+    #image = Image.open(BytesIO(pic_string.encode('utf-8')))
+    image = Image.open(BytesIO(base64.b64decode(pic_string)))
+    image_show = gr.Image(value=image ,type='pil')
+    return image_show
 
 
 # GRADIO
@@ -69,10 +91,12 @@ def reset_state():
 with gr.Blocks() as demo:
     gr.HTML("""<h1 align="center">Test</h1>""")
     with gr.Row():
+        with gr.Column(scale=10):
+            chatbot = gr.Chatbot(height=720)
         with gr.Column(scale=6):
-            chatbot = gr.Chatbot()
-        with gr.Column(scale=6):
-            command_dropdown = gr.Dropdown(choices=commands, type='value', label="command", multiselect=True)
+            image_show = gr.Image(type='pil')
+            txt2img_input = gr.Textbox(show_label=False, placeholder="输入生成图像指令", lines=1,container=False,show_copy_button=True)
+            picGenBtn = gr.Button("Generate a Picture")
     with gr.Row():
         with gr.Column(scale=4):
             with gr.Column(scale=12):
@@ -83,6 +107,7 @@ with gr.Blocks() as demo:
             emptyBtn = gr.Button("Clear History")
             model_select_box = gr.Dropdown(choices=chat_models.keys(), type='value', label="model")
             extractBtn = gr.Button("Extract Instruction")
+            command_dropdown = gr.Dropdown(choices=commands, type='value', label="command", multiselect=True)
 
     history = gr.State([])
 
@@ -92,7 +117,9 @@ with gr.Blocks() as demo:
 
     emptyBtn.click(reset_state, outputs=[chatbot, history], show_progress=True)
 
-    extractBtn.click(extract_chat, [chatbot,command_dropdown], [chatbot,command_dropdown], show_progress=True)
+    extractBtn.click(extract_chat_process, [chatbot,command_dropdown], [chatbot,command_dropdown], show_progress=True)
+
+    picGenBtn.click(generate_pic_process,[txt2img_input],[image_show],show_progress=True)
 
     
 

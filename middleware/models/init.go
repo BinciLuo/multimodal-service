@@ -12,6 +12,7 @@ type jset = map[string]bool
 var (
 	GlmChatURL   string
 	Text2ImgURL  string
+	Img2ImgURL   string
 	LoraURL      string
 	OpenAIClient *openai.Client
 )

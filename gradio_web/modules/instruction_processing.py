@@ -51,8 +51,6 @@ def extract_instructions(pattern_file_path:str, string:str):
     with open(pattern_file_path, 'r') as json_file:
         pattern_dict:dict = json.load(json_file)
 
-    # TODO : Check if the pattern_dict invalid
-
     for instraction_list in jarrays_list:
         if type(instraction_list) != list:
             continue

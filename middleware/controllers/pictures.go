@@ -14,7 +14,7 @@ type PicturesController struct {
 
 func (c *PicturesController) PostSDTxt2Img() {
 	var (
-		body models.SDTxt2ImgArgs
+		body jmap
 	)
 
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &body); err != nil {
@@ -34,7 +34,7 @@ func (c *PicturesController) PostSDTxt2Img() {
 
 func (c *PicturesController) PostSDImg2Img() {
 	var (
-		body models.SDImg2ImgArgs
+		body jmap
 	)
 
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &body); err != nil {

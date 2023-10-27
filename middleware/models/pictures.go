@@ -41,7 +41,7 @@ type SDImg2ImgArgs struct {
 	CFGScale       int64    `json:"cfg_scale"`
 }
 
-func PostSDTxt2Img(paras SDTxt2ImgArgs) (jmap, error) {
+func PostSDTxt2Img(paras jmap) (jmap, error) {
 	r := make(jmap)
 
 	requestBody, err := json.Marshal(paras)
@@ -66,7 +66,7 @@ func PostSDTxt2Img(paras SDTxt2ImgArgs) (jmap, error) {
 	return r, nil
 }
 
-func PostSDImg2Img(paras SDImg2ImgArgs) (jmap, error) {
+func PostSDImg2Img(paras jmap) (jmap, error) {
 	r := make(jmap)
 
 	requestBody, err := json.Marshal(paras)

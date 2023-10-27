@@ -102,13 +102,6 @@ def change_pic_process(init_img: Image, query: str, loras:list[str]=[], width:in
 
 """
 def postprocess(self, y):
-    # if y is None:
-    #     return []
-    # for i, (message, response) in enumerate(y):
-    #     y[i] = (
-    #         None if message is None else mdtex2html.convert((message)),
-    #         None if response is None else mdtex2html.convert(response),
-    #     )
     return y
 
 gr.Chatbot.postprocess = postprocess

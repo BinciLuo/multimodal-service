@@ -3,11 +3,16 @@ import io
 import gradio as gr
 import json
 import mdtex2html
+from PIL import Image
+from io import BytesIO
+
 from modules.api.chat_api import chat
 from modules.instruction_processing import extract_instructions
 from modules.api.pics_api import post_txt2img,get_loras,post_img2img
-from PIL import Image
-from io import BytesIO
+
+from controllers.chat_controllers import chat_process,extract_chat_process,commands
+from controllers.pics_controller import change_pic_process,generate_pic_process
+
 
 # 加载全局变量
 """
@@ -17,6 +22,8 @@ with open("config/conf.json", 'r') as json_file:
     global_variables:dict = json.load(json_file)
 with open("config/chat_models.json", 'r') as json_file:
     chat_models:dict = json.load(json_file)
+with open("config/sd_templates.json", 'r') as json_file:
+    img_gen_template_dict:dict = json.load(json_file)
 
 SERVER_URL = global_variables["server_url"]
 PATTERN_FILE_PATH = global_variables["pattern_file_path"]
@@ -30,7 +37,6 @@ instruction_prompt_files_info = chat_models["prompt_templates"]["instruction_gen
 }
 """
 
-commands = []
 try:
     loras = get_loras()
     
@@ -44,57 +50,6 @@ except:
 
 """
 
-def chat_process(inputs, model_name, prompt_index=0, chatbot=None):
-    """
-    submitBtn process function
-    """
-    prompt_file_name = instruction_prompt_files_info[prompt_index]["file_path"]
-    with open(prompt_file_name,'r') as f:
-        infer_text = f.read()
-    infer_text = infer_text.replace(instruction_prompt_files_info[prompt_index]["user_input_replace"],inputs)
-    chatbot.append((input,""))
-    answer, e = chat(model_name, infer_text, SERVER_URL)
-    chatbot[-1] = (inputs, answer) if e==None else (inputs, e)
-
-    yield chatbot, None
-
-def extract_chat_process(chatbot,command_dropdown):
-    """
-    extractBtn process function
-    """
-    extracted_commands = extract_instructions(PATTERN_FILE_PATH,chatbot[-1][-1])
-    commands.extend([json.dumps(cmd) for cmd in extracted_commands])
-    extracted_commands_string = ""
-    for cmd in extracted_commands:
-        extracted_commands_string += f'操作为: {cmd["command"]} 参数为: {cmd["paras"]}\n'
-    #extracted_commands_string = json.dumps(extracted_commands,ensure_ascii=False)
-
-    
-    chatbot[-1][-1] = extracted_commands_string if extracted_commands_string != "" else chatbot[-1][-1]
-    print(commands)
-    command_dropdown = gr.Dropdown(choices=[f'操作为: {json.loads(cmd)["command"]} 参数为: {json.loads(cmd)["paras"]}' for cmd in commands], type='index', label="command", multiselect=True)
-    
-
-    yield chatbot, command_dropdown
-
-def generate_pic_process(query: str, loras:list[str]=[], width:int=512, height:int = 512):
-    pic_string, e = post_txt2img(query, loras=loras, width=512, height=512)
-    #image = Image.open(BytesIO(pic_string.encode('utf-8')))
-    image = Image.open(BytesIO(base64.b64decode(pic_string)))
-    image_show = gr.Image(value=image ,type='pil')
-    return image_show
-
-def change_pic_process(init_img: Image, query: str, loras:list[str]=[], width:int=512, height:int = 512):
-    image_bytesio = io.BytesIO()
-    init_img.save(image_bytesio, format="PNG")  # 可以选择其他图像格式
-    init_img_bytes = image_bytesio.getvalue()
-    init_img_str = base64.b64encode(init_img_bytes).decode('utf-8')
-    
-    pic_string, e = post_img2img(init_img_str, query, loras=loras, width=init_img.size[0], height=init_img.size[1])
-    image = Image.open(BytesIO(base64.b64decode(pic_string)))
-    image_show = gr.Image(value=image ,type='pil')
-    return image_show
-
 
 
 # GRADIO
@@ -102,13 +57,6 @@ def change_pic_process(init_img: Image, query: str, loras:list[str]=[], width:in
 
 """
 def postprocess(self, y):
-    # if y is None:
-    #     return []
-    # for i, (message, response) in enumerate(y):
-    #     y[i] = (
-    #         None if message is None else mdtex2html.convert((message)),
-    #         None if response is None else mdtex2html.convert(response),
-    #     )
     return y
 
 gr.Chatbot.postprocess = postprocess
@@ -131,6 +79,7 @@ with gr.Blocks() as demo:
             widthSlider = gr.Slider(0, 1920, value=512, step=1)
             heightSlider = gr.Slider(0, 1080, value=512, step=1)
             lora_dropdown = gr.Dropdown(choices=loras, type='value', label="lora", multiselect=True)
+            img_gen_template_dropdown = gr.Dropdown(choices=img_gen_template_dict.keys(), type='value', label="img template", value="default")
             picGenBtn = gr.Button("Generate a Picture")
             picChangeBtn = gr.Button("Change Picture")
     with gr.Row():
@@ -158,7 +107,7 @@ with gr.Blocks() as demo:
 
     picGenBtn.click(generate_pic_process,[img_input, lora_dropdown, widthSlider, heightSlider],[image_show],show_progress=True)
     
-    picChangeBtn.click(change_pic_process,[image_show, img_input, lora_dropdown, widthSlider, heightSlider], [image_show], show_progress=True)
+    picChangeBtn.click(change_pic_process,[image_show, img_input, lora_dropdown, img_gen_template_dropdown], [image_show], show_progress=True)
     
 
 demo.queue().launch(share=False, inbrowser=True, server_name='0.0.0.0',server_port=27777,debug=True)

@@ -4,7 +4,9 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
+	"strconv"
 )
 
 // post_data={'prompt': prompt_str,
@@ -41,7 +43,7 @@ type SDImg2ImgArgs struct {
 	CFGScale       int64    `json:"cfg_scale"`
 }
 
-func PostSDTxt2Img(paras SDTxt2ImgArgs) (jmap, error) {
+func PostSDTxt2Img(paras jmap) (jmap, error) {
 	r := make(jmap)
 
 	requestBody, err := json.Marshal(paras)
@@ -66,7 +68,7 @@ func PostSDTxt2Img(paras SDTxt2ImgArgs) (jmap, error) {
 	return r, nil
 }
 
-func PostSDImg2Img(paras SDImg2ImgArgs) (jmap, error) {
+func PostSDImg2Img(paras jmap) (jmap, error) {
 	r := make(jmap)
 
 	requestBody, err := json.Marshal(paras)
@@ -81,6 +83,12 @@ func PostSDImg2Img(paras SDImg2ImgArgs) (jmap, error) {
 		return nil, err
 	}
 	defer response.Body.Close()
+
+	if response.StatusCode != 200 {
+		err = fmt.Errorf("PostSDImg2Img failed, status code : " + strconv.Itoa(response.StatusCode))
+		log.Println(err)
+		return nil, err
+	}
 
 	err = json.NewDecoder(response.Body).Decode(&r)
 	if err != nil {

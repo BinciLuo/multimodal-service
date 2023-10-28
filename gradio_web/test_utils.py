@@ -1,0 +1,3 @@
+import tests.test_utils as utils_tester
+
+print(utils_tester.test_form_alwayson_scripts_from_templates_beauty())

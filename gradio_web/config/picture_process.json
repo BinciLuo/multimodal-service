@@ -1,0 +1,14 @@
+{
+    "txt2img" :
+    {
+        "route" : "/v1/pics/txt2img"
+    },
+    "loras" :
+    {
+        "route" : "/v1/pics/loras"
+    },
+    "img2img" :
+    {
+        "route" : "/v1/pics/img2img"
+    }
+}

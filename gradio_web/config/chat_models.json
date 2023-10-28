@@ -1,0 +1,24 @@
+{
+    "models":
+    {
+        "gpt3dot5turbo":
+        {
+            "route":"/v1/chat/gpt3dot5turbo"
+        },
+        "glm2_6b":
+        {
+            "route":"/v1/chat/glm2_6b"
+        }
+    },
+    "prompt_templates":
+    {
+        "instruction_gen":
+        [
+            {
+                "description" : "Give template and examples",
+                "file_path" : "prompts/instruction_generate_prompt.txt",
+                "user_input_replace" : "HERE IS USER INPUT"
+            }
+        ]
+    }
+}

@@ -1,0 +1,37 @@
+{
+    "change background color":
+    {
+        "paras_type" : "<class 'str'>",
+        "paras_enum" : ["red","blue","white","black","gray","green","pink"],
+        "paras_min":null,
+        "paras_max":null
+    },
+    "super resolution":
+    {
+        "paras_type" : "<class 'float'>",
+        "paras_enum" : null,
+        "paras_min":1.0,
+        "paras_max":10.0
+    },
+    "beauty":
+    {
+        "paras_type" : "<class 'int'>",
+        "paras_enum" : null,
+        "paras_min":1,
+        "paras_max":100
+    },
+    "split":
+    {
+        "paras_type" : "<class 'list'>",
+        "paras_enum" : null,
+        "paras_min":0.0,
+        "paras_max":1.0
+    },
+    "others":
+    {
+        "paras_type" : "<class 'str'>",
+        "paras_enum" : null,
+        "paras_min":null,
+        "paras_max":null
+    }
+}

@@ -1,0 +1,45 @@
+现在我给出一段关于图片修改的描述，请将它解析为一串命令，格式为json，不支持的跳过，支持的有：
+[
+    {
+        "command" : "change background color",
+        "paras" : color
+    },
+    {
+        "command" : "super resolution",
+        "paras" : rate
+    },
+    {
+        "command" : "beauty",
+        "paras" : rate
+    },
+    {
+        "command" : "split",
+        "paras" : [ a, b, c, d]
+    },
+]
+其中change background color为更改背景颜色，color为颜色，类型为英文字符串，如"red"
+super resolution为超分辨率，rate为float，如1.5表示超分辨率1.5倍
+beauty为美颜rate表示程度，类型为int，范围为1-100
+split为分割，abcd分别代表(a,b)和(c,d)确认的矩形相对范围，如a,b=0.25, c,d=0.75表示裁剪（1/4，1/4）到（3/4.3/4）
+给我的回答请只包含json array，在json array前后不要任何信息，模版如下：
+[
+    {
+        "command" : "change background color",
+        "paras" : : "red"
+    },
+    {
+        "command" : "super resolution",
+        "paras" : 1.5
+    },
+    {
+        "command" : "beauty",
+        "paras" : 50
+    },
+    {
+        "command" : "split",
+        "paras" : [0.25, 0.25, 0.75, 0.75]
+    }
+]
+
+下面是修改的描述：
+HERE IS USER INPUT

@@ -9,17 +9,6 @@ import (
 	"strconv"
 )
 
-// post_data={'prompt': prompt_str,
-//
-//	'negative_prompt': data['negative_prompt'],
-//	'sampler_index': data['sampler_index'],
-//	#'seed': data['seed'],
-//	'seed':random.randint(0,4029094098),
-//	'steps': data['steps'],
-//	'width': data['width'],
-//	'height': data['height'],
-//	'cfg_scale': data['cfg_scale']}
-
 type SDTxt2ImgArgs struct {
 	Prompt         string `json:"prompt"`
 	NegativePrompt string `json:"negative_prompt"`

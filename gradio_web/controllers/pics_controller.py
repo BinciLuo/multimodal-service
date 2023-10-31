@@ -11,13 +11,20 @@ from modules.api.pics_api import post_txt2img, post_img2img
 
 def generate_pic_process(query: str, loras:list[str]=[], width:int=512, height:int = 512):
     pic_string, e = post_txt2img(query, loras=loras, width=512, height=512)
-    #image = Image.open(BytesIO(pic_string.encode('utf-8')))
+    if e != None:
+        # TODO : Change print(e) to message box
+        print(e)
+        return None
     image = Image.open(BytesIO(base64.b64decode(pic_string)))
     image_show = gr.Image(value=image ,type='pil')
     return image_show
 
 def change_pic_process(init_img: Image, query: str, loras:list[str] = [], template = None):
     image_bytesio = io.BytesIO()
+    if init_img == None:
+        # TODO : Change print("No init img") to message box
+        print("No init img")
+        return None
     init_img.save(image_bytesio, format="PNG")
     init_img_bytes = image_bytesio.getvalue()
     init_img_str = base64.b64encode(init_img_bytes).decode('utf-8')

@@ -65,35 +65,34 @@ def reset_user_input():
     return gr.update(value='')
 
 def reset_state():
-    return [], []
+    return [], [], None
 
 with gr.Blocks() as demo:
     
     gr.HTML("""<h1 align="center">Test</h1>""")
     with gr.Row():
         with gr.Column(scale=10):
-            chatbot = gr.Chatbot(height=720)
+            chatbot = gr.Chatbot(height = 320)
+            user_input = gr.Textbox(show_label=False, placeholder="输入命令", lines=4,container=False,show_copy_button=True)
+            with gr.Row():
+                model_select_box = gr.Dropdown(choices=chat_models["models"].keys(), type='value', label="model", value="gpt3dot5turbo")
+                instruction_template_dropdown = gr.Dropdown(choices=[info["description"] for info in instruction_prompt_files_info], type='index', label="prompt",value=0)
+            with gr.Row():
+                submitBtn = gr.Button("Submit", variant="primary")
+                emptyBtn = gr.Button("Clear History",variant="stop")
         with gr.Column(scale=6):
             image_show = gr.Image(type='pil',interactive=True)
-            img_input = gr.Textbox(show_label=False, placeholder="输入生成图像指令", lines=1,container=False,show_copy_button=True)
             widthSlider = gr.Slider(0, 1920, value=512, step=1)
             heightSlider = gr.Slider(0, 1080, value=512, step=1)
             lora_dropdown = gr.Dropdown(choices=loras, type='value', label="lora", multiselect=True)
             img_gen_template_dropdown = gr.Dropdown(choices=img_gen_template_dict.keys(), type='value', label="img template", value="default")
-            picGenBtn = gr.Button("Generate a Picture")
-            picChangeBtn = gr.Button("Change Picture")
-    with gr.Row():
-        with gr.Column(scale=10):
-            with gr.Column(scale=10):
-                user_input = gr.Textbox(show_label=False, placeholder="输入命令", lines=10,container=False,show_copy_button=True)
-            with gr.Column(min_width=32, scale=2):
-                submitBtn = gr.Button("Submit", variant="primary")
-        with gr.Column(scale=6):
-            emptyBtn = gr.Button("Clear History")
-            model_select_box = gr.Dropdown(choices=chat_models["models"].keys(), type='value', label="model", value="gpt3dot5turbo")
-            instruction_template_dropdown = gr.Dropdown(choices=[info["description"] for info in instruction_prompt_files_info], type='index', label="prompt",value=0)
+            img_input = gr.Textbox(show_label=False, placeholder="输入生成图像指令", lines=1,container=False,show_copy_button=True)
+            with gr.Row():
+                picGenBtn = gr.Button("Generate a Picture",variant="primary")
+                picChangeBtn = gr.Button("Change Picture",variant="primary")
             extractBtn = gr.Button("Extract Instruction")
             command_dropdown = gr.Dropdown(choices=commands, type='value', label="command", multiselect=True)
+            
 
     history = gr.State([])
 
@@ -101,7 +100,7 @@ with gr.Blocks() as demo:
                     show_progress=True)
     submitBtn.click(reset_user_input, [], [user_input])
 
-    emptyBtn.click(reset_state, outputs=[chatbot, history], show_progress=True)
+    emptyBtn.click(reset_state, outputs=[chatbot, history, image_show], show_progress=True)
 
     extractBtn.click(extract_chat_process, [chatbot,command_dropdown], [chatbot,command_dropdown], show_progress=True)
 

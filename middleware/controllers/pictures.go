@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"middleware/models"
+	"net/http"
 
 	beego "github.com/beego/beego/v2/server/web"
 )
@@ -19,11 +20,13 @@ func (c *PicturesController) PostSDTxt2Img() {
 
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &body); err != nil {
 		fmt.Println(err)
+		c.Ctx.ResponseWriter.WriteHeader(http.StatusInternalServerError)
 		c.Abort("RequestParams")
 	}
 
 	r, err := models.PostSDTxt2Img(body)
 	if err != nil {
+		c.Ctx.ResponseWriter.WriteHeader(http.StatusInternalServerError)
 		c.Abort("PicturesControllerError")
 	}
 
@@ -39,11 +42,13 @@ func (c *PicturesController) PostSDImg2Img() {
 
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &body); err != nil {
 		fmt.Println(err)
+		c.Ctx.ResponseWriter.WriteHeader(http.StatusBadRequest)
 		c.Abort("RequestParams")
 	}
 
 	r, err := models.PostSDImg2Img(body)
 	if err != nil {
+		c.Ctx.ResponseWriter.WriteHeader(http.StatusInternalServerError)
 		c.Abort("PicturesControllerError")
 	}
 
@@ -55,6 +60,7 @@ func (c *PicturesController) PostSDImg2Img() {
 func (c *PicturesController) GetLoras() {
 	r, err := models.GetLoras()
 	if err != nil {
+		c.Ctx.ResponseWriter.WriteHeader(http.StatusInternalServerError)
 		c.Abort("PicturesControllerError")
 	}
 	c.Data["json"] = r

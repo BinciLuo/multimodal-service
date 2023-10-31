@@ -10,7 +10,7 @@ from modules.api.chat_api import chat
 from modules.instruction_processing import extract_instructions
 from modules.api.pics_api import post_txt2img,get_loras,post_img2img
 
-from controllers.chat_controllers import chat_process,extract_chat_process,commands
+from controllers.chat_controllers import chat_process,extract_chat_process,reset_state,commands
 from controllers.pics_controller import change_pic_process,generate_pic_process
 
 
@@ -64,8 +64,7 @@ gr.Chatbot.postprocess = postprocess
 def reset_user_input():
     return gr.update(value='')
 
-def reset_state():
-    return [], [], None
+
 
 with gr.Blocks() as demo:
     
@@ -91,7 +90,7 @@ with gr.Blocks() as demo:
                 picGenBtn = gr.Button("Generate a Picture",variant="primary")
                 picChangeBtn = gr.Button("Change Picture",variant="primary")
             extractBtn = gr.Button("Extract Instruction")
-            command_dropdown = gr.Dropdown(choices=commands, type='value', label="command", multiselect=True)
+            command_dropdown = gr.Dropdown(choices=commands, type='index', label="command", multiselect=True)
             
 
     history = gr.State([])
@@ -100,7 +99,7 @@ with gr.Blocks() as demo:
                     show_progress=True)
     submitBtn.click(reset_user_input, [], [user_input])
 
-    emptyBtn.click(reset_state, outputs=[chatbot, history, image_show], show_progress=True)
+    emptyBtn.click(reset_state, outputs=[chatbot, history, command_dropdown, image_show], show_progress=True)
 
     extractBtn.click(extract_chat_process, [chatbot,command_dropdown], [chatbot,command_dropdown], show_progress=True)
 

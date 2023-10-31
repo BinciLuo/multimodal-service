@@ -24,6 +24,8 @@ def post_txt2img(query: str, loras:list[str]=[], width:int=512, height:int=512):
         "cfg_scale": 5
     }
     response = requests.post(conf_info["server_url"]+picture_process_info["txt2img"]["route"], data=json.dumps(paras))
+    if response.status_code != 200:
+        return None, Exception(f"post txt2img failed, status code:{response.status_code}")
     return response.json()['images'][0],None
 
 def post_img2img(init_img_str:str ,query: str ,loras:list[str]=[], **kwargv):

@@ -40,7 +40,7 @@ def post_txt2img(query: str, loras:list[str]=[], **kwargv):
     # ------------------------------------------------------
     # Begin check route and get loras
     if "route" not in picture_process_info["txt2img"].keys():
-        return None,f"route of txt2img not found"
+        return None,f"[SD] route of txt2img not found"
     for lora_name in loras:
             query += f" <lora:{lora_name}:{1/len(loras)}> "
 
@@ -48,7 +48,7 @@ def post_txt2img(query: str, loras:list[str]=[], **kwargv):
     # Begin load always on scripts
     alwayson_scripts, err_string = form_alwayson_scripts_from_kwargv(**kwargv)
     if err_string != None:
-        return None, f"post txt2img failed, {err_string}"
+        return None, f"[SD] alwayson_scripts failed, {err_string}"
     
     # ------------------------------------------------------
 
@@ -68,7 +68,7 @@ def post_txt2img(query: str, loras:list[str]=[], **kwargv):
 
     response = requests.post(conf_info["server_url"]+picture_process_info["txt2img"]["route"], data=json.dumps(paras))
     if response.status_code != 200:
-        return None, f"post txt2img failed, status code:{response.status_code}"
+        return None, f"[SD] txt2img failed"
     return response.json()['images'][0],None
 
 def post_img2img(init_img_str:str ,query: str ,loras:list[str]=[], **kwargv):
@@ -104,7 +104,7 @@ def post_img2img(init_img_str:str ,query: str ,loras:list[str]=[], **kwargv):
     # ------------------------------------------------------
     # Begin check route and get loras
     if "route" not in picture_process_info["img2img"].keys():
-        return None, f"route of img2img not found"
+        return None, f"[SD] route of img2img not found"
     for lora_name in loras:
             query += f" <lora:{lora_name}:{1/len(loras)}> "
     
@@ -112,7 +112,7 @@ def post_img2img(init_img_str:str ,query: str ,loras:list[str]=[], **kwargv):
     # Begin load always on scripts
     alwayson_scripts, err_string = form_alwayson_scripts_from_kwargv(init_img_str=init_img_str ,**kwargv)
     if err_string != None:
-        return None, f"post img2img failed, {err_string}"
+        return None, f"[SD] alwayson_scripts failed, {err_string}"
     
     # ------------------------------------------------------
     # Begin set paras
@@ -136,14 +136,17 @@ def post_img2img(init_img_str:str ,query: str ,loras:list[str]=[], **kwargv):
     try:
         return response.json()['images'][0],None
     except:    
-        return None,f"post_img2img failed, status code{response.status_code}"
+        return None,f"[SD] img2img failed"
        
 def get_loras():
     """
     Get loras through api
     """
     if "route" not in picture_process_info["loras"].keys():
-        return {"message": Exception},Exception("route of loras not found")
-    response = requests.get(url=conf_info["server_url"]+picture_process_info["loras"]["route"])
-    return response.json()["loras"]
+        return [],f"[SD] route of loras not found"
+    try:
+        response = requests.get(url=conf_info["server_url"]+picture_process_info["loras"]["route"])
+        return response.json()["loras"],None
+    except:
+        return [],f'[SD] Get loras failed'
     

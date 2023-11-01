@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"strconv"
@@ -52,8 +53,8 @@ func PostChatGLM2_6B(params jmap) (jmap, error) {
 	defer response.Body.Close()
 
 	if response.StatusCode != 200 {
-		r["chat"] = " PostChatGLM2_6B not avliable, status code : " + strconv.Itoa(response.StatusCode)
-		return r, nil
+		err = fmt.Errorf(" PostChatGLM2_6B not avliable, status code : " + strconv.Itoa(response.StatusCode))
+		return nil, err
 	}
 	err = json.NewDecoder(response.Body).Decode(&r)
 	if err != nil {

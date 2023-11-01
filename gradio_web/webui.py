@@ -12,6 +12,7 @@ from modules.api.pics_api import post_txt2img,get_loras,post_img2img
 
 from controllers.chat_controllers import chat_process,extract_chat_process,reset_state,commands
 from controllers.pics_controller import change_pic_process,generate_pic_process
+from controllers.utils_controller import check_status_process
 
 
 # 加载全局变量
@@ -36,13 +37,10 @@ instruction_prompt_files_info = chat_models["prompt_templates"]["instruction_gen
     "user_input_replace" : "HERE IS USER INPUT"
 }
 """
-
-try:
-    loras = get_loras()
-    
-except:
+# TODO: get loras need err handler
+loras,err = get_loras()
+if err != None:
     print("[WARNING] Init loras failed. Check if the SD server is running")
-    loras = []
 
 
 # Functions
@@ -79,7 +77,9 @@ with gr.Blocks() as demo:
             with gr.Row():
                 submitBtn = gr.Button("Submit", variant="primary")
                 emptyBtn = gr.Button("Clear History",variant="stop")
+                
         with gr.Column(scale=6):
+            checkBtn = gr.Button("Check server status", variant="primary")
             image_show = gr.Image(type='pil',interactive=True)
             widthSlider = gr.Slider(0, 1920, value=512, step=1)
             heightSlider = gr.Slider(0, 1080, value=512, step=1)
@@ -107,5 +107,6 @@ with gr.Blocks() as demo:
     
     picChangeBtn.click(change_pic_process,[image_show, img_input, lora_dropdown, img_gen_template_dropdown], [image_show], show_progress=True)
     
+    checkBtn.click(check_status_process,[],[])
 
 demo.queue().launch(share=False, inbrowser=True, server_name='0.0.0.0',server_port=27777,debug=True)

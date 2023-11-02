@@ -22,7 +22,7 @@ def check_status_process():
         each_thread.start()
 
     # 等待2s
-    time.sleep(2)
+    time.sleep(2.5)
 
     print(err_info_list)
 

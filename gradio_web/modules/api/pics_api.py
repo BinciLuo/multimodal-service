@@ -1,11 +1,19 @@
 import json
+import sys
 import requests
 from modules.utils.scripts_gen import form_alwayson_scripts_from_kwargv
 
 with open("config/picture_process.json", 'r') as json_file:
     picture_process_info:dict = json.load(json_file)
 with open("config/conf.json", 'r') as json_file:
-    conf_info:dict = json.load(json_file)
+    global_variables:dict = json.load(json_file)
+
+ENV = sys.argv[1]
+if ENV == "docker":
+    print(f"Running in docker, set server url {global_variables['server_url_docker']}")
+    SERVER_URL = global_variables["server_url_docker"]
+else:
+    SERVER_URL = global_variables["server_url"]
 
 def post_txt2img(query: str, loras:list[str]=[], **kwargv):
     """
@@ -66,7 +74,7 @@ def post_txt2img(query: str, loras:list[str]=[], **kwargv):
         "alwayson_scripts": alwayson_scripts,
     }
 
-    response = requests.post(conf_info["server_url"]+picture_process_info["txt2img"]["route"], data=json.dumps(paras))
+    response = requests.post(SERVER_URL+picture_process_info["txt2img"]["route"], data=json.dumps(paras))
     if response.status_code != 200:
         return None, f"[SD] txt2img failed"
     return response.json()['images'][0],None
@@ -132,7 +140,7 @@ def post_img2img(init_img_str:str ,query: str ,loras:list[str]=[], **kwargv):
 
     # ------------------------------------------------------
     # Begin send request
-    response = requests.post(conf_info["server_url"]+picture_process_info["img2img"]["route"], data=json.dumps(paras))
+    response = requests.post(SERVER_URL+picture_process_info["img2img"]["route"], data=json.dumps(paras))
     try:
         return response.json()['images'][0],None
     except:    
@@ -145,7 +153,7 @@ def get_loras():
     if "route" not in picture_process_info["loras"].keys():
         return [],f"[SD] route of loras not found"
     try:
-        response = requests.get(url=conf_info["server_url"]+picture_process_info["loras"]["route"])
+        response = requests.get(url=SERVER_URL+picture_process_info["loras"]["route"])
         return response.json()["loras"],None
     except:
         return [],f'[SD] Get loras failed'

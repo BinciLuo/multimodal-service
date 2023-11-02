@@ -1,4 +1,5 @@
 import json
+import sys
 import gradio as gr
 
 from modules.api.chat_api import chat
@@ -12,8 +13,13 @@ with open("config/chat_models.json", 'r') as json_file:
 with open("config/sd_templates.json", 'r') as json_file:
     img_gen_template_dict:dict = json.load(json_file)
 
+ENV = sys.argv[1]
+if ENV == "docker":
+    print(f"Running in docker, set server url {global_variables['server_url_docker']}")
+    SERVER_URL = global_variables["server_url_docker"]
+else:
+    SERVER_URL = global_variables["server_url"]
 
-SERVER_URL = global_variables["server_url"]
 PATTERN_FILE_PATH = global_variables["pattern_file_path"]
 instruction_prompt_files_info = chat_models["prompt_templates"]["instruction_gen"]
 

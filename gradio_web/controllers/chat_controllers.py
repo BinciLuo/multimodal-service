@@ -13,6 +13,7 @@ with open("config/chat_models.json", 'r') as json_file:
 with open("config/sd_templates.json", 'r') as json_file:
     img_gen_template_dict:dict = json.load(json_file)
 
+# TODO : Set this in const file
 ENV = sys.argv[1]
 if ENV == "docker":
     print(f"Running in docker, set server url {global_variables['server_url_docker']}")

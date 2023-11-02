@@ -29,9 +29,10 @@ with open("config/sd_templates.json", 'r') as json_file:
 
 IN_DOCKER = os.environ.get('IN_DOCKER')
 if IN_DOCKER is not None:
+    print(f"Running in docker, set server url {global_variables['server_url_docker']}")
     SERVER_URL = global_variables["server_url_docker"]
-
-SERVER_URL = global_variables["server_url"]
+else:
+    SERVER_URL = global_variables["server_url"]
 PATTERN_FILE_PATH = global_variables["pattern_file_path"]
 
 instruction_prompt_files_info = chat_models["prompt_templates"]["instruction_gen"]

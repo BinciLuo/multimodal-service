@@ -1,6 +1,7 @@
 import base64
 import io
 import os
+import sys
 import gradio as gr
 import json
 import mdtex2html
@@ -27,8 +28,8 @@ with open("config/chat_models.json", 'r') as json_file:
 with open("config/sd_templates.json", 'r') as json_file:
     img_gen_template_dict:dict = json.load(json_file)
 
-IN_DOCKER = os.environ.get('IN_DOCKER')
-if IN_DOCKER is not None:
+ENV = sys.argv[1]
+if ENV == "docker":
     print(f"Running in docker, set server url {global_variables['server_url_docker']}")
     SERVER_URL = global_variables["server_url_docker"]
 else:

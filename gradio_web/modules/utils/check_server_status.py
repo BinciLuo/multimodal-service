@@ -1,4 +1,5 @@
 import json
+import sys
 import gradio as gr
 import threading
 import time
@@ -18,7 +19,13 @@ with open("config/chat_models.json", 'r') as json_file:
     model_info:dict = json.load(json_file)["models"]
 
 
-SERVER_URL = global_variables["server_url"]
+ENV = sys.argv[1]
+if ENV == "docker":
+    print(f"Running in docker, set server url {global_variables['server_url_docker']}")
+    SERVER_URL = global_variables["server_url_docker"]
+else:
+    SERVER_URL = global_variables["server_url"]
+
 PATTERN_FILE_PATH = global_variables["pattern_file_path"]
 instruction_prompt_files_info = chat_models["prompt_templates"]["instruction_gen"]
 

@@ -7,4 +7,4 @@ WORKDIR /root/multimodal-service/gradio_web/
 RUN pip install -r requirements.txt
 EXPOSE 27777
 
-CMD  python webui.py docker
+CMD  export ENV=docker && python webui.py

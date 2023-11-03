@@ -16,45 +16,10 @@ from controllers.chat_controllers import chat_process,extract_chat_process,reset
 from controllers.pics_controller import change_pic_process,generate_pic_process
 from controllers.utils_controller import check_status_process
 
-
-# 加载全局变量
-"""
-
-"""
-with open("config/conf.json", 'r') as json_file:
-    global_variables:dict = json.load(json_file)
-with open("config/chat_models.json", 'r') as json_file:
-    chat_models:dict = json.load(json_file)
-with open("config/sd_templates.json", 'r') as json_file:
-    img_gen_template_dict:dict = json.load(json_file)
-
-ENV = sys.argv[1]
-if ENV == "docker":
-    print(f"Running in docker, set server url {global_variables['server_url_docker']}")
-    SERVER_URL = global_variables["server_url_docker"]
-else:
-    SERVER_URL = global_variables["server_url"]
-PATTERN_FILE_PATH = global_variables["pattern_file_path"]
-
-instruction_prompt_files_info = chat_models["prompt_templates"]["instruction_gen"]
-""" list of:
-{
-    "description" : "Give template and examples",
-    "file_path" : "prompts/instruction_generate_prompt.txt",
-    "user_input_replace" : "HERE IS USER INPUT"
-}
-"""
-# TODO: get loras need err handler
+from const import *
 loras,err = get_loras()
 if err != None:
     print("[WARNING] Init loras failed. Check if the SD server is running")
-
-
-# Functions
-"""
-
-"""
-
 
 
 # GRADIO
@@ -79,8 +44,8 @@ with gr.Blocks() as demo:
             chatbot = gr.Chatbot(height = 320)
             user_input = gr.Textbox(show_label=False, placeholder="输入命令", lines=4,container=False,show_copy_button=True)
             with gr.Row():
-                model_select_box = gr.Dropdown(choices=chat_models["models"].keys(), type='value', label="model", value="gpt3dot5turbo")
-                instruction_template_dropdown = gr.Dropdown(choices=[info["description"] for info in instruction_prompt_files_info], type='index', label="prompt",value=0)
+                model_select_box = gr.Dropdown(choices=chat_config["models"].keys(), type='value', label="model", value="gpt3dot5turbo")
+                instruction_template_dropdown = gr.Dropdown(choices=[info["description"] for info in INSTRUCTION_PROMPT_FILES_INFO], type='index', label="prompt",value=0)
             with gr.Row():
                 submitBtn = gr.Button("Submit", variant="primary")
                 emptyBtn = gr.Button("Clear History",variant="stop")

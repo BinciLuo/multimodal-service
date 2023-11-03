@@ -3,17 +3,7 @@ import sys
 import requests
 from modules.utils.scripts_gen import form_alwayson_scripts_from_kwargv
 
-with open("config/picture_process.json", 'r') as json_file:
-    picture_process_info:dict = json.load(json_file)
-with open("config/conf.json", 'r') as json_file:
-    global_variables:dict = json.load(json_file)
-
-ENV = sys.argv[1]
-if ENV == "docker":
-    print(f"Running in docker, set server url {global_variables['server_url_docker']}")
-    SERVER_URL = global_variables["server_url_docker"]
-else:
-    SERVER_URL = global_variables["server_url"]
+from const import *
 
 def post_txt2img(query: str, loras:list[str]=[], **kwargv):
     """

@@ -1,10 +1,9 @@
 import json
 import requests
 
+from const import *
 
 def chat(model_name: str, query: str, sever_url:str):
-    with open("config/chat_models.json", 'r') as json_file:
-                model_info:dict = json.load(json_file)["models"]
     if model_name not in model_info.keys():
         return "",f"[Chat] model_name [{model_name}] not found"
     if "route" not in model_info[model_name].keys():

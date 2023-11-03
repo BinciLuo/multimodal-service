@@ -7,27 +7,8 @@ import time
 from modules.api.chat_api import chat
 from modules.api.pics_api import get_loras,post_img2img,post_txt2img
 
+from const import *
 
-
-with open("config/conf.json", 'r') as json_file:
-    global_variables:dict = json.load(json_file)
-with open("config/chat_models.json", 'r') as json_file:
-    chat_models:dict = json.load(json_file)
-with open("config/sd_templates.json", 'r') as json_file:
-    img_gen_template_dict:dict = json.load(json_file)
-with open("config/chat_models.json", 'r') as json_file:
-    model_info:dict = json.load(json_file)["models"]
-
-
-ENV = sys.argv[1]
-if ENV == "docker":
-    print(f"Running in docker, set server url {global_variables['server_url_docker']}")
-    SERVER_URL = global_variables["server_url_docker"]
-else:
-    SERVER_URL = global_variables["server_url"]
-
-PATTERN_FILE_PATH = global_variables["pattern_file_path"]
-instruction_prompt_files_info = chat_models["prompt_templates"]["instruction_gen"]
 
 ## Chat
 def each_chat_check(model_name, err_info_list):

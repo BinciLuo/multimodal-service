@@ -5,24 +5,7 @@ import gradio as gr
 from modules.api.chat_api import chat
 from modules.instruction_processing import extract_instructions
 
-
-with open("config/conf.json", 'r') as json_file:
-    global_variables:dict = json.load(json_file)
-with open("config/chat_models.json", 'r') as json_file:
-    chat_models:dict = json.load(json_file)
-with open("config/sd_templates.json", 'r') as json_file:
-    img_gen_template_dict:dict = json.load(json_file)
-
-# TODO : Set this in const file
-ENV = sys.argv[1]
-if ENV == "docker":
-    print(f"Running in docker, set server url {global_variables['server_url_docker']}")
-    SERVER_URL = global_variables["server_url_docker"]
-else:
-    SERVER_URL = global_variables["server_url"]
-
-PATTERN_FILE_PATH = global_variables["pattern_file_path"]
-instruction_prompt_files_info = chat_models["prompt_templates"]["instruction_gen"]
+from const import *
 
 commands = []
 
@@ -30,10 +13,10 @@ def chat_process(inputs, model_name, prompt_index=0, chatbot=None):
     """
     submitBtn process function
     """
-    prompt_file_name = instruction_prompt_files_info[prompt_index]["file_path"]
+    prompt_file_name = INSTRUCTION_PROMPT_FILES_INFO[prompt_index]["file_path"]
     with open(prompt_file_name,'r') as f:
         infer_text = f.read()
-    infer_text = infer_text.replace(instruction_prompt_files_info[prompt_index]["user_input_replace"],inputs)
+    infer_text = infer_text.replace(INSTRUCTION_PROMPT_FILES_INFO[prompt_index]["user_input_replace"],inputs)
     chatbot.append((input,""))
     answer, e = chat(model_name, infer_text, SERVER_URL)
     chatbot[-1] = (inputs, answer) if e==None else (inputs, e)

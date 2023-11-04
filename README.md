@@ -1,5 +1,32 @@
 # 语言交互图像编辑
 
+## Usage
+### Run in local
+1. Run middleware(`golang`,`beego` required)
+   - `cd middleware`
+   - `bee run`
+2. Run webui
+   - `cd gradio_web`
+   - `pip install -r requirements.txt`
+   - `python webui.py`
+3. Open `127.0.0.1:27777`
+### Run through Docker
+1. Run middleware
+   - `docker pull binciluo/middleware:latest`
+   - `docker run --name middleware -p 8080:8080 binciluo/middleware:latest`
+2. Run webui
+   - `docker pull binciluo/gradio_web:latest`
+   - `docker run --name webui -p 27777:27777 binciluo/gradio_web:latest`
+3. Build a network
+   - `docker network creat mm-service`
+   - `docker network connect mm-service middleware`
+   - `docker network connect mm-service webui`
+4. Open `127.0.0.1:27777`
+### Run through k8s
+1. `cd k8s/mutimodal-service`
+2. `kubectl apply -f pod.yaml`
+3. if your OS is not Linux, run `kubectl port-forward mm-service-pod  -n default  27777:27777`
+4. Open `127.0.0.1:27777`
 # 系统架构
 前端-->后端-->gpt glm stablediffusion
 ## [前端](./gradio_web)

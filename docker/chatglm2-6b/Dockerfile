@@ -1,10 +1,7 @@
-FROM pytorch/pytorch:2.1.0-cuda12.1-cudnn8-runtime
+FROM reg.lanrui-ai.com/ark-public/pytorch2-cuda11.7-rdma-devel-ubuntu20.04@sha256:d2ed6141cb8b2292127d5cbc34fc3cb8fcc4d32b5d97565b5443d5a79b2dc81b
 
 RUN apt-get update 
-RUN apt-get install sudo python3 pip git -y 
-RUN useradd -ms /bin/bash user && echo "user ALL=(ALL) NOPASSWD:ALL" | tee -a /etc/sudoers.d/90-cloud-init-user \
-    && rm -rf /var/run/sshd \
-    && pip config set global.index-url https://mirror.baidu.com/pypi/simple
+RUN apt-get install sudo python3 pip git -y
 
 
 WORKDIR /app

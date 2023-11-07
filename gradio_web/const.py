@@ -17,7 +17,11 @@ ENV = os.environ.get("ENV")
 if ENV == "docker":
     print(f"Running in docker, set server url {global_variables['server_url_docker']}")
     SERVER_URL = global_variables["server_url_docker"]
+elif ENV == "local":
+    print(f"Running in local, set server url {global_variables['server_url_local']}")
+    SERVER_URL = global_variables["server_url_local"]
 else:
+    print(f"Middleware Running in Azure, set server url {global_variables['server_url']}")
     SERVER_URL = global_variables["server_url"]
 
 PATTERN_FILE_PATH = global_variables["pattern_file_path"]

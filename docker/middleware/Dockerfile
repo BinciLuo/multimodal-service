@@ -8,4 +8,4 @@ RUN go env -w GO111MODULE=on && \
     go env -w GOPROXY=https://goproxy.cn
 RUN go install github.com/beego/bee/v2@latest
 EXPOSE 80
-CMD bee run
+CMD bash ../azura_middleware.sh

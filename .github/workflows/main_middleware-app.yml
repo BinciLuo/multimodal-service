@@ -31,7 +31,7 @@ jobs:
       with:
         push: true
         tags: index.docker.io/${{ secrets.AzureAppService_ContainerUsername_c14469409dfb4361bb838ad9db09b9d0 }}/binciluo/middleware:${{ github.sha }}
-        file: ./Dockerfile
+        file: docker/middleware/Dockerfile
 
   deploy:
     runs-on: ubuntu-latest

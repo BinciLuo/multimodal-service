@@ -7,5 +7,5 @@ WORKDIR /root/multimodal-service/middleware/
 RUN go env -w GO111MODULE=on && \
     go env -w GOPROXY=https://goproxy.cn
 RUN go install github.com/beego/bee/v2@latest
-EXPOSE 80
-CMD bash ../azura_middleware.sh
+EXPOSE 8080
+CMD bash azura_middleware.sh

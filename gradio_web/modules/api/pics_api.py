@@ -1,13 +1,56 @@
+import base64
+from io import BytesIO
 import json
 import sys
+from PIL import Image
 import requests
 from modules.utils.scripts_gen import form_alwayson_scripts_from_kwargv
 
 from const import *
 
-def post_txt2img(query: str, loras:list[str]=[], **kwargv):
+def post_txt2img(paras):
+    
+    # ------------------------------------------------------
+    # Begin check route and get loras
+    if "route" not in picture_process_info["txt2img"].keys():
+        return None,f"[SD] route of txt2img not found"
+    
+    # ------------------------------------------------------
+    # Begin send request
+    response = requests.post(SERVER_URL+picture_process_info["txt2img"]["route"], data=json.dumps(paras))
+    if response.status_code != 200:
+        return None, f"[SD] txt2img failed"
+    return response.json()['images'][0],None
+
+def post_img2img(paras):
+    # ------------------------------------------------------
+    # Begin check route
+    if "route" not in picture_process_info["img2img"].keys():
+        return None, f"[SD] route of img2img not found"
+    
+    # ------------------------------------------------------
+    # Begin send request
+    response = requests.post(SERVER_URL+picture_process_info["img2img"]["route"], data=json.dumps(paras))
+    try:
+        return response.json()['images'][0],None
+    except:    
+        return None,f"[SD] img2img failed"
+       
+def get_loras():
     """
-    ## Send requests
+    Get loras through api
+    """
+    if "route" not in picture_process_info["loras"].keys():
+        return [],f"[SD] route of loras not found"
+    try:
+        response = requests.get(url=SERVER_URL+picture_process_info["loras"]["route"])
+        return response.json()["loras"],None
+    except:
+        return [],f'[SD] Get loras failed'
+
+def form_post_txt2img_paras(query: str, loras:list[str]=[], **kwargv):
+    """
+    ## Form paras for post_txt2img
 
     ## Argvs:
     ```
@@ -35,23 +78,19 @@ def post_txt2img(query: str, loras:list[str]=[], **kwargv):
     ```
         
     """
-    # ------------------------------------------------------
-    # Begin check route and get loras
-    if "route" not in picture_process_info["txt2img"].keys():
-        return None,f"[SD] route of txt2img not found"
+    # Load loras to query
     for lora_name in loras:
-            query += f" <lora:{lora_name}:{1/len(loras)}> "
+        query += f" <lora:{lora_name}:{1/len(loras)}> "
 
     # ------------------------------------------------------
-    # Begin load always on scripts
-    alwayson_scripts, err_string = form_alwayson_scripts_from_kwargv(**kwargv)
-    if err_string != None:
-        return None, f"[SD] alwayson_scripts failed, {err_string}"
+    # Load always on scripts
+    alwayson_scripts, e = form_alwayson_scripts_from_kwargv(**kwargv)
+    if e != None:
+        return None, f"[SD] alwayson_scripts failed, {e}"
     
     # ------------------------------------------------------
-
+    # Set paras
     paras = {
-        "init_images": kwargv.get("init_image_str",""),
         "prompt": query + kwargv.get("prompt", ",(recherche details) ,(ultra details),8k resolution,excellent quality,beautiful cinematic lighting,engaging atmosphere"), # TODO : remove this hard code
         "negative_prompt": kwargv.get("negative_prompt", "(worst quality, low quality, cgi, bad eye, worst eye, illustration, cartoon),deformed,distorted,disfigured,poorly drawn,bad anatomy,wrong anatomy"), # TODO : remove this hard code
         "denoising_strength": kwargv.get("denoising_strength", 0.2),
@@ -64,14 +103,11 @@ def post_txt2img(query: str, loras:list[str]=[], **kwargv):
         "alwayson_scripts": alwayson_scripts,
     }
 
-    response = requests.post(SERVER_URL+picture_process_info["txt2img"]["route"], data=json.dumps(paras))
-    if response.status_code != 200:
-        return None, f"[SD] txt2img failed"
-    return response.json()['images'][0],None
-
-def post_img2img(init_img_str:str ,query: str ,loras:list[str]=[], **kwargv):
+    return paras, None
+    
+def form_post_img2img_paras(init_img_str:str ,query: str ,loras:list[str]=[], **kwargv):
     """
-    ## Send requests
+    ## Form paras for post_img2img
 
     ## Argvs:
     ```
@@ -94,26 +130,33 @@ def post_img2img(init_img_str:str ,query: str ,loras:list[str]=[], **kwargv):
     ```
     ## Return:
     ```
-        image_str(str)
+        paras(dict)
         err_string(str|None)
     ```
         
     """
     # ------------------------------------------------------
-    # Begin check route and get loras
-    if "route" not in picture_process_info["img2img"].keys():
-        return None, f"[SD] route of img2img not found"
+    # Check if init_img_str valid
+    if init_img_str == None:
+        return None, f"No init image"
+    try:
+        image = Image.open(BytesIO(base64.b64decode(init_img_str)))
+    except:
+        return None, f"Invalid init image"
+    
+    # ------------------------------------------------------
+    # Load loras to query
     for lora_name in loras:
-            query += f" <lora:{lora_name}:{1/len(loras)}> "
+        query += f" <lora:{lora_name}:{1/len(loras)}> "
+
+    # ------------------------------------------------------
+    # Load alwayson_scripts
+    alwayson_scripts, e = form_alwayson_scripts_from_kwargv(init_img_str=init_img_str ,**kwargv)
+    if e != None:
+        return None, f"{e}"
     
     # ------------------------------------------------------
-    # Begin load always on scripts
-    alwayson_scripts, err_string = form_alwayson_scripts_from_kwargv(init_img_str=init_img_str ,**kwargv)
-    if err_string != None:
-        return None, f"[SD] alwayson_scripts failed, {err_string}"
-    
-    # ------------------------------------------------------
-    # Begin set paras
+    # Set paras
     paras = {
         "init_images": [init_img_str],
         "prompt": query + kwargv.get("prompt", ",(recherche details) ,(ultra details),8k resolution,excellent quality,beautiful cinematic lighting,engaging atmosphere"), # TODO : remove this hard code
@@ -129,22 +172,4 @@ def post_img2img(init_img_str:str ,query: str ,loras:list[str]=[], **kwargv):
     }
 
     # ------------------------------------------------------
-    # Begin send request
-    response = requests.post(SERVER_URL+picture_process_info["img2img"]["route"], data=json.dumps(paras))
-    try:
-        return response.json()['images'][0],None
-    except:    
-        return None,f"[SD] img2img failed"
-       
-def get_loras():
-    """
-    Get loras through api
-    """
-    if "route" not in picture_process_info["loras"].keys():
-        return [],f"[SD] route of loras not found"
-    try:
-        response = requests.get(url=SERVER_URL+picture_process_info["loras"]["route"])
-        return response.json()["loras"],None
-    except:
-        return [],f'[SD] Get loras failed'
-    
+    return paras, None

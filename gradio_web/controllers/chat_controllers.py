@@ -17,9 +17,12 @@ def chat_process(inputs, model_name, prompt_index=0, chatbot=None):
     with open(prompt_file_name,'r') as f:
         infer_text = f.read()
     infer_text = infer_text.replace(INSTRUCTION_PROMPT_FILES_INFO[prompt_index]["user_input_replace"],inputs)
-    chatbot.append((input,""))
     answer, e = chat(model_name, infer_text, SERVER_URL)
-    chatbot[-1] = (inputs, answer) if e==None else (inputs, e)
+    if e != None:
+        gr.Warning(e)
+        return chatbot, None
+    chatbot.append((input,""))
+    chatbot[-1] = (inputs, answer)
 
     return chatbot, None
 

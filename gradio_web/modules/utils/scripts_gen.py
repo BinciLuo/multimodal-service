@@ -27,16 +27,16 @@ def form_alwayson_scripts_from_kwargv(**kwargv):
         template(str|None)
         init_img_str(str|None)
     """
-    err_string = None
+    e = None
     # Begin load always on scripts
     ## if key "alwayson_scripts" in kwargv, use it.
     alwayson_scripts = kwargv.get("alwayson_scripts", None)
     ## if alwayson_scripts not in kwargv and key "templates" in kwargv, use template
     template = kwargv.get("template", None)
     if template != None and alwayson_scripts == None :    
-        alwayson_scripts,err_string = form_alwayson_scripts_from_templates(**kwargv)
+        alwayson_scripts,e = form_alwayson_scripts_from_templates(**kwargv)
     ## if "alwayson_scripts" and "templates" not in kwargv use default {}
     if alwayson_scripts == None:
         alwayson_scripts= {}
     
-    return alwayson_scripts, err_string
+    return alwayson_scripts, e

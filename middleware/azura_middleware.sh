@@ -1,2 +1,2 @@
-export BEE_PORT=8080
+export BEE_PORT=80
 bee run

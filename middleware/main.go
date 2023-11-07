@@ -3,6 +3,7 @@ package main
 import (
 	"middleware/models"
 	_ "middleware/routers"
+	"os"
 
 	"github.com/beego/beego/v2/core/config"
 	beego "github.com/beego/beego/v2/server/web"
@@ -22,5 +23,10 @@ func main() {
 	models.OpenAIClient = openai.NewClient(OpenAIToken)
 	GlmServer, _ := config.String("GLMSERVER")
 	models.GlmChatURL = GlmServer + "/chat/chatglm2-6b"
-	beego.Run()
+	Port := os.Getenv("BEE_PORT")
+	if Port == "" {
+		Port = "8080"
+	}
+	RunningAddr := "0.0.0.0:" + Port
+	beego.Run(RunningAddr)
 }

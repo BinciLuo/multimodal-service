@@ -19,6 +19,8 @@ func main() {
 	OpenAIToken2, _ := config.String("OpenAIToken2")
 	OpenAIToken3, _ := config.String("OpenAIToken3")
 	OpenAIToken := OpenAIToken1 + OpenAIToken2 + OpenAIToken3
+	models.TencentAK, _ = config.String("TencentAK")
+	models.TencentSK, _ = config.String("TencentSK")
 
 	models.OpenAIClient = openai.NewClient(OpenAIToken)
 	GlmServer, _ := config.String("GLMSERVER")

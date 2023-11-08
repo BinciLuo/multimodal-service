@@ -23,10 +23,10 @@ jobs:
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
     
     - name: Build the Docker image gradio_web
-      run: docker build . --file docker/gradio_web/AzureDockerfile --tag ${{ secrets.DOCKERHUB_USERNAME }}/gradio_web:azure
+      run: docker build . --file docker/gradio_web/AzureDockerfile --tag ${{ secrets.DOCKERHUB_USERNAME }}/gradio_web:${{ github.sha }}
     
     - name: Docker image push gradio_web
-      run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/gradio_web:azure
+      run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/gradio_web:${{ github.sha }}
 
   deploy:
     runs-on: ubuntu-latest
@@ -43,4 +43,4 @@ jobs:
         app-name: 'gradio-app'
         slot-name: 'production'
         publish-profile: ${{ secrets.AzureAppService_PublishProfile_2c0505fee83b4ca18004c1d4435e4829 }}
-        images: ${{ secrets.DOCKERHUB_USERNAME }}/gradio_web:azure
+        images: ${{ secrets.DOCKERHUB_USERNAME }}/gradio_web:${{ github.sha }}

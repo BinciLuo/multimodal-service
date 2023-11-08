@@ -23,10 +23,10 @@ jobs:
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
     
     - name: Build the Docker image middleware
-      run: docker build . --file docker/middleware/AzureDockerfile --tag ${{ secrets.DOCKERHUB_USERNAME }}/middleware:azure
+      run: docker build . --file docker/middleware/AzureDockerfile --tag ${{ secrets.DOCKERHUB_USERNAME }}/middleware:${{ github.sha }}
     
     - name: Docker image push middleware
-      run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/middleware:azure
+      run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/middleware:${{ github.sha }}
 
   deploy:
     runs-on: ubuntu-latest
@@ -43,4 +43,4 @@ jobs:
         app-name: 'middleware-app'
         slot-name: 'production'
         publish-profile: ${{ secrets.AzureAppService_PublishProfile_1abd115625134c9c833e3acd11376b49 }}
-        images: ${{ secrets.DOCKERHUB_USERNAME }}/middleware:azure
+        images: ${{ secrets.DOCKERHUB_USERNAME }}/middleware:${{ github.sha }}

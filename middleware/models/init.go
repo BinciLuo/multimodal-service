@@ -15,6 +15,8 @@ var (
 	Img2ImgURL   string
 	LoraURL      string
 	OpenAIClient *openai.Client
+	TencentAK    string
+	TencentSK    string
 )
 
 func init() {

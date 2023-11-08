@@ -10,5 +10,9 @@
     "img2img" :
     {
         "route" : "/v1/pics/img2img"
+    },
+    "tencent_cloud_img2img" :
+    {
+        "route" : "/v1/pics/tencent/img2img"
     }
 }

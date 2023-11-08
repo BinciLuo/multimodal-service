@@ -36,6 +36,15 @@ func init() {
 			MethodParams:     param.Make(),
 			Filters:          nil,
 			Params:           nil})
+
+	beego.GlobalControllerRouter["middleware/controllers:PicturesController"] = append(beego.GlobalControllerRouter["middleware/controllers:PicturesController"],
+		beego.ControllerComments{
+			Method:           "PostTencentCloudImg2Img",
+			Router:           "/tencent/img2img",
+			AllowHTTPMethods: []string{"post"},
+			MethodParams:     param.Make(),
+			Filters:          nil,
+			Params:           nil})
 	/*
 		/chat
 	*/

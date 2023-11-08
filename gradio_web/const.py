@@ -27,6 +27,8 @@ else:
 GRADIO_ENV = os.environ.get("GRADIO_ENV")
 if GRADIO_ENV == "Azure":
     GRADIO_PORT = 80
+elif GRADIO_ENV == "local":
+    GRADIO_PORT = 27777
 else:
     GRADIO_PORT = 8080
 

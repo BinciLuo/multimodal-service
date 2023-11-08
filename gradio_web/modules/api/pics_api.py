@@ -2,6 +2,7 @@ import base64
 from io import BytesIO
 import json
 import sys
+import gradio as gr
 from PIL import Image
 import requests
 from modules.utils.scripts_gen import form_alwayson_scripts_from_kwargv
@@ -32,9 +33,14 @@ def post_img2img(paras):
     # Begin send request
     response = requests.post(SERVER_URL+picture_process_info["img2img"]["route"], data=json.dumps(paras))
     try:
-        return response.json()['images'][0],None
+        return response.json()['images'][0], None
     except:    
-        return None,f"[SD] img2img failed"
+        gr.Warning(f"SD img2img failed, fallback to tencent cloud")
+        response = requests.post(SERVER_URL+picture_process_info["tencent_cloud_img2img"]["route"], data=json.dumps(paras))
+        try:
+            return response.json()["Response"]["ResultImage"], None
+        except:
+            return None, f"[IMG] Tencent cloud failed, img2imgfailed"
        
 def get_loras():
     """

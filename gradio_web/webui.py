@@ -17,6 +17,7 @@ from controllers.pics_controller import change_pic_process,generate_pic_process
 from controllers.utils_controller import check_status_process
 
 from const import *
+
 loras,err = get_loras()
 if err != None:
     print("[WARNING] Init loras failed. Check if the SD server is running")
@@ -33,6 +34,13 @@ gr.Chatbot.postprocess = postprocess
 
 def reset_user_input():
     return gr.update(value='')
+
+def refresh_loras():
+    global loras
+    loras,err = get_loras()
+    if err != None:
+        gr.Warning(f"Refresh loras failed: {err}")
+    return gr.Dropdown(choices=loras, type='value', label="lora", multiselect=True,scale=2)
 
 
 
@@ -56,6 +64,7 @@ with gr.Blocks() as demo:
             widthSlider = gr.Slider(0, 1920, value=512, step=1)
             heightSlider = gr.Slider(0, 1080, value=512, step=1)
             lora_dropdown = gr.Dropdown(choices=loras, type='value', label="lora", multiselect=True)
+            loraRefreshBtn = gr.Button("Refresh",variant="primary",scale=1,size='sm')
             img_gen_template_dropdown = gr.Dropdown(choices=img_gen_template_dict.keys(), type='value', label="img template", value="default")
             img_input = gr.Textbox(show_label=False, placeholder="输入生成图像指令", lines=1,container=False,show_copy_button=True)
             with gr.Row():
@@ -80,5 +89,7 @@ with gr.Blocks() as demo:
     picChangeBtn.click(change_pic_process,[image_show, img_input, lora_dropdown, img_gen_template_dropdown], [image_show], show_progress=True)
     
     checkBtn.click(check_status_process,[],[])
+
+    loraRefreshBtn.click(refresh_loras,[],[lora_dropdown])
 
 demo.queue().launch(share=False, inbrowser=True, server_name='0.0.0.0',server_port=GRADIO_PORT,debug=True)

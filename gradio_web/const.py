@@ -13,16 +13,22 @@ with open("config/picture_process.json", 'r') as json_file:
     picture_process_info:dict = json.load(json_file)
 
 
-ENV = os.environ.get("ENV")
-if ENV == "docker":
+MIDDLEWARE_ENV = os.environ.get("MIDDLEWARE_ENV")
+if MIDDLEWARE_ENV == "docker":
     print(f"Running in docker, set server url {global_variables['server_url_docker']}")
     SERVER_URL = global_variables["server_url_docker"]
-elif ENV == "local":
+elif MIDDLEWARE_ENV == "local":
     print(f"Running in local, set server url {global_variables['server_url_local']}")
     SERVER_URL = global_variables["server_url_local"]
 else:
     print(f"Middleware Running in Azure, set server url {global_variables['server_url']}")
     SERVER_URL = global_variables["server_url"]
+
+GRADIO_ENV = os.environ.get("GRADIO_ENV")
+if GRADIO_ENV == "Azure":
+    GRADIO_PORT = 80
+else:
+    GRADIO_PORT = 8080
 
 PATTERN_FILE_PATH = global_variables["pattern_file_path"]
 

@@ -81,4 +81,4 @@ with gr.Blocks() as demo:
     
     checkBtn.click(check_status_process,[],[])
 
-demo.queue().launch(share=False, inbrowser=True, server_name='0.0.0.0',server_port=27777,debug=True)
+demo.queue().launch(share=False, inbrowser=True, server_name='0.0.0.0',server_port=GRADIO_PORT,debug=True)

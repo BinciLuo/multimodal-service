@@ -116,7 +116,7 @@ func GetLoras() (jmap, error) {
 	return r, nil
 }
 
-func getNearestTencentCloudImg2ImgResolution(width, height int64) string {
+func getResizedTencentCloudImg2ImgResolution(width, height int64) string {
 	availableResolution := make(map[float64]string)
 	availableResolution[1.] = "768:768"
 	availableResolution[.75] = "768:1024"
@@ -158,7 +158,7 @@ func PostTencentCloudImg2Img(paras jmap) (jmap, error) {
 	request.NegativePrompt = common.StringPtr(paras["negative_prompt"].(string))
 	width := int64(paras["width"].(float64))
 	height := int64(paras["height"].(float64))
-	widthHeightStr := getNearestTencentCloudImg2ImgResolution(width, height)
+	widthHeightStr := getResizedTencentCloudImg2ImgResolution(width, height)
 	fmt.Println(widthHeightStr)
 	request.ResultConfig = &aiart.ResultConfig{
 		Resolution: common.StringPtr(widthHeightStr),

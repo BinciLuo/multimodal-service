@@ -44,6 +44,7 @@ func PostGPT3Dot5Turbo(query string) (jmap, error) {
 		)
 
 		if err != nil {
+			log.Printf("ChatCompletion client2 error: %v\n, ", err)
 			return nil, err
 		}
 	}

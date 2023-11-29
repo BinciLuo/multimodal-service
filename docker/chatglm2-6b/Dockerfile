@@ -5,7 +5,7 @@ RUN apt-get install sudo python3 pip git -y
 
 
 WORKDIR /app
-RUN git clone https://github.com/BinciLuo/multimodal-service.git
+RUN git clone https://github.com/BinciLuo/multimodal-service.git --depth=1
 WORKDIR /app/multimodal-service/chatglm2-6b
 RUN pip install torch==2.1.0+cu118 -f https://download.pytorch.org/whl/torch_stable.html
 RUN pip3 install -r requirements.txt

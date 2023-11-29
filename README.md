@@ -5,7 +5,7 @@
 ### Demo
 A demo is deployed in Azure. [Try it here](https://gradio-app.azurewebsites.net)
 ### Run through Kubernetes (Recommend)
-1. `cd k8s/mutimodal-service`
+1. `cd k8s`
 2. `kubectl apply -f pod.yaml` (`kubectl apply -f pod_arm.yaml` if you are using Arm)
 3. if your OS is not Linux, run `kubectl port-forward mm-service-pod  -n default  27777:27777`
 4. Open `127.0.0.1:27777`

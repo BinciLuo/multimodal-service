@@ -20,10 +20,10 @@ jobs:
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
     
     - name: Build the Docker image gradio
-      run: docker build . --file docker/gradio_web/Dockerfile --tag ${{ secrets.DOCKERHUB_USERNAME }}/gradio_web:arm_latest
+      run: docker build . --no-cache --file docker/gradio_web/Dockerfile --tag ${{ secrets.DOCKERHUB_USERNAME }}/gradio_web:arm_latest
     
     - name: Build the Docker image middleware
-      run: docker build . --file docker/middleware/Dockerfile --tag ${{ secrets.DOCKERHUB_USERNAME }}/middleware:arm_latest
+      run: docker build . --no-cache --file docker/middleware/Dockerfile --tag ${{ secrets.DOCKERHUB_USERNAME }}/middleware:arm_latest
     
     - name: Docker image push gradio_web
       run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/gradio_web:arm_latest

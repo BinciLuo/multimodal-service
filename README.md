@@ -26,7 +26,7 @@ A demo is deployed in Azure. [Try it here](https://gradio-app.azurewebsites.net)
 ### Run in local
 1. Run middleware(`golang`,`beego` required)
    - `cd middleware`
-   - `bee run`
+   - `export BEE_PORT=52780 && bee run`
 2. Run webui
    - `cd gradio_web`
    - `pip install -r requirements.txt`
@@ -49,3 +49,14 @@ A demo is deployed in Azure. [Try it here](https://gradio-app.azurewebsites.net)
 ### 实现方式
 基于开源项目[stable-diffusion-webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui.git)的API，对其进行了API的扩充
 
+## Trouble Shooting
+### Can't open gradio_web
+1. Check if webui.py is running.
+2. Check  `$GRADIO_ENV` using `echo $GRADIO_ENV`. If the value is `Azure` it will be launched in port **80**. If the value is `local` or `k8s` in port **27777**. Otherwise, it will be launched in port **8080**.
+3. If it is still unavailable and you are using it through k8s or docker, check if you successfully set the network mentioned in [Usage](#usage).
+### Can't connect to middleware
+1. check if middleware is running.
+2. Check if the `$MIDDLEWARE_ENV` in the terminal running webui matchs how middleware is running (local, k8s, docker). 
+3. Check `$BEE_PORT`
+### Can't connect to openai
+1. If error message is `Post "https://api.openai.com/v1/chat/completions": dial tcp [2a03:2880:f130:83:face:b00c:0:25de]:443: i/o timeout`, you should check if you need to set a proxy to send requests.

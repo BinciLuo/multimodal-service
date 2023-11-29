@@ -2,5 +2,6 @@
     "server_url" : "https://middleware-app.azurewebsites.net",
     "pattern_file_path" : "config/pattern.json",
     "server_url_docker" : "http://middleware:8080",
-    "server_url_local": "http://localhost:8080"
+    "server_url_k8s" : "http://localhost:8080",
+    "server_url_local": "http://localhost:52780"
 }

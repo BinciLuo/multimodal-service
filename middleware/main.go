@@ -35,6 +35,7 @@ func main() {
 
 	models.OpenAIClient1 = openai.NewClient(OpenAITokenOne)
 	models.OpenAIClient2 = openai.NewClient(OpenAITokenTwo)
+	models.OpenAIKey = OpenAITokenTwo
 	GlmServer, _ := config.String("GLMSERVER")
 	models.GlmChatURL = GlmServer + "/chat/chatglm2-6b"
 	Port := os.Getenv("BEE_PORT")

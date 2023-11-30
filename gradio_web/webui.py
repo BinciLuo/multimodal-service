@@ -13,8 +13,8 @@ from modules.instruction_processing import extract_instructions
 from modules.api.pics_api import post_txt2img,get_loras,post_img2img
 
 from controllers.chat_controllers import chat_process,extract_chat_process,reset_state,commands
-from controllers.pics_controller import change_pic_process,generate_pic_process
-from controllers.utils_controller import check_status_process
+from controllers.pics_controller import change_pic_process,generate_pic_process, set_base_image
+from controllers.utils_controller import check_status_process,submit_mask_process
 
 from const import *
 
@@ -48,7 +48,8 @@ with gr.Blocks() as demo:
     
     gr.HTML("""<h1 align="center">Test</h1>""")
     with gr.Row():
-        with gr.Column(scale=10):
+        with gr.Tab("Chat"):
+            checkBtn = gr.Button("Check server status", variant="primary")
             chatbot = gr.Chatbot(height = 320)
             user_input = gr.Textbox(show_label=False, placeholder="输入命令", lines=4,container=False,show_copy_button=True)
             with gr.Row():
@@ -57,39 +58,57 @@ with gr.Blocks() as demo:
             with gr.Row():
                 submitBtn = gr.Button("Submit", variant="primary")
                 emptyBtn = gr.Button("Clear History",variant="stop")
-                
-        with gr.Column(scale=6):
-            checkBtn = gr.Button("Check server status", variant="primary")
-            image_show = gr.Image(type='pil',interactive=True)
-            widthSlider = gr.Slider(0, 1920, value=512, step=1)
-            heightSlider = gr.Slider(0, 1080, value=512, step=1)
-            lora_dropdown = gr.Dropdown(choices=loras, type='value', label="lora", multiselect=True)
-            loraRefreshBtn = gr.Button("Refresh",variant="primary",scale=1,size='sm')
-            img_gen_template_dropdown = gr.Dropdown(choices=img_gen_template_dict.keys(), type='value', label="img template", value="default")
-            img_input = gr.Textbox(show_label=False, placeholder="输入生成图像指令", lines=1,container=False,show_copy_button=True)
-            with gr.Row():
-                picGenBtn = gr.Button("Generate a Picture",variant="primary")
-                picChangeBtn = gr.Button("Change Picture",variant="primary")
-            extractBtn = gr.Button("Extract Instruction")
             command_dropdown = gr.Dropdown(choices=commands, type='index', label="command", multiselect=True)
-            
+            extractBtn = gr.Button("Extract Instruction")
+
+        with gr.Tab("Draw"):
+            with gr.Row():
+                with gr.Column(scale=1):
+                    base_image = gr.Image(label='Origin Image', type='pil', interactive=True)
+                    with gr.Row():
+                        image_editor = gr.ImageMask(label='Edit', type='pil', interactive=True)
+                        mask_image = gr.Image(label='Mask Image', type='pil',interactive=False,image_mode='RGBA')
+                    submitMaskBtn = gr.Button("Get Mask")
+                    with gr.Tab("Pic Settings"):
+                        widthSlider = gr.Slider(0, 1920, value=512, step=1)
+                        heightSlider = gr.Slider(0, 1080, value=512, step=1)
+                        lora_dropdown = gr.Dropdown(choices=loras, type='value', label="lora", multiselect=True)
+                        loraRefreshBtn = gr.Button("Refresh loras",variant="primary",scale=1,size='sm')
+                        img_gen_template_dropdown = gr.Dropdown(choices=img_gen_template_dict.keys(), type='value', label="img template", value="default")
+                    with gr.Tab("Operations"):
+                        img_input = gr.Textbox(show_label=False, placeholder="输入生成图像指令", lines=1,container=False,show_copy_button=True)
+                        picGenBtn = gr.Button("Generate a Picture",variant="primary")
+                        picChangeBtn = gr.Button("Change Picture",variant="primary")
+                
+
+                with gr.Column(scale=1):
+                    edited_image = gr.Image(label='Edited Image', type='pil',interactive=False)
+                    setBaseImageBtn = gr.Button("Set as Origin Image", variant="primary")
+
 
     history = gr.State([])
 
+    # Btn
     submitBtn.click(chat_process, [user_input, model_select_box, instruction_template_dropdown, chatbot], [chatbot, history],
                     show_progress=True)
     submitBtn.click(reset_user_input, [], [user_input])
 
-    emptyBtn.click(reset_state, outputs=[chatbot, history, command_dropdown, image_show], show_progress=True)
+    emptyBtn.click(reset_state, outputs=[chatbot, history, command_dropdown, base_image], show_progress=True)
 
     extractBtn.click(extract_chat_process, [chatbot,command_dropdown], [chatbot,command_dropdown], show_progress=True)
 
-    picGenBtn.click(generate_pic_process,[img_input, lora_dropdown, widthSlider, heightSlider],[image_show],show_progress=True)
+    picGenBtn.click(generate_pic_process,[img_input, lora_dropdown, widthSlider, heightSlider],[base_image],show_progress=True)
     
-    picChangeBtn.click(change_pic_process,[image_show, img_input, lora_dropdown, img_gen_template_dropdown], [image_show], show_progress=True)
+    picChangeBtn.click(change_pic_process,[base_image, img_input, lora_dropdown, img_gen_template_dropdown, mask_image], [edited_image], show_progress=True)
     
     checkBtn.click(check_status_process,[],[])
 
     loraRefreshBtn.click(refresh_loras,[],[lora_dropdown])
+
+    setBaseImageBtn.click(set_base_image,[edited_image],[base_image])
+
+    submitMaskBtn.click(submit_mask_process,[image_editor],[mask_image])
+
+
 
 demo.queue().launch(share=False, inbrowser=True, server_name='0.0.0.0',server_port=GRADIO_PORT,debug=True)

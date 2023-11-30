@@ -88,3 +88,25 @@ func (c *PicturesController) PostTencentCloudImg2Img() {
 	c.ServeJSON()
 
 }
+
+func (c *PicturesController) PostDALLE2Edit() {
+	var (
+		body jmap
+	)
+
+	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &body); err != nil {
+		fmt.Println(err)
+		c.Ctx.ResponseWriter.WriteHeader(http.StatusBadRequest)
+		c.Abort("RequestParams")
+	}
+
+	r, err := models.PostDALLE2Edit(body)
+	if err != nil {
+		c.Ctx.ResponseWriter.WriteHeader(http.StatusInternalServerError)
+		c.Abort("PicturesControllerError")
+	}
+
+	c.Data["json"] = r
+	c.ServeJSON()
+
+}

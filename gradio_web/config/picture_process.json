@@ -14,5 +14,9 @@
     "tencent_cloud_img2img" :
     {
         "route" : "/v1/pics/tencent/img2img"
+    },
+    "dall-e-2_img2img" :
+    {
+        "route" : "/v1/pics/openai/img2img"
     }
 }

@@ -36,6 +36,23 @@ def get_background_color(image: Image):
 
     return np.array([max_r, max_g, max_b])
 
+def generate_mask_from_rgb(rgb_image: Image):
+    # 创建一个新的RGBA图像（黑色背景）
+    mask = Image.new("RGBA", rgb_image.size, (0, 0, 0, 255))
+
+    # 获取RGB图像的像素数据
+    rgb_data = rgb_image.getdata()
+
+    # 遍历像素数据，找到全黑的像素点并将其复制到RGBA图像
+    for i, pixel in enumerate(rgb_data):
+        if pixel[0] == 0 and pixel[1] == 0 and pixel[2] == 0:
+            # 如果是全黑的像素点，将其复制到RGBA图像
+            mask.putpixel((i % rgb_image.width, i // rgb_image.width), (0, 0, 0, 0))
+        else:
+            mask.putpixel((i % rgb_image.width, i // rgb_image.width), (pixel[0], pixel[1], pixel[2], 254))
+
+    return mask
+
 if __name__ == '__main__':
     with open("../../tests/test_img.txt",'r') as f:
         init_img_str = f.read()

@@ -8,6 +8,7 @@ from modules.instruction_processing import extract_instructions
 from const import *
 
 commands = []
+history = []
 
 def chat_process(inputs, model_name, prompt_index=0, chatbot=None):
     """
@@ -22,6 +23,7 @@ def chat_process(inputs, model_name, prompt_index=0, chatbot=None):
         gr.Warning(e)
         return chatbot, None
     chatbot.append((input,""))
+    history.append(inputs, answer)
     chatbot[-1] = (inputs, answer)
 
     return chatbot, None

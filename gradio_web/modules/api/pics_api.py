@@ -35,12 +35,16 @@ def post_img2img(paras):
     try:
         return response.json()['images'][0], None
     except:    
-        gr.Warning(f"SD img2img failed, fallback to tencent cloud")
-        response = requests.post(SERVER_URL+picture_process_info["tencent_cloud_img2img"]["route"], data=json.dumps(paras))
+        gr.Warning(f"SD img2img failed, fallback to openai")
+        response = requests.post(SERVER_URL+picture_process_info["dall-e-2_img2img"]["route"], data=json.dumps(paras))
         try:
-            return response.json()["Response"]["ResultImage"], None
+            return response.json()["images"][0], None
         except:
-            return None, f"[IMG] Tencent cloud failed, img2imgfailed"
+            response = requests.post(SERVER_URL+picture_process_info["tencent_cloud_img2img"]["route"], data=json.dumps(paras))
+            try:
+                return response.json()["Response"]["ResultImage"], None
+            except:
+                return None, f"[IMG] Tencent cloud failed, img2imgfailed"
        
 def get_loras():
     """
@@ -133,6 +137,8 @@ def form_post_img2img_paras(init_img_str:str ,query: str ,loras:list[str]=[], **
         height(int|None)
         cfg_scale(int|None)
         alwayson_scripts(str|None)
+
+        mask_img_str(str|None): mask image string
     ```
     ## Return:
     ```
@@ -165,7 +171,8 @@ def form_post_img2img_paras(init_img_str:str ,query: str ,loras:list[str]=[], **
     # Set paras
     paras = {
         "init_images": [init_img_str],
-        "prompt": query + kwargv.get("prompt", ",(recherche details) ,(ultra details),8k resolution,excellent quality,beautiful cinematic lighting,engaging atmosphere"), # TODO : remove this hard code
+        #"prompt": query + kwargv.get("prompt", ",(recherche details) ,(ultra details),8k resolution,excellent quality,beautiful cinematic lighting,engaging atmosphere"), # TODO : remove this hard code
+        "prompt": query, # TODO : remove this hard code
         "negative_prompt": kwargv.get("negative_prompt", "(worst quality, low quality, cgi, bad eye, worst eye, illustration, cartoon),deformed,distorted,disfigured,poorly drawn,bad anatomy,wrong anatomy"), # TODO : remove this hard code
         "denoising_strength": kwargv.get("denoising_strength", 0.2),
         "sampler_index": kwargv.get("sampler_index", "DPM++ 2M Karras"),
@@ -175,6 +182,7 @@ def form_post_img2img_paras(init_img_str:str ,query: str ,loras:list[str]=[], **
         "height": kwargv.get("height",512),
         "cfg_scale": kwargv.get("cfg_scale",5),
         "alwayson_scripts": alwayson_scripts,
+        "mask_image": kwargv.get("mask_img_str",None)
     }
 
     # ------------------------------------------------------

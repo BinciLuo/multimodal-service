@@ -4,8 +4,11 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"io"
 	"log"
+	"mime/multipart"
 	"net/http"
+	"os"
 	"strconv"
 
 	aiart "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/aiart/v20221229"
@@ -175,5 +178,162 @@ func PostTencentCloudImg2Img(paras jmap) (jmap, error) {
 	if err != nil {
 		return nil, err
 	}
+	return r, nil
+}
+
+func PostDALLE2Edit(paras jmap) (jmap, error) {
+	r := make(jmap)
+	var (
+		err error
+	)
+
+	if _, ok := paras["init_images"].(jarray)[0].(string); !ok {
+		err = fmt.Errorf("err: No init_image")
+		log.Println(err)
+		return nil, err
+	}
+
+	if _, ok := paras["mask_image"].(string); !ok {
+		err = fmt.Errorf("err: No mask image")
+		log.Println(err)
+		return nil, err
+	}
+
+	if _, ok := paras["prompt"].(string); !ok {
+		err = fmt.Errorf("err: No prompt")
+		log.Println(err)
+		return nil, err
+	}
+
+	// width := int64(paras["width"].(float64))
+	// height := int64(paras["height"].(float64))
+	// sizeStr := strconv.Itoa(int(width)) + "x" + strconv.Itoa(int(height))
+	sizeStr := "512x512"
+	log.Println(sizeStr)
+
+	//initImageFile, err := base64ToPNGFile(paras["init_images"].(jarray)[0].(string), "tempt.PNG")
+	_, err = base64ToPNGFile(paras["init_images"].(jarray)[0].(string), "tempt.PNG")
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+
+	_, err = base64ToPNGFile(paras["mask_image"].(string), "transparent.PNG")
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+
+	err = convertRGBToRGBA("tempt.PNG", "tempt_rgba.PNG", false)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+
+	// 设置API密钥
+	apiKey := OpenAIKey
+
+	// 设置API端点和请求URL
+	apiEndpoint := "https://api.openai.com/v1/images/edits"
+	url := apiEndpoint
+
+	// 创建multipart/form-data请求体
+	body := &bytes.Buffer{}
+	writer := multipart.NewWriter(body)
+
+	// 添加图像文件字段
+	imageFile, err := os.Open("tempt_rgba.PNG")
+	if err != nil {
+		fmt.Println("Error opening image file:", err)
+		return nil, err
+	}
+	imagePart, err := writer.CreateFormFile("image", "tempt_rgba.PNG")
+	if err != nil {
+		fmt.Println("Error creating image form file:", err)
+		return nil, err
+	}
+	_, err = io.Copy(imagePart, imageFile)
+	if err != nil {
+		fmt.Println("Error copy image form file:", err)
+		return nil, err
+	}
+
+	// 添加透明图片
+
+	transparentFile, err := os.Open("transparent.PNG")
+	if err != nil {
+		fmt.Println("Error opening image file:", err)
+		return nil, err
+	}
+	transparentPart, err := writer.CreateFormFile("mask", "transparent.PNG")
+	if err != nil {
+		fmt.Println("Error creating image form file:", err)
+		return nil, err
+	}
+	_, err = io.Copy(transparentPart, transparentFile)
+	if err != nil {
+		fmt.Println("Error copy image form file:", err)
+		return nil, err
+	}
+
+	// 添加其他字段
+	writer.WriteField("prompt", paras["prompt"].(string))
+	writer.WriteField("n", "1")
+	writer.WriteField("size", sizeStr)
+	writer.WriteField("response_format", "b64_json")
+
+	// 关闭multipart写入器
+	writer.Close()
+
+	// 创建HTTP请求
+	request, err := http.NewRequest("POST", url, body)
+	if err != nil {
+		fmt.Println("Error creating HTTP request:", err)
+		return nil, err
+	}
+
+	// 设置请求头
+	request.Header.Set("Content-Type", writer.FormDataContentType())
+	request.Header.Set("Authorization", "Bearer "+apiKey)
+
+	// a, _ := io.ReadAll(request.Body)
+	// fmt.Println(string(a))
+
+	// 发送请求并获取响应
+	client := &http.Client{}
+	response, err := client.Do(request)
+	if err != nil {
+		fmt.Println("Error sending HTTP request:", err)
+		return nil, err
+	}
+	defer response.Body.Close()
+
+	// 读取并打印响应内容
+	responseBody, err := io.ReadAll(response.Body)
+	if err != nil {
+		fmt.Println("Error reading response body:", err)
+		return nil, err
+	}
+
+	if err != nil {
+		fmt.Printf("Image creation error: %v\n", err)
+		return nil, err
+	}
+
+	var responseJson jmap
+	err = json.Unmarshal(responseBody, &responseJson)
+	if err != nil {
+		fmt.Println("解析JSON时发生错误:", err)
+		return nil, err
+	}
+
+	imgStr := responseJson["data"].(jarray)[0].(jmap)["b64_json"].(string)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+	var images jarray
+	images = append(images, imgStr)
+	r["images"] = images
 	return r, nil
 }

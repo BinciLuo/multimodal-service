@@ -2,8 +2,10 @@ import json
 import gradio as gr
 import threading
 import time
+from PIL import Image
 
 from modules.utils.check_server_status import  check_chat_api_chat, check_sd_api_img2img, check_sd_api_loras, check_sd_api_txt2img
+from modules.utils.colors import generate_mask_from_rgb
 
 
 def check_status_process():
@@ -28,4 +30,7 @@ def check_status_process():
 
     for err_info in err_info_list:
         gr.Warning('🤡'+err_info.upper()+'🥲')
+
+def submit_mask_process(painted):
+    return generate_mask_from_rgb(painted['composite'])
     

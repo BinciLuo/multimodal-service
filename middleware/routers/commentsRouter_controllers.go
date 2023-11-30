@@ -30,6 +30,15 @@ func init() {
 
 	beego.GlobalControllerRouter["middleware/controllers:PicturesController"] = append(beego.GlobalControllerRouter["middleware/controllers:PicturesController"],
 		beego.ControllerComments{
+			Method:           "PostDALLE2Edit",
+			Router:           "/openai/img2img",
+			AllowHTTPMethods: []string{"post"},
+			MethodParams:     param.Make(),
+			Filters:          nil,
+			Params:           nil})
+
+	beego.GlobalControllerRouter["middleware/controllers:PicturesController"] = append(beego.GlobalControllerRouter["middleware/controllers:PicturesController"],
+		beego.ControllerComments{
 			Method:           "GetLoras",
 			Router:           "/loras",
 			AllowHTTPMethods: []string{"get"},

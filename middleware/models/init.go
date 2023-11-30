@@ -16,6 +16,7 @@ var (
 	LoraURL       string
 	OpenAIClient1 *openai.Client
 	OpenAIClient2 *openai.Client
+	OpenAIKey     string
 	TencentAK     string
 	TencentSK     string
 )

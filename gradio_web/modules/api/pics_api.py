@@ -181,22 +181,28 @@ def form_post_img2img_paras(init_img_str:str ,query: str ,loras:list[str]=[], **
     # ------------------------------------------------------
     # Set paras
     # For each para, if it is not given in kwargv, it will search template. If template is not available, it will set to default
+    default_paras = IMG2IMG_DEFAULT_PARAS
     paras = {
         "init_images": [init_img_str],
-        "prompt": query + kwargv.get("prompt", template_paras.get("prompt", "")),
-        "negative_prompt": kwargv.get("negative_prompt", template_paras.get("negative_prompt", "")),
-        "denoising_strength": kwargv.get("denoising_strength", template_paras.get("denoising_strength", 0.3)),
-        "sampler_index": kwargv.get("sampler_index", template_paras.get("sampler_index", "DPM++ 2M Karras")),
-        "seed": kwargv.get("seed", template_paras.get("seed", -1)),
-        "steps": kwargv.get("steps", template_paras.get("steps", 40)),
-        "width": kwargv.get("width", template_paras.get("width", 512)),
-        "height": kwargv.get("height", template_paras.get("height", 512)),
-        "cfg_scale": kwargv.get("cfg_scale", template_paras.get("cfg_scale", 5)),
+        "prompt": kwargv.get("prompt", template_paras.get("prompt", None)),
+        "negative_prompt": kwargv.get("negative_prompt", template_paras.get("negative_prompt", None)),
+        "denoising_strength": kwargv.get("denoising_strength", template_paras.get("denoising_strength", None)),
+        "sampler_index": kwargv.get("sampler_index", template_paras.get("sampler_index", None)),
+        "seed": kwargv.get("seed", template_paras.get("seed", None)),
+        "steps": kwargv.get("steps", template_paras.get("steps", None)),
+        "width": kwargv.get("width", template_paras.get("width", None)),
+        "height": kwargv.get("height", template_paras.get("height", None)),
+        "cfg_scale": kwargv.get("cfg_scale", template_paras.get("cfg_scale", None)),
         "alwayson_scripts": alwayson_scripts,
 
         "mask_image": kwargv.get("mask_img_str", template_paras.get("mask_image",None)),
-        "source": kwargv.get("source", template_paras.get("source","DALLE"))
+        "source": kwargv.get("source", template_paras.get("source",None))
     }
 
+    for key in IMG2IMG_DEFAULT_PARAS.keys():
+        paras[key] = paras[key] if paras[key] != None else default_paras[key]
+        if key == "prompt":
+            paras[key] = query + paras[key]
+    
     # ------------------------------------------------------
     return paras, None

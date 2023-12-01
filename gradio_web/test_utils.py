@@ -9,13 +9,15 @@ class TestSD(unittest.TestCase):
             init_img_str = f.read()
         _, e = form_post_img2img_paras(init_img_str,'',[])
         self.assertEqual(None, e, e)
-        paras, e = form_post_img2img_paras(init_img_str,'',[],template="beauty")
+        paras, e = form_post_img2img_paras(init_img_str,'',[],template="beauty",prompt=None,sampler_index=None)
         self.assertEqual(None, e, e)
-        self.assertEqual(0.2, paras["denoising_strength"], f"form_post_img2img_paras failed with template: beauty")
+        self.assertEqual(0.25, paras["denoising_strength"], f"form_post_img2img_paras failed with template: beauty")
+        self.assertEqual("DPM++ 2M Karras", paras["sampler_index"], f"form_post_img2img_paras failed with template: beauty")
         self.assertEqual(paras["alwayson_scripts"]["controlnet"]["args"][0]["input_image"], init_img_str, "Init_img_str not applied")
-        paras, e = form_post_img2img_paras(init_img_str,'',[],template="default")
+        paras, e = form_post_img2img_paras(init_img_str,'test',[],template="default", prompt = "test")
         self.assertEqual(None, e, e)
         self.assertEqual(0.3, paras["denoising_strength"], f"form_post_img2img_paras failed with template: beauty")
+        self.assertEqual("testtest", paras["prompt"], f"form_post_img2img_paras failed with template: beauty")
     
     def test_form_post_txt2img_paras(self):
         _, e = form_post_txt2img_paras('',[])

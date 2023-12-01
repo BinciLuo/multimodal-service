@@ -1,0 +1,14 @@
+{
+    "prompt": "",
+    "negative_prompt": "",
+    "denoising_strength": 0.3,
+    "sampler_index": "DPM++ 2M Karras",
+    "seed": -1,
+    "steps": 40,
+    "width": 512,
+    "height": 512,
+    "cfg_scale": 5,
+    "alwayson_scripts": {},
+
+    "source": "DALLE"
+}

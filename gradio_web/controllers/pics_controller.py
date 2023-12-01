@@ -50,7 +50,7 @@ def change_pic_process(init_img: Image, query: str, loras:list[str] = [], templa
         gr.Warning(f"Mask image size {mask_img.size} not equals init image size {init_img.size}")
         return None
     if mask_img == None:
-        gr.Warning(f"Mask is None, so the full image will change")
+        gr.Warning(f"Mask is None, if you're using DALL-E, the full image will change")
         mask_img = Image.new("RGBA", init_img.size, (0, 0, 0, 0))
     mask_img.save(image_bytesio, format="PNG")
     mask_img_bytes = image_bytesio.getvalue()
@@ -65,7 +65,7 @@ def change_pic_process(init_img: Image, query: str, loras:list[str] = [], templa
     
     # ------------------------------------------------------
     # Use api post_img2img
-    pic_string, e = post_img2img(paras)
+    pic_string, e = post_img2img(paras, source = paras["source"])
     if e != None:
         gr.Warning(e)
         return gr.Image(value=init_img ,type='pil')

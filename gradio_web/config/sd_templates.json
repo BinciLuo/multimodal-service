@@ -1,19 +1,31 @@
 {
-    "default":{
-    
+    "default": {
+        "source": "DALLE"
     },
-    
-    "beauty":{
-        "controlnet":{
-            "args":[
-                {
-                    "module":"canny",
-                    "model":"coadapter-canny-sd15v1 [0f01fb68]",
-                    "input_image":"",
-                    "threshold_a":10,
-                    "threshold_b":100
-                }
-            ]
+    "beauty": {
+        "prompt": ",(recherche details) ,(ultra details),8k resolution,excellent quality,beautiful cinematic lighting,engaging atmosphere",
+        "negative_prompt":"(worst quality, low quality, cgi, bad eye, worst eye, illustration, cartoon),deformed,distorted,disfigured,poorly drawn,bad anatomy,wrong anatomy",
+        "denoising_strength": 0.25,
+        "sampler_index": "DPM++ 2M Karras",
+        "seed": -1,
+        "steps": 40,
+        "width": 512,
+        "height": 512,
+        "cfg_scale": 5,
+        "mask_image": null,
+        "source": "SD",
+        "alwayson_scripts": {
+            "controlnet": {
+                "args": [
+                    {
+                        "module": "canny",
+                        "model": "coadapter-canny-sd15v1 [0f01fb68]",
+                        "input_image": "",
+                        "threshold_a": 10,
+                        "threshold_b": 100
+                    }
+                ]
+            }
         }
     }
 }

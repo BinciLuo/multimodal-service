@@ -14,7 +14,7 @@ from modules.api.pics_api import post_txt2img,get_loras,post_img2img
 
 from controllers.chat_controllers import chat_process,extract_chat_process,reset_state,commands
 from controllers.pics_controller import change_pic_process,generate_pic_process, set_base_image
-from controllers.utils_controller import check_status_process,submit_mask_process
+from controllers.utils_controller import check_status_process,submit_mask_process,send_to_editor_process
 
 from const import *
 
@@ -65,17 +65,18 @@ with gr.Blocks() as demo:
             with gr.Row():
                 with gr.Column(scale=1):
                     base_image = gr.Image(label='Origin Image', type='pil', interactive=True)
+                    #sendToEditorBtn = gr.Button("Send to Editor",variant='primary')
                     with gr.Row():
                         image_editor = gr.ImageMask(label='Edit', type='pil', interactive=True)
                         mask_image = gr.Image(label='Mask Image', type='pil',interactive=False,image_mode='RGBA')
-                    submitMaskBtn = gr.Button("Get Mask")
+                    submitMaskBtn = gr.Button("Get Mask", variant='primary')
                     with gr.Tab("Pic Settings"):
                         widthSlider = gr.Slider(0, 1920, value=512, step=1)
                         heightSlider = gr.Slider(0, 1080, value=512, step=1)
+                    with gr.Tab("Operations"):
                         lora_dropdown = gr.Dropdown(choices=loras, type='value', label="lora", multiselect=True)
                         loraRefreshBtn = gr.Button("Refresh loras",variant="primary",scale=1,size='sm')
                         img_gen_template_dropdown = gr.Dropdown(choices=img_gen_template_dict.keys(), type='value', label="img template", value="default")
-                    with gr.Tab("Operations"):
                         img_input = gr.Textbox(show_label=False, placeholder="输入生成图像指令", lines=1,container=False,show_copy_button=True)
                         picGenBtn = gr.Button("Generate a Picture",variant="primary")
                         picChangeBtn = gr.Button("Change Picture",variant="primary")
@@ -107,8 +108,12 @@ with gr.Blocks() as demo:
 
     setBaseImageBtn.click(set_base_image,[edited_image],[base_image])
 
-    submitMaskBtn.click(submit_mask_process,[image_editor],[mask_image])
+    submitMaskBtn.click(submit_mask_process,[image_editor],[mask_image,image_editor])
 
+    #sendToEditorBtn.click(send_to_editor_process,[base_image],[image_editor])
+
+    # events
+    base_image.change(send_to_editor_process,[base_image],[image_editor])
 
 
 demo.queue().launch(share=False, inbrowser=True, server_name='0.0.0.0',server_port=GRADIO_PORT,debug=True)

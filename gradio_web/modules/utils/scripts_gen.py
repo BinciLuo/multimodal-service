@@ -7,7 +7,11 @@ with open("config/sd_templates.json", 'r') as json_file:
 
 def form_alwayson_scripts_from_templates(**kwargv):
     template_name = kwargv.get("template",None)
-    alwayson_scripts = templates_dict.get(template_name, {})
+    if template_name != None:
+        template = templates_dict.get(template_name, {})
+        alwayson_scripts = template.get("alwayson_scripts", {})
+    else:
+        return {}, None
 
     # some processing for control net
     control_net_dict = alwayson_scripts.get("controlnet",None)
@@ -40,3 +44,27 @@ def form_alwayson_scripts_from_kwargv(**kwargv):
         alwayson_scripts= {}
     
     return alwayson_scripts, e
+
+def form_default_paras_from_template(**kwargv):
+    template_name = kwargv.get("template",None)
+    if template_name != None:
+        template = templates_dict.get(template_name, {})
+    else:
+        return {},None
+    
+    template_paras = {
+        "prompt": template.get("prompt", ""),
+        "negative_prompt": template.get("negative_prompt", ""),
+        "denoising_strength": template.get("denoising_strength", 0.3),
+        "sampler_index": template.get("sampler_index", "DPM++ 2M Karras"),
+        "seed": template.get("seed", -1),
+        "steps": template.get("steps",40),
+        "width": template.get("width",512),
+        "height": template.get("height",512),
+        "cfg_scale": template.get("cfg_scale",5),
+
+        "mask_image": template.get("mask_img_str",None),
+        "source": template.get("source","DALLE")
+    }
+
+    return template_paras, None

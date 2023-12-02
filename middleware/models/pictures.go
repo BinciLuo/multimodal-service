@@ -328,10 +328,16 @@ func PostDALLE2Edit(paras jmap) (jmap, error) {
 		return nil, err
 	}
 
-	log.Println(responseJson)
+	if _, ok := responseJson["data"].(jarray); !ok {
+		log.Println(responseJson)
+		err = fmt.Errorf("err: DALLE Get image error")
+		log.Println(err)
+		return nil, err
+	}
 
 	if _, ok := responseJson["data"].(jarray)[0].(jmap)["b64_json"].(string); !ok {
 		err = fmt.Errorf("err: DALLE Get image error")
+
 		log.Println(err)
 		return nil, err
 	}

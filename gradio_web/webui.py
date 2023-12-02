@@ -71,8 +71,8 @@ with gr.Blocks() as demo:
                         mask_image = gr.Image(label='Mask Image', type='pil',interactive=False,image_mode='RGBA')
                     with gr.Row():
                         with gr.Column():
-                            autoMaskBtn = gr.Button("Auto Mask", variant='primary', size='sm')
-                            undoAutoMaskBtn = gr.Button("Undo Auto Mask", variant='primary', size='sm')
+                            autoFillBtn = gr.Button("Auto Fill", variant='primary', size='sm')
+                            undoAutoFillBtn = gr.Button("Undo Auto Fill", variant='primary', size='sm')
                         submitMaskBtn = gr.Button("Get Mask", variant='primary')
                     with gr.Tab("Operations"):
                         img_gen_template_dropdown = gr.Dropdown(choices=img_gen_template_dict.keys(), type='value', label="img template", value="default")
@@ -115,13 +115,14 @@ with gr.Blocks() as demo:
 
     submitMaskBtn.click(submit_mask_process,[image_editor],[mask_image,image_editor])
 
-    autoMaskBtn.click(auto_mask_process,[image_editor],[image_editor])
+    autoFillBtn.click(auto_mask_process,[image_editor, base_image],[image_editor])
 
-    undoAutoMaskBtn.click(undo_auto_mask_process,[],[image_editor])
+    undoAutoFillBtn.click(undo_auto_mask_process,[],[image_editor])
     #sendToEditorBtn.click(send_to_editor_process,[base_image],[image_editor])
 
     # events
     base_image.change(send_to_editor_process,[base_image],[image_editor])
+
 
 
 demo.queue().launch(share=False, inbrowser=True, server_name='0.0.0.0',server_port=GRADIO_PORT,debug=True)

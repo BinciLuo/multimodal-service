@@ -36,7 +36,7 @@ def get_background_color(image: Image):
 
     return np.array([max_r, max_g, max_b])
 
-def generate_mask_from_rgb(rgb_image: Image):
+def generate_mask_from_black(rgb_image: Image):
     # 创建一个新的RGBA图像（黑色背景）
     mask = Image.new("RGBA", rgb_image.size, (0, 0, 0, 255))
 

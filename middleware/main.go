@@ -33,6 +33,11 @@ func main() {
 	models.TencentAK = TencentAK1 + TencentAK2
 	models.TencentSK = TencentSK1 + TencentSK2
 
+	HuggingFaceToken1, _ := config.String("HuggingFaceToken1")
+	HuggingFaceToken2, _ := config.String("HuggingFaceToken2")
+	models.HuggingFaceToken = HuggingFaceToken1 + HuggingFaceToken2
+	models.SegformerB5URL, _ = config.String("SegformerB5URL")
+
 	models.OpenAIClient1 = openai.NewClient(OpenAITokenOne)
 	models.OpenAIClient2 = openai.NewClient(OpenAITokenTwo)
 	models.OpenAIKey = OpenAITokenTwo

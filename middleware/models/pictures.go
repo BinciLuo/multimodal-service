@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"log"
 	"mime/multipart"
 	"net/http"
@@ -327,6 +328,20 @@ func PostDALLE2Edit(paras jmap) (jmap, error) {
 		return nil, err
 	}
 
+	if _, ok := responseJson["data"].(jarray); !ok {
+		log.Println(responseJson)
+		err = fmt.Errorf("err: DALLE Get image error")
+		log.Println(err)
+		return nil, err
+	}
+
+	if _, ok := responseJson["data"].(jarray)[0].(jmap)["b64_json"].(string); !ok {
+		err = fmt.Errorf("err: DALLE Get image error")
+
+		log.Println(err)
+		return nil, err
+	}
+
 	imgStr := responseJson["data"].(jarray)[0].(jmap)["b64_json"].(string)
 	if err != nil {
 		log.Println(err)
@@ -336,4 +351,47 @@ func PostDALLE2Edit(paras jmap) (jmap, error) {
 	images = append(images, imgStr)
 	r["images"] = images
 	return r, nil
+}
+
+func PostHuggingFaceImgSegment(image string) (jarray, error) {
+	requestBody, err := json.Marshal(map[string]string{"image": image})
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("POST", SegformerB5URL, bytes.NewBuffer(requestBody))
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Set("Authorization", "Bearer "+HuggingFaceToken)
+	req.Header.Set("Content-Type", "application/json")
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	responseBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	var result interface{}
+	if err := json.Unmarshal(responseBody, &result); err != nil {
+		return nil, err
+	}
+
+	switch result.(type) {
+	case jmap:
+		err = fmt.Errorf(result.(jmap)["error"].(string))
+		log.Println(err)
+		return nil, err
+	case jarray:
+		return result.(jarray), nil
+	default:
+		return nil, fmt.Errorf("err: unknown err")
+	}
 }

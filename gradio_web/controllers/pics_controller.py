@@ -4,7 +4,9 @@ from io import BytesIO
 import gradio as gr
 import io
 
-from modules.api.pics_api import post_txt2img, post_img2img, form_post_txt2img_paras,form_post_img2img_paras
+from modules.api.pics_api import post_txt2img, post_img2img
+from modules.utils.imaga_paras_gen import form_post_txt2img_paras,form_post_img2img_paras
+from modules.utils.image_io import trans_image_to_str, trans_str_to_image
 
 base_image = None
 
@@ -35,26 +37,18 @@ def change_pic_process(init_img: Image, query: str, loras:list[str] = [], templa
     # ------------------------------------------------------
     # Check init_img and get init_img_str and get size
     size = init_img.size
-    image_bytesio = io.BytesIO()
-    if init_img == None:
-        gr.Warning("No image provided.")
-        return None
-    init_img.save(image_bytesio, format="PNG")
-    init_img_bytes = image_bytesio.getvalue()
-    init_img_str = base64.b64encode(init_img_bytes).decode('utf-8')
+    init_img_str = trans_image_to_str(init_img)
 
     # ------------------------------------------------------
     # Check mask_img and get mask_img_str
-    image_bytesio = io.BytesIO()
     if mask_img !=None and mask_img.size != init_img.size:
         gr.Warning(f"Mask image size {mask_img.size} not equals init image size {init_img.size}")
         return None
     if mask_img == None:
         gr.Warning(f"Mask is None, if you're using DALL-E, the full image will change")
         mask_img = Image.new("RGBA", init_img.size, (0, 0, 0, 0))
-    mask_img.save(image_bytesio, format="PNG")
-    mask_img_bytes = image_bytesio.getvalue()
-    mask_img_str = base64.b64encode(mask_img_bytes).decode('utf-8')
+    else:
+        mask_img_str = trans_image_to_str(mask_img)
 
     # ------------------------------------------------------
     # Form paras
@@ -72,7 +66,7 @@ def change_pic_process(init_img: Image, query: str, loras:list[str] = [], templa
     
     # ------------------------------------------------------
     # Get image from str and return
-    image = Image.open(BytesIO(base64.b64decode(pic_string)))
+    image = trans_str_to_image(pic_string)
     image = image.resize(size)
     image_show = gr.Image(value=image ,type='pil')
     return image_show

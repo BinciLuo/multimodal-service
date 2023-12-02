@@ -3,6 +3,7 @@ package controllers
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"middleware/models"
 	"net/http"
 
@@ -109,4 +110,42 @@ func (c *PicturesController) PostDALLE2Edit() {
 	c.Data["json"] = r
 	c.ServeJSON()
 
+}
+
+func (c *PicturesController) PostHuggingFaceImgSegment() {
+	var (
+		body jmap
+	)
+
+	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &body); err != nil {
+		r := make(jmap)
+		r["error"] = err.Error()
+		log.Println(err)
+		c.Data["json"] = r
+		c.ServeJSON()
+	}
+
+	if _, ok := body["image"].(string); !ok {
+		err := fmt.Errorf("err: No Image Provided")
+		r := make(jmap)
+		r["error"] = err.Error()
+		log.Println(err)
+		c.Data["json"] = r
+		c.ServeJSON()
+	}
+
+	imagePackages, err := models.PostHuggingFaceImgSegment(body["image"].(string))
+	if err != nil {
+		r := make(jmap)
+		r["error"] = err.Error()
+		log.Println(err)
+		c.Data["json"] = r
+		c.ServeJSON()
+	}
+
+	r := make(jmap)
+	r["error"] = nil
+	r["image_packages"] = imagePackages
+	c.Data["json"] = r
+	c.ServeJSON()
 }

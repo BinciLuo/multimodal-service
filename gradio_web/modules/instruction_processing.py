@@ -7,14 +7,21 @@ def check_instruction(pattern_dict:dict,instruction:dict):
         print(f"command not match")
         return False
     # 如果paras类型不符，跳过
-    if pattern_dict[instruction["command"]]["paras_type"] != str(type(instruction["paras"])):
-        print(f"paras type not match")
-        return False
+    if pattern_dict[instruction["command"]]["paras_type"] != None:
+        if len(pattern_dict[instruction["command"]]["paras_type"]) !=len(instruction["paras"]):
+            print(f"paras lenth not match")
+            return False
+        for para, right_type in zip(instruction["paras"], pattern_dict[instruction["command"]]["paras_type"]):
+            if str(type(para)) != right_type:
+                print(f"paras type not match")
+                return False
     # 如果是enum且不满足，跳过
     if pattern_dict[instruction["command"]]["paras_enum"] != None:
         if instruction["paras"] not in pattern_dict[instruction["command"]]["paras_enum"]:
-            print(f"enum not match")
-            return False
+            for para, enum in zip(instruction["paras"],pattern_dict[instruction["command"]]["paras_enum"]):
+                if enum != None and para not in enum:
+                    print(f"enum not match")
+                    return False
     # 如果不满足范围，跳过
     try:
         for each in instruction["paras"]:

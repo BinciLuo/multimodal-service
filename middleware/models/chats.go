@@ -15,40 +15,21 @@ import (
 func PostGPT3Dot5Turbo(query string) (jmap, error) {
 	r := make(jmap)
 
-	resp, err := OpenAIClient1.CreateChatCompletion(
+	UpdateChatGPTUserChatMessages(query)
+	resp, err := OpenAIClient2.CreateChatCompletion(
 		context.Background(),
 		openai.ChatCompletionRequest{
-			Model: openai.GPT3Dot5Turbo,
-			Messages: []openai.ChatCompletionMessage{
-				{
-					Role:    openai.ChatMessageRoleUser,
-					Content: query,
-				},
-			},
+			Model:    openai.GPT3Dot5Turbo,
+			Messages: ChatGPTMessages,
 		},
 	)
 
 	if err != nil {
-		log.Printf("ChatCompletion fallback to client2. error: %v\n, ", err)
-		resp, err = OpenAIClient2.CreateChatCompletion(
-			context.Background(),
-			openai.ChatCompletionRequest{
-				Model: openai.GPT3Dot5Turbo,
-				Messages: []openai.ChatCompletionMessage{
-					{
-						Role:    openai.ChatMessageRoleUser,
-						Content: query,
-					},
-				},
-			},
-		)
-
-		if err != nil {
-			log.Printf("ChatCompletion client2 error: %v\n, ", err)
-			return nil, err
-		}
+		log.Printf("ChatCompletion client2 error: %v\n, ", err)
+		return nil, err
 	}
 
+	UpdateChatbotChatGPTChatMessages(resp.Choices[0].Message.Content)
 	r["chat"] = resp.Choices[0].Message.Content
 	return r, nil
 }

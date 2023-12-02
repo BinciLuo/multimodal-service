@@ -20,7 +20,7 @@
 其中mask_selected为将所选tag标记为mask，paras为一个列表，第一个元素表示所选tag的名称的列表
 mask_unselected为将非选中的tag标记为mask，paras为一个列表，第一个元素表示选中的tag的名称的列表
 beauty为美颜
-change_masked为改变mask的区域，paras为一个列表，第一个元素表示使用的模型的名称，有"SD"和"DALLE"可选；第二个为提示词，不能为空，如果我没有给出那就默认为sky
+change_masked为改变mask的区域，paras为一个列表，第一个元素表示使用的模型的名称，有"SD"和"DALLE"可选；第二个为提示词，不能为空，默认为sky
 给我的回答请只包含json array，在json array前后不要任何信息
 
 模版如下：
@@ -42,6 +42,3 @@ change_masked为改变mask的区域，paras为一个列表，第一个元素表�
         "paras" : [ "DALLE" , "Sky"]
     }
 ]
-
-下面是修改的描述：
-HERE IS USER INPUT

@@ -10,6 +10,8 @@ import (
 	"net/http"
 	"os"
 	"strings"
+
+	openai "github.com/sashabaranov/go-openai"
 )
 
 func convertRGBToRGBA(inputPath, outputPath string, mask bool) error {
@@ -117,4 +119,50 @@ func imagUrlToBase64(url string) (string, error) {
 	base64String := base64.StdEncoding.EncodeToString(imageData)
 
 	return base64String, nil
+}
+
+func UpdateChatGPTUserChatMessages(newMessage string) {
+	// 将新消息添加到全局变量中
+	ChatGPTMessages = append(ChatGPTMessages, openai.ChatCompletionMessage{
+		Role:    openai.ChatMessageRoleUser,
+		Content: newMessage,
+	})
+
+	// 限制消息数量为最近的20条
+	if len(ChatGPTMessages) > 20 {
+		ChatGPTMessages = ChatGPTMessages[len(ChatGPTMessages)-20:]
+	}
+}
+
+func UpdateChatbotChatGPTChatMessages(newMessage string) {
+	// 将新消息添加到全局变量中
+	ChatGPTMessages = append(ChatGPTMessages, openai.ChatCompletionMessage{
+		Role:    openai.ChatMessageRoleAssistant,
+		Content: newMessage,
+	})
+
+	// 限制消息数量为最近的20条
+	if len(ChatGPTMessages) > 20 {
+		ChatGPTMessages = ChatGPTMessages[len(ChatGPTMessages)-20:]
+	}
+}
+
+func getLastNChatGPTMessages(n int) []openai.ChatCompletionMessage {
+	// 如果消息数量小于N，返回所有消息
+	if len(ChatGPTMessages) <= n {
+		return ChatGPTMessages
+	}
+	// 否则返回最近的N条消息
+	return ChatGPTMessages[len(ChatGPTMessages)-n:]
+}
+
+func ReadTextFile(filePath string) (string, error) {
+	// 读取文件内容
+	content, err := ioutil.ReadFile(filePath)
+	if err != nil {
+		return "", err
+	}
+	// 将文件内容转换为字符串
+	fileContent := string(content)
+	return fileContent, nil
 }

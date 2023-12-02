@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"middleware/models"
 	_ "middleware/routers"
 	"os"
@@ -43,6 +44,14 @@ func main() {
 	models.OpenAIKey = OpenAITokenTwo
 	GlmServer, _ := config.String("GLMSERVER")
 	models.GlmChatURL = GlmServer + "/chat/chatglm2-6b"
+
+	chatGPTHead, err := models.ReadTextFile("prompt/chatGPT_head.txt")
+	if err != nil {
+		log.Println(err)
+		chatGPTHead = ""
+	}
+	models.UpdateChatGPTUserChatMessages(chatGPTHead)
+
 	Port := os.Getenv("BEE_PORT")
 	if Port == "" {
 		Port = "8080"

@@ -37,7 +37,7 @@ def extract_chat_process(chatbot,command_dropdown):
         return chatbot, command_dropdown
     global commands
     extracted_commands = extract_instructions(PATTERN_FILE_PATH,chatbot[-1][-1])
-    commands.extend([json.dumps(cmd) for cmd in extracted_commands])
+    commands.extend([cmd for cmd in extracted_commands])
     extracted_commands_string = ""
     for cmd in extracted_commands:
         extracted_commands_string += f'操作为: {cmd["command"]} 参数为: {cmd["paras"]}\n'
@@ -46,7 +46,7 @@ def extract_chat_process(chatbot,command_dropdown):
     
     chatbot[-1][-1] = extracted_commands_string if extracted_commands_string != "" else chatbot[-1][-1]
     print(commands)
-    command_dropdown = gr.Dropdown(choices=[f'操作为: {json.loads(cmd)["command"]} 参数为: {json.loads(cmd)["paras"]}' for cmd in commands], type='index', label="command", multiselect=True)
+    command_dropdown = gr.Dropdown(choices=[f'操作为: {cmd["command"]} 参数为: {cmd["paras"]}' for cmd in commands], type='index', label="command", multiselect=True)
     
 
     return chatbot, command_dropdown

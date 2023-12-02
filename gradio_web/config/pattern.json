@@ -1,31 +1,30 @@
 {
-    "change background color":
+    "mask_selected":
     {
-        "paras_type" : "<class 'str'>",
-        "paras_enum" : ["red","blue","white","black","gray","green","pink"],
+        "paras_type" : ["<class 'list'>"],
+        "paras_enum" : null,
         "paras_min":null,
         "paras_max":null
     },
-    "super resolution":
+    "mask_unselected":
     {
-        "paras_type" : "<class 'float'>",
+        "paras_type" : ["<class 'list'>"],
         "paras_enum" : null,
-        "paras_min":1.0,
-        "paras_max":10.0
+        "paras_min":null,
+        "paras_max":null
     },
     "beauty":
     {
-        "paras_type" : "<class 'int'>",
+        "paras_type" : null,
         "paras_enum" : null,
-        "paras_min":1,
-        "paras_max":100
+        "paras_min":null,
+        "paras_max":null
     },
-    "split":
-    {
-        "paras_type" : "<class 'list'>",
-        "paras_enum" : null,
-        "paras_min":0.0,
-        "paras_max":1.0
+    "change_masked":{
+        "paras_type": ["<class 'str'>", "<class 'str'>"],
+        "paras_enum" : [["SD","DALLE"],null],
+        "paras_min":null,
+        "paras_max":null
     },
     "others":
     {

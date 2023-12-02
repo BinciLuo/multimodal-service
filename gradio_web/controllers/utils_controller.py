@@ -10,7 +10,6 @@ from modules.utils.img_segment import auto_fill_by_blackpoints,replace_black_pix
 
 last_editor = []
 
-
 def check_status_process():
     err_info_list = []
     test_funcs = [
@@ -35,8 +34,7 @@ def check_status_process():
         gr.Warning('🤡'+err_info.upper()+'🥲')
 
 def submit_mask_process(painted):
-    new_editor = gr.ImageEditor(value={"background":painted["composite"],"layers":[],"composite":None}, label='Edit', type='pil', interactive=True)
-    return generate_mask_from_black(painted['composite']), new_editor
+    return generate_mask_from_black(painted['composite']), {"background":painted["composite"],"layers":[],"composite":None}
 
 def send_to_editor_process(base_img):
     new_editor = gr.ImageEditor(value={"background":replace_black_pixels(base_img),"layers":[],"composite":None}, label='Edit', type='pil', interactive=True)

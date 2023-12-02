@@ -21,6 +21,8 @@ var (
 	TencentSK        string
 	HuggingFaceToken string
 	SegformerB5URL   string
+
+	ChatGPTMessages []openai.ChatCompletionMessage
 )
 
 func init() {

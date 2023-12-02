@@ -7,7 +7,7 @@ def check_instruction(pattern_dict:dict,instruction:dict):
         print(f"command not match")
         return False
     # 如果paras类型不符，跳过
-    if pattern_dict[instruction["command"]]["paras_type"] != str(type(instruction["paras"])):
+    if pattern_dict[instruction["command"]]["paras_type"] != None and pattern_dict[instruction["command"]]["paras_type"] != str(type(instruction["paras"])):
         print(f"paras type not match")
         return False
     # 如果是enum且不满足，跳过

@@ -8,6 +8,8 @@ from modules.utils.check_server_status import  check_chat_api_chat, check_sd_api
 from modules.utils.colors import generate_mask_from_rgb
 from modules.utils.img_segment import get_mask_by_blackpoints,replace_black_pixels
 
+last_editor = []
+
 
 def check_status_process():
     err_info_list = []
@@ -38,10 +40,22 @@ def submit_mask_process(painted):
 
 def send_to_editor_process(base_img):
     new_editor = gr.ImageEditor(value={"background":replace_black_pixels(base_img),"layers":[],"composite":None}, label='Edit', type='pil', interactive=True)
+    global last_editor
+    last_editor.append({"background":replace_black_pixels(base_img),"layers":[],"composite":None})
     return new_editor
 
 def auto_mask_process(painted):
+    global last_editor
+    last_editor.append(painted)
     composite_img = painted["composite"]
     auto_mask_img = get_mask_by_blackpoints(composite_img)
+    print(auto_mask_img.mode)
     new_editor = gr.ImageEditor(value={"background":auto_mask_img,"layers":[],"composite":None}, label='Edit', type='pil', interactive=True)
     return new_editor
+
+def undo_auto_mask_process():
+    if len(last_editor) != 1:
+        return last_editor.pop()
+    else:
+        gr.Warning("It is the init image, can't undo anymore")
+        return last_editor[0]

@@ -1,11 +1,12 @@
 import base64
 from io import BytesIO
+import io
 import numpy as np
 import requests
 from PIL import Image
 import gradio as gr
-API_URL = "https://api-inference.huggingface.co/models/nvidia/segformer-b5-finetuned-ade-640-640"
-headers = {"Authorization": "Bearer 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"}
+
+from modules.api.pics_api import post_hgface_img_segment
 
 def replace_black_pixels(image: Image):
     if image == None:
@@ -23,11 +24,6 @@ def replace_black_pixels(image: Image):
     result_image = Image.fromarray(img_array)
     return result_image
 
-def post_hgface_img_segment(filename):
-    with open(filename, "rb") as f:
-        data = f.read()
-    response = requests.post(API_URL, headers=headers, data=data)
-    return response.json()
 
 def process_images_by_blackpoints(original_image: Image, mask_images: dict):
     # 将原始图像转换为NumPy数组
@@ -43,7 +39,8 @@ def process_images_by_blackpoints(original_image: Image, mask_images: dict):
     # 对于每个L模式的图像数组，在原始图像中找到对应位置为全黑的像素，并将其置为0
     for layer in l_arrays:
         black_pixels = np.where(zero_pixels & (layer == 255))
-        if black_pixels[0].size > 0:
+        print(black_pixels[0].size)
+        if black_pixels[0].size > 10:
             try:
                 original_array[(layer == 255)] = [ 0, 0, 0, 255]
             except:
@@ -54,26 +51,30 @@ def process_images_by_blackpoints(original_image: Image, mask_images: dict):
     return result_image
 
 def get_mask_by_blackpoints(image: Image):
-    image.save("temp.png")
-    response_json = post_hgface_img_segment("temp.png")
-    try:
-        err = response_json.get("error",None)
-        print(err)
-    except:
-        err = None
-        labels_and_scores = [(image_package['label'],image_package['score']) for image_package in response_json]
-        print(labels_and_scores)
+    image_bytesio = io.BytesIO()
+    if image == None:
+        gr.Warning("No image provided.")
+        return None
+    image.save(image_bytesio, format="PNG")
+    img_bytes = image_bytesio.getvalue()
+    img_str = base64.b64encode(img_bytes).decode('utf-8')
+    response_json, err = post_hgface_img_segment(img_str)
+    
     if err != None:
+        print(err)
         gr.Warning(err)
         return image
+    
+    labels_and_scores = [(image_package['label'],image_package['score']) for image_package in response_json["image_packages"]]
+    print(labels_and_scores)
+    
     mask_images={}
-    for image_package in response_json:
+    for image_package in response_json["image_packages"]:
         mask_image = Image.open(BytesIO(base64.b64decode(image_package['mask'])))
         mask_images[image_package['label']] = mask_image
     
     result_image = process_images_by_blackpoints(image, mask_images)
     return result_image
-
 
 def process_images_by_keywords(image: Image, mask_images: dict, keys_words: list[str]):
     # 将原始图像转换为NumPy数组

@@ -206,3 +206,24 @@ def form_post_img2img_paras(init_img_str:str ,query: str ,loras:list[str]=[], **
     
     # ------------------------------------------------------
     return paras, None
+
+def post_hgface_img_segment(image: str):
+    # ------------------------------------------------------
+    # Begin check route
+    if "route" not in picture_process_info["huggingface_img_segment"].keys():
+        return None, f"[SD] route of img2img not found"
+    route = picture_process_info["huggingface_img_segment"]["route"]
+
+    # ------------------------------------------------------
+    # Begin post
+    response = requests.post(SERVER_URL+route, data=json.dumps({"image": image}))
+    print(response)
+    try:
+        return response.json(),None
+    except:
+        try:
+            print(response)
+            return None,response.json()["error"] if response.json()["error"] is not None else "Post Error"
+        except:
+            print(response)
+            return None,"Post Error"

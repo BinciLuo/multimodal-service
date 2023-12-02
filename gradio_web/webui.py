@@ -14,7 +14,7 @@ from modules.api.pics_api import post_txt2img,get_loras,post_img2img
 
 from controllers.chat_controllers import chat_process,extract_chat_process,reset_state,commands
 from controllers.pics_controller import change_pic_process,generate_pic_process, set_base_image
-from controllers.utils_controller import auto_mask_process, check_status_process,submit_mask_process,send_to_editor_process
+from controllers.utils_controller import auto_mask_process, check_status_process,submit_mask_process,send_to_editor_process,undo_auto_mask_process
 
 from const import *
 
@@ -70,18 +70,21 @@ with gr.Blocks() as demo:
                         image_editor = gr.ImageMask(label='Edit', type='pil', interactive=True, show_download_button= True)
                         mask_image = gr.Image(label='Mask Image', type='pil',interactive=False,image_mode='RGBA')
                     with gr.Row():
-                        autoMaskBtn = gr.Button("Auto Mask", variant='primary')
+                        with gr.Column():
+                            autoMaskBtn = gr.Button("Auto Mask", variant='primary', size='sm')
+                            undoAutoMaskBtn = gr.Button("Undo Auto Mask", variant='primary', size='sm')
                         submitMaskBtn = gr.Button("Get Mask", variant='primary')
-                    with gr.Tab("Pic Settings"):
-                        widthSlider = gr.Slider(0, 1920, value=512, step=1)
-                        heightSlider = gr.Slider(0, 1080, value=512, step=1)
                     with gr.Tab("Operations"):
-                        lora_dropdown = gr.Dropdown(choices=loras, type='value', label="lora", multiselect=True)
-                        loraRefreshBtn = gr.Button("Refresh loras",variant="primary",scale=1,size='sm')
                         img_gen_template_dropdown = gr.Dropdown(choices=img_gen_template_dict.keys(), type='value', label="img template", value="default")
                         img_input = gr.Textbox(show_label=False, placeholder="输入生成图像指令", lines=1,container=False,show_copy_button=True)
                         picGenBtn = gr.Button("Generate a Picture",variant="primary")
                         picChangeBtn = gr.Button("Change Picture",variant="primary")
+                    with gr.Tab("Pic Settings"):
+                        widthSlider = gr.Slider(0, 1920, value=512, step=1)
+                        heightSlider = gr.Slider(0, 1080, value=512, step=1)
+                        lora_dropdown = gr.Dropdown(choices=loras, type='value', label="lora", multiselect=True)
+                        loraRefreshBtn = gr.Button("Refresh loras",variant="primary",scale=1,size='sm')
+                    
                 
 
                 with gr.Column(scale=1):
@@ -113,6 +116,8 @@ with gr.Blocks() as demo:
     submitMaskBtn.click(submit_mask_process,[image_editor],[mask_image,image_editor])
 
     autoMaskBtn.click(auto_mask_process,[image_editor],[image_editor])
+
+    undoAutoMaskBtn.click(undo_auto_mask_process,[],[image_editor])
     #sendToEditorBtn.click(send_to_editor_process,[base_image],[image_editor])
 
     # events

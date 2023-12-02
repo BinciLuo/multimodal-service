@@ -15,6 +15,7 @@ from modules.api.pics_api import post_txt2img,get_loras,post_img2img
 from controllers.chat_controllers import chat_process,extract_chat_process,reset_state,commands
 from controllers.pics_controller import change_pic_process,generate_pic_process, set_base_image
 from controllers.utils_controller import auto_mask_process, check_status_process,submit_mask_process,send_to_editor_process,undo_auto_mask_process
+from controllers.mutimodal_controllers import exec_commands_process
 
 from const import *
 
@@ -60,6 +61,7 @@ with gr.Blocks() as demo:
                 emptyBtn = gr.Button("Clear History",variant="stop")
             command_dropdown = gr.Dropdown(choices=commands, type='index', label="command", multiselect=True)
             extractBtn = gr.Button("Extract Instruction")
+            execBtn = gr.Button("Exec Selected commands")
 
         with gr.Tab("Draw"):
             with gr.Row():
@@ -118,6 +120,8 @@ with gr.Blocks() as demo:
     autoFillBtn.click(auto_mask_process,[image_editor, base_image],[image_editor])
 
     undoAutoFillBtn.click(undo_auto_mask_process,[],[image_editor])
+
+    execBtn.click(exec_commands_process,[command_dropdown,base_image,image_editor,mask_image,edited_image,img_input,lora_dropdown],[base_image, image_editor, mask_image, edited_image])
     #sendToEditorBtn.click(send_to_editor_process,[base_image],[image_editor])
 
     # events

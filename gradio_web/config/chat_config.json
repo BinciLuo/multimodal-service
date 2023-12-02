@@ -15,13 +15,13 @@
         "instruction_gen":
         [
             {
-                "description" : "Give template and examples",
-                "file_path" : "prompts/instruction_generate_prompt.txt",
+                "description" : "Default",
+                "file_path" : "prompts/default.txt",
                 "user_input_replace" : "HERE IS USER INPUT"
             },
             {
-                "description" : "Default",
-                "file_path" : "prompts/default.txt",
+                "description" : "Give template and examples",
+                "file_path" : "prompts/instruction_generate_prompt.txt",
                 "user_input_replace" : "HERE IS USER INPUT"
             }
         ]

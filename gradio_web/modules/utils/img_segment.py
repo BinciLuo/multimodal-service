@@ -72,7 +72,7 @@ def auto_fill_by_blackpoints(image: Image,init_img: Image):
     result_image = auto_fill_black(image, mask_images)
     return result_image
 
-def process_images_by_keywords(image: Image, mask_images: dict, keys_words: list[str]):
+def auto_black_keywords(image: Image, mask_images: dict, keys_words: list[str]):
     # 将原始图像转换为NumPy数组
     original_array = np.array(image)
     # 打开所有L模式的图像
@@ -93,23 +93,28 @@ def process_images_by_keywords(image: Image, mask_images: dict, keys_words: list
     # 返回处理后的图像
     return result_image
 
-def get_mask_by_keywords(image: Image, keywords: list[str]):
-    image.save("temp.png")
-    response_json = post_hgface_img_segment("temp.png")
-    try:
-        err = response_json.get("error",None)
-        print(err)
-    except:
-        err = None
-        labels_and_scores = [(image_package['label'],image_package['score']) for image_package in response_json]
-        print(labels_and_scores)
+def auto_black_by_keywords(image: Image, init_img: Image, keywords: list[str]):
+    init_img_str = trans_image_to_str(init_img)
+    # Post huggingface models and check
+    response_json, err = post_hgface_img_segment(init_img_str)
     if err != None:
-        gr.Warning(err)
+        # clear cache
+        post_hgface_img_segment.cache_clear()
+        print(err)
+        gr.Warning(err+". Cache cleared")
         return image
+    try:
+        labels_and_scores = [(image_package['label'],image_package['score']) for image_package in response_json["image_packages"]]
+        print(labels_and_scores)
+    except:
+        print(response_json)
+        gr.Warning(response_json.get("error", f"Unknown err: {response_json}"))
+        return image
+    # Get all mask images
     mask_images={}
-    for image_package in response_json:
+    for image_package in response_json["image_packages"]:
         mask_image = Image.open(BytesIO(base64.b64decode(image_package['mask'])))
         mask_images[image_package['label']] = mask_image
     
-    result_image = process_images_by_keywords(image, mask_images, keywords)
+    result_image = auto_black_keywords(image, mask_images, keywords)
     return result_image

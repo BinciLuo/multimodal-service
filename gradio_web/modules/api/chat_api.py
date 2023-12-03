@@ -3,13 +3,13 @@ import requests
 
 from const import *
 
-def chat(model_name: str, query: str, sever_url:str):
+def post_chat(model_name: str, query: str, sever_url:str, history=[]):
     if model_name not in model_info.keys():
         return "",f"[Chat] model_name [{model_name}] not found"
     if "route" not in model_info[model_name].keys():
         return "",f"[Chat] route of model [{model_name}] not found"
     
-    post_data = {"query": query}
+    post_data = {"query": query, "history": history}
 
     response=requests.post(sever_url+model_info[model_name]["route"], data=json.dumps(post_data))
     if response.status_code != 200:

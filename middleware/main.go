@@ -46,11 +46,11 @@ func main() {
 	models.GlmChatURL = GlmServer + "/chat/chatglm2-6b"
 
 	chatGPTHead, err := models.ReadTextFile("prompt/chatGPT_head.txt")
+	models.ChatGPTHead = chatGPTHead
 	if err != nil {
 		log.Println(err)
-		chatGPTHead = ""
+		models.ChatGPTHead = ""
 	}
-	models.UpdateChatGPTUserChatMessages(chatGPTHead)
 
 	Port := os.Getenv("BEE_PORT")
 	if Port == "" {

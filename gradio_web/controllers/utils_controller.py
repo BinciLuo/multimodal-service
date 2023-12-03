@@ -7,6 +7,9 @@ from PIL import Image
 from modules.utils.check_server_status import  check_chat_api_chat, check_sd_api_img2img, check_sd_api_loras, check_sd_api_txt2img
 from modules.utils.colors import generate_mask_from_black
 from modules.utils.img_segment import auto_fill_by_blackpoints,replace_black_pixels
+from modules.api.pics_api import post_hgface_img_segment
+from modules.utils.image_io import trans_image_to_str
+from controllers.chat_controllers import history
 
 last_editor = []
 
@@ -36,11 +39,25 @@ def check_status_process():
 def submit_mask_process(painted):
     return generate_mask_from_black(painted['composite']), {"background":painted["composite"],"layers":[],"composite":None}
 
-def send_to_editor_process(base_img):
+def change_base_image_process(base_img, chatbot):
+    base_img_str = trans_image_to_str(base_img)
+    if base_img_str != None:
+        response_json, err = post_hgface_img_segment(base_img_str)
+        if err == None:
+            labels = [image_package['label'] for image_package in response_json["image_packages"]]
+            msg = "分割得到的标签有:"
+            for i,label in enumerate(labels):
+                msg += f"\n{i+1}. {label}"
+            chatbot.append(("我更改了图片，新的图片有哪些部分？",""))
+            global history
+            history.clear()
+            history.append(("我更改了图片，新的图片有哪些部分？",msg))
+            chatbot[-1] = ("我更改了图片，新的图片有哪些部分？",msg)
     new_editor = gr.ImageEditor(value={"background":replace_black_pixels(base_img),"layers":[],"composite":None}, label='Edit', type='pil', interactive=True)
     global last_editor
     last_editor = [{"background":replace_black_pixels(base_img),"layers":[],"composite":None}]
-    return new_editor
+
+    return new_editor, chatbot
 
 def auto_mask_process(painted, init_img):
     global last_editor

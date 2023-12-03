@@ -8,9 +8,16 @@ from controllers.utils_controller import submit_mask_process
 def exec_command(command_package, base_image: Image, image_editor: dict, mask_image: Image, edited_image: Image, img_input: str, lora_dropdown: list[str]):
     # ---------------------------------------------------------------------------------------------------------------------------------------------
     if command_package['command'] == 'mask_selected':
-        new_composite = auto_black_by_keywords(image_editor["composite"], base_image,command_package["paras"][0])
+        new_composite = auto_black_by_keywords(image_editor["composite"], base_image,command_package["paras"][0], False)
         image_editor = {"background":new_composite,"layers":[],"composite":new_composite}
+        mask_image, new_image_editor_dict = submit_mask_process(image_editor)
+        image_editor = {"background":new_image_editor_dict["background"],"layers":[],"composite":new_image_editor_dict["background"]}
     # ---------------------------------------------------------------------------------------------------------------------------------------------
+    elif command_package['command'] == 'mask_unselected':
+        new_composite = auto_black_by_keywords(image_editor["composite"], base_image,command_package["paras"][0], True)
+        image_editor = {"background":new_composite,"layers":[],"composite":new_composite}
+        mask_image, new_image_editor_dict = submit_mask_process(image_editor)
+        image_editor = {"background":new_image_editor_dict["background"],"layers":[],"composite":new_image_editor_dict["background"]}
     # ---------------------------------------------------------------------------------------------------------------------------------------------    
     # ---------------------------------------------------------------------------------------------------------------------------------------------
     # ---------------------------------------------------------------------------------------------------------------------------------------------
@@ -31,4 +38,4 @@ def exec_commands_process(command_dropdown: list, base_image: Image, image_edito
     command_packages = [commands[index] for index in command_dropdown]
     for command_package in command_packages:
         base_image, image_editor, mask_image, edited_image = exec_command(command_package,base_image,image_editor,mask_image,edited_image,img_input,lora_dropdown)
-    return base_image, gr.ImageEditor(value={"background":image_editor["composite"],"layers":[],"composite":None}, label='Edit', type='pil', interactive=True), mask_image, edited_image
+    return gr.ImageEditor(value={"background":image_editor["composite"],"layers":[],"composite":None}, label='Edit', type='pil', interactive=True), mask_image, edited_image

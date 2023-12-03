@@ -4,7 +4,7 @@ import gradio as gr
 import threading
 import time
 
-from modules.api.chat_api import chat
+from modules.api.chat_api import post_chat
 from modules.api.pics_api import get_loras,post_img2img,post_txt2img
 from modules.utils.imaga_paras_gen import form_post_txt2img_paras,form_post_img2img_paras
 
@@ -13,7 +13,7 @@ from const import *
 
 ## Chat
 def each_chat_check(model_name, err_info_list):
-    _, e = chat(model_name, '123', SERVER_URL)
+    _, e = post_chat(model_name, '123', SERVER_URL, [])
     if e != None:
         err_info_list.append(e)
 

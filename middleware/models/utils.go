@@ -147,6 +147,15 @@ func UpdateChatbotChatGPTChatMessages(newMessage string) {
 	}
 }
 
+func FormChatGPTMessages(head string, history jarray) {
+	ChatGPTMessages = []openai.ChatCompletionMessage{}
+	UpdateChatbotChatGPTChatMessages(head)
+	for _, round := range history {
+		UpdateChatGPTUserChatMessages(round.(jarray)[0].(string))
+		UpdateChatbotChatGPTChatMessages(round.(jarray)[1].(string))
+	}
+}
+
 func getLastNChatGPTMessages(n int) []openai.ChatCompletionMessage {
 	// 如果消息数量小于N，返回所有消息
 	if len(ChatGPTMessages) <= n {

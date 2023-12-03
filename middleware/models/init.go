@@ -22,6 +22,7 @@ var (
 	HuggingFaceToken string
 	SegformerB5URL   string
 
+	ChatGPTHead     string
 	ChatGPTMessages []openai.ChatCompletionMessage
 )
 

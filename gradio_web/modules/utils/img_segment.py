@@ -72,11 +72,14 @@ def auto_fill_by_blackpoints(image: Image,init_img: Image):
     result_image = auto_fill_black(image, mask_images)
     return result_image
 
-def auto_black_keywords(image: Image, mask_images: dict, keys_words: list[str]):
+def auto_black_keywords(image: Image, mask_images: dict, keys_words: list[str], reverse: bool):
     # 将原始图像转换为NumPy数组
     original_array = np.array(image)
     # 打开所有L模式的图像
-    l_images = [mask_images[key] for key in keys_words if key in mask_images.keys()]
+    if reverse == False:
+        l_images = [mask_images[key] for key in keys_words if key in mask_images.keys()]
+    else:
+        l_images = [mask_images[key] for key in mask_images.keys() if key not in keys_words]
     # 将L模式的图像转换为NumPy数组
     l_arrays = [np.array(l_image) for l_image in l_images]
     # 找到L模式的图像中值为255的像素点
@@ -93,7 +96,7 @@ def auto_black_keywords(image: Image, mask_images: dict, keys_words: list[str]):
     # 返回处理后的图像
     return result_image
 
-def auto_black_by_keywords(image: Image, init_img: Image, keywords: list[str]):
+def auto_black_by_keywords(image: Image, init_img: Image, keywords: list[str], reverse: bool):
     init_img_str = trans_image_to_str(init_img)
     # Post huggingface models and check
     response_json, err = post_hgface_img_segment(init_img_str)
@@ -116,5 +119,5 @@ def auto_black_by_keywords(image: Image, init_img: Image, keywords: list[str]):
         mask_image = Image.open(BytesIO(base64.b64decode(image_package['mask'])))
         mask_images[image_package['label']] = mask_image
     
-    result_image = auto_black_keywords(image, mask_images, keywords)
+    result_image = auto_black_keywords(image, mask_images, keywords, reverse)
     return result_image

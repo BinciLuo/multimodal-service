@@ -3,6 +3,7 @@ import functools
 from io import BytesIO
 import json
 import sys
+import time
 import gradio as gr
 from PIL import Image
 import requests
@@ -71,18 +72,23 @@ def post_hgface_img_segment(image: str):
     # ------------------------------------------------------
     # Begin check route
     if "route" not in picture_process_info["huggingface_img_segment"].keys():
-        return None, f"[SD] route of img2img not found"
+        return None, f"[SD] route of huggingface_img_segment not found"
     route = picture_process_info["huggingface_img_segment"]["route"]
 
     # ------------------------------------------------------
-    # Begin post
-    response = requests.post(SERVER_URL+route, data=json.dumps({"image": image}))
-    print(response)
-    try:
-        err = response.json().get("error", None)
-        if err != None:
-            return None, err
-        return response.json(), None
-    except:
+    # Begin post, set max retry time 10
+    for i in range(100):
+        response = requests.post(SERVER_URL+route, data=json.dumps({"image": image}))
         print(response)
-        return None, f"Unknown err, {response}"
+        try:
+            err = response.json().get("error", None)
+            if err != None:
+                gr.Warning(f"🥲 Segment Error: {err}, retry {i+1}/10")
+                time.sleep(3)
+                continue
+            gr.Info("😃 Get Segment Success!")
+            return response.json(), None
+        except:
+            print(response)
+            return None, f"Unknown err, {response}"
+    return None, err

@@ -25,8 +25,12 @@ func (c *ChatController) PostGPT3Dot5Turbo() {
 		c.Ctx.ResponseWriter.WriteHeader(http.StatusBadRequest)
 		c.Abort("RequestParams")
 	}
+	if _, ok := body["history"].(jarray); !ok {
+		c.Ctx.ResponseWriter.WriteHeader(http.StatusBadRequest)
+		c.Abort("RequestParams")
+	}
 
-	r, err := models.PostGPT3Dot5Turbo(body["query"].(string))
+	r, err := models.PostGPT3Dot5Turbo(body["query"].(string), body["history"].(jarray))
 	if err != nil {
 		log.Println(err)
 		c.Ctx.ResponseWriter.WriteHeader(http.StatusInternalServerError)

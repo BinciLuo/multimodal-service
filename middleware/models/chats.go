@@ -12,9 +12,10 @@ import (
 	openai "github.com/sashabaranov/go-openai"
 )
 
-func PostGPT3Dot5Turbo(query string) (jmap, error) {
+func PostGPT3Dot5Turbo(query string, history jarray) (jmap, error) {
 	r := make(jmap)
 
+	FormChatGPTMessages(ChatGPTHead, history)
 	UpdateChatGPTUserChatMessages(query)
 	resp, err := OpenAIClient2.CreateChatCompletion(
 		context.Background(),
@@ -29,7 +30,6 @@ func PostGPT3Dot5Turbo(query string) (jmap, error) {
 		return nil, err
 	}
 
-	UpdateChatbotChatGPTChatMessages(resp.Choices[0].Message.Content)
 	r["chat"] = resp.Choices[0].Message.Content
 	return r, nil
 }

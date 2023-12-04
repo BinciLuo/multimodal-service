@@ -49,9 +49,30 @@ def generate_mask_from_black(rgb_image: Image):
             # 如果是全黑的像素点，将其复制到RGBA图像
             mask.putpixel((i % rgb_image.width, i // rgb_image.width), (0, 0, 0, 0))
         else:
-            mask.putpixel((i % rgb_image.width, i // rgb_image.width), (pixel[0], pixel[1], pixel[2], 254))
+            mask.putpixel((i % rgb_image.width, i // rgb_image.width), (pixel[0], pixel[1], pixel[2], 255))
 
     return mask
+
+def convert_to_white(image):
+    # 转换为RGB模式
+    rgb_image = image.convert('RGB')
+
+    # 获取图像的宽度和高度
+    width, height = rgb_image.size
+
+    # 遍历每个像素
+    for x in range(width):
+        for y in range(height):
+            # 获取像素的RGB值
+            r, g, b = rgb_image.getpixel((x, y))
+
+            # 检查是否为全黑像素
+            if r == g == b == 0:
+                # 如果是全黑像素，则转换为全白
+                continue
+            rgb_image.putpixel((x, y), (255, 255, 255))
+
+    return rgb_image
 
 if __name__ == '__main__':
     with open("../../tests/test_img.txt",'r') as f:

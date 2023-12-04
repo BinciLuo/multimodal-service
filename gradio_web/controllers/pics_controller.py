@@ -7,6 +7,7 @@ import io
 from modules.api.pics_api import post_txt2img, post_img2img
 from modules.utils.imaga_paras_gen import form_post_txt2img_paras,form_post_img2img_paras
 from modules.utils.image_io import trans_image_to_str, trans_str_to_image
+from modules.utils.colors import convert_to_white
 
 base_image = None
 
@@ -33,7 +34,7 @@ def generate_pic_process(query: str, loras:list[str]=[], width:int=512, height:i
     return image_show
 
 
-def change_pic_process(init_img: Image, query: str, loras:list[str] = [], template = None, mask_img: Image = None):
+def change_pic_process(init_img: Image, query: str, loras:list[str] = [], template = None, mask_img: Image = None, image_editor: dict = None):
     # ------------------------------------------------------
     # Check init_img and get init_img_str and get size
     size = init_img.size
@@ -45,18 +46,20 @@ def change_pic_process(init_img: Image, query: str, loras:list[str] = [], templa
         gr.Warning(f"Mask image size {mask_img.size} not equals init image size {init_img.size}")
         return None
     if mask_img == None:
-        if template != "beauty":
+        if template != "beauty" and template != "face":
             gr.Warning(f"Mask is None, if you're using DALL-E, the full image will change")
         mask_img = Image.new("RGBA", init_img.size, (0, 0, 0, 0))
-        
 
+    binary_image = convert_to_white(image_editor["background"])
+    binary_image.save("binary_image.png")    
+    black_img_str = trans_image_to_str(binary_image)
     
     mask_img_str = trans_image_to_str(mask_img)
     
 
     # ------------------------------------------------------
     # Form paras
-    paras,e = form_post_img2img_paras(init_img_str, query, loras=loras, width=init_img.size[0], height=init_img.size[1],template = template, mask_img_str = mask_img_str)
+    paras,e = form_post_img2img_paras(init_img_str, query, loras=loras, width=init_img.size[0], height=init_img.size[1],template = template, mask_img_str = mask_img_str, black_img_str = black_img_str)
     if e != None:
         gr.Warning(e)
         return init_img

@@ -28,6 +28,11 @@ def post_txt2img(paras):
 
 def post_img2img(paras, source):
     # ------------------------------------------------------
+    # log paras
+    for key in paras.keys():
+        if key not in ["init_images","mask","mask_image"]:
+            print(f"{key}: {paras[key]}")
+    # ------------------------------------------------------
     # Begin check route
     if "route" not in picture_process_info["img2img"].keys():
         return None, f"[SD] route of img2img not found"

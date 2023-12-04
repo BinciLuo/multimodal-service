@@ -12,20 +12,30 @@ def exec_command(command_package, base_image: Image.Image, image_editor: dict, m
         new_composite = auto_black_by_keywords(image_editor["background"], edited_image,command_package["paras"][0], False)
         image_editor = {"background":new_composite,"layers":[],"composite":new_composite}
         mask_image, image_editor = submit_mask_process(image_editor)
+        image_editor["composite"] = image_editor["background"]
+        gr.Info(f"Finish {command_package['command']}")
     # ---------------------------------------------------------------------------------------------------------------------------------------------
     elif command_package['command'] == 'mask_unselected':
         new_composite = auto_black_by_keywords(image_editor["background"], base_image,command_package["paras"][0], True)
         image_editor = {"background":new_composite,"layers":[],"composite":new_composite}
         mask_image, image_editor = submit_mask_process(image_editor)
+        image_editor["composite"] = image_editor["background"]
+        gr.Info(f"Finish {command_package['command']}")
     # ---------------------------------------------------------------------------------------------------------------------------------------------
     elif command_package['command'] == 'beauty':
-        edited_image = change_pic_process(edited_image, "", lora_dropdown, "beauty", None)
+        edited_image = change_pic_process(edited_image, "", lora_dropdown, "beauty", None, image_editor)
+        gr.Info(f"Finish {command_package['command']}")
     # ---------------------------------------------------------------------------------------------------------------------------------------------
+    elif command_package['command'] == 'face':
+        edited_image = change_pic_process(edited_image, command_package["paras"][0] if command_package["paras"][0] != None else "", lora_dropdown, "face", None, image_editor)
+        gr.Info(f"Finish {command_package['command']}")
     # ---------------------------------------------------------------------------------------------------------------------------------------------
     elif command_package['command'] == 'change_masked':
         print(image_editor)
         mask_image, image_editor = submit_mask_process(image_editor)
-        edited_image = change_pic_process(edited_image, img_input if img_input is not None and img_input != "" else command_package['paras'][1], lora_dropdown, "default", mask_image)
+        edited_image = change_pic_process(edited_image, img_input if img_input is not None and img_input != "" else command_package['paras'][1], lora_dropdown, "default", mask_image, image_editor)
+        image_editor["composite"] = image_editor["background"]
+        gr.Info(f"Finish {command_package['command']}")
         
     # ---------------------------------------------------------------------------------------------------------------------------------------------
     else:

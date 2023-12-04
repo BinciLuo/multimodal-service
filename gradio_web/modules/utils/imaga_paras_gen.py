@@ -140,6 +140,12 @@ def form_post_img2img_paras(init_img_str:str ,query: str ,loras:list[str]=[], **
         "cfg_scale": kwargv.get("cfg_scale", template_paras.get("cfg_scale", None)),
         "alwayson_scripts": alwayson_scripts,
 
+        "inpainting_fill": 0,
+        "inpaint_full_res": False,
+        "inpaint_full_res_padding": 32,
+        "inpainting_mask_invert": 1,
+        "mask_blur": 4,
+        "mask": kwargv.get("black_img_str", template_paras.get("black_image",None)),
         "mask_image": kwargv.get("mask_img_str", template_paras.get("mask_image",None)),
         "source": kwargv.get("source", template_paras.get("source",None))
     }

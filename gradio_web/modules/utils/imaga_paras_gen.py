@@ -140,15 +140,20 @@ def form_post_img2img_paras(init_img_str:str ,query: str ,loras:list[str]=[], **
         "cfg_scale": kwargv.get("cfg_scale", template_paras.get("cfg_scale", None)),
         "alwayson_scripts": alwayson_scripts,
 
-        "inpainting_fill": 0,
-        "inpaint_full_res": False,
-        "inpaint_full_res_padding": 32,
-        "inpainting_mask_invert": 1,
+        "inpainting_fill": kwargv.get("inpainting_fill", template_paras.get("inpainting_fill", None)),
+        "inpaint_full_res": kwargv.get("inpaint_full_res", template_paras.get("inpaint_full_res", None)),
+        "inpaint_full_res_padding": kwargv.get("inpaint_full_res_padding", template_paras.get("inpaint_full_res_padding", None)),
+        "inpainting_mask_invert": kwargv.get("inpainting_mask_invert", template_paras.get("inpainting_mask_invert", None)),
         "mask_blur": 4,
         "mask": kwargv.get("black_img_str", template_paras.get("black_image",None)),
         "mask_image": kwargv.get("mask_img_str", template_paras.get("mask_image",None)),
         "source": kwargv.get("source", template_paras.get("source",None))
     }
+
+    template_name = kwargv.get("template", None)
+    if template_name != "inpaintSD":
+        paras["mask"] = None 
+        
 
     for key in IMG2IMG_DEFAULT_PARAS.keys():
         paras[key] = paras[key] if paras[key] != None else default_paras[key]

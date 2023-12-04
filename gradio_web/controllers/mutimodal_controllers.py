@@ -33,7 +33,7 @@ def exec_command(command_package, base_image: Image.Image, image_editor: dict, m
     elif command_package['command'] == 'change_masked':
         print(image_editor)
         mask_image, image_editor = submit_mask_process(image_editor)
-        edited_image = change_pic_process(edited_image, img_input if img_input is not None and img_input != "" else command_package['paras'][1], lora_dropdown, "default", mask_image, image_editor)
+        edited_image = change_pic_process(edited_image, img_input if img_input is not None and img_input != "" else command_package['paras'][1], lora_dropdown, "inpaintSD", mask_image, image_editor)
         image_editor["composite"] = image_editor["background"]
         gr.Info(f"Finish {command_package['command']}")
         

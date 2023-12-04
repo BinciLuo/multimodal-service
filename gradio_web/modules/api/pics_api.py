@@ -30,7 +30,7 @@ def post_img2img(paras, source):
     # ------------------------------------------------------
     # log paras
     for key in paras.keys():
-        if key not in ["init_images","mask","mask_image"]:
+        if key not in ["init_images","mask","mask_image","alwayson_scripts"]:
             print(f"{key}: {paras[key]}")
     # ------------------------------------------------------
     # Begin check route

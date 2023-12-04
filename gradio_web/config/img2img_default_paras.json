@@ -1,6 +1,12 @@
 {
     "prompt": "",
     "negative_prompt": "",
+    "mask": null,
+    "inpainting_fill": 0,
+    "inpaint_full_res": false,
+    "inpaint_full_res_padding": 32,
+    "inpainting_mask_invert": 1,
+    "mask_blur": 4,
     "denoising_strength": 0.75,
     "sampler_index": "DPM++ 2M Karras",
     "seed": -1,

@@ -68,8 +68,13 @@ def change_pic_process(init_img: Image, query: str, loras:list[str] = [], templa
     # Use api post_img2img
     pic_string, e = post_img2img(paras, source = paras["source"])
     if e != None:
-        gr.Warning(e)
-        return init_img
+        if template == "inpaintSD":
+            gr.Warning(e+" \nFallback to DALLE")
+            paras["source"] = "DALLE"
+            pic_string, e = post_img2img(paras, source = paras["source"])
+        if e != None:
+            gr.Error(e)
+            return init_img
     
     # ------------------------------------------------------
     # Get image from str and return

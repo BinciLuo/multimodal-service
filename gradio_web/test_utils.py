@@ -14,7 +14,7 @@ class TestSD(unittest.TestCase):
         self.assertEqual(0.25, paras["denoising_strength"], f"form_post_img2img_paras failed with template: beauty")
         self.assertEqual("DPM++ 2M Karras", paras["sampler_index"], f"form_post_img2img_paras failed with template: beauty")
         self.assertEqual(paras["alwayson_scripts"]["controlnet"]["args"][0]["input_image"], init_img_str, "Init_img_str not applied")
-        paras, e = form_post_img2img_paras(init_img_str,'test',[],template="default", prompt = "test")
+        paras, e = form_post_img2img_paras(init_img_str,'test',[],template="inpaintSD", prompt = "test")
         self.assertEqual(None, e, e)
         self.assertEqual(0.3, paras["denoising_strength"], f"form_post_img2img_paras failed with template: beauty")
         self.assertEqual("testtest", paras["prompt"], f"form_post_img2img_paras failed with template: beauty")

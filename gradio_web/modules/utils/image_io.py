@@ -3,7 +3,7 @@ import io
 import gradio as gr
 from PIL import Image
 
-def trans_image_to_str(image: Image):
+def trans_image_to_str(image: Image.Image):
     image_bytesio = io.BytesIO()
     if image == None:
         gr.Warning("No image provided.")

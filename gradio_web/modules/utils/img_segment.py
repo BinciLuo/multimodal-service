@@ -96,7 +96,7 @@ def auto_black_keywords(image: Image, mask_images: dict, keys_words: list[str], 
     # 返回处理后的图像
     return result_image
 
-def auto_black_by_keywords(image: Image, init_img: Image, keywords: list[str], reverse: bool):
+def auto_black_by_keywords(image: Image.Image, init_img: Image.Image, keywords: list[str], reverse: bool = False):
     init_img_str = trans_image_to_str(init_img)
     # Post huggingface models and check
     response_json, err = post_hgface_img_segment(init_img_str)

@@ -7,7 +7,7 @@ A demo is deployed in Azure. [Try it here](https://gradio-app.azurewebsites.net)
 ### Run through Kubernetes (Recommend)
 1. `cd k8s`
 2. `kubectl apply -f pod.yaml` (`kubectl apply -f pod_arm.yaml` if you are using Arm)
-3. if your OS is not Linux, run `kubectl port-forward mm-service-pod  -n default  27777:27777`
+3. If your OS is not Linux, run `kubectl port-forward mm-service-pod  -n default  27777:27777`
 4. Open `127.0.0.1:27777`
 
 ### Run through Docker
@@ -26,11 +26,11 @@ A demo is deployed in Azure. [Try it here](https://gradio-app.azurewebsites.net)
 ### Run in local
 1. Run middleware(`golang`,`beego` required)
    - `cd middleware`
-   - `export BEE_PORT=52780 && bee run`
+   - `bash local_middleware.sh`
 2. Run webui
    - `cd gradio_web`
    - `pip install -r requirements.txt`
-   - `export MIDDLEWARE_ENV=local && python webui.py`
+   - `bash local_gradio.sh`
 3. Open `127.0.0.1:27777`
 # 系统架构
 前端-->后端-->gpt glm stablediffusion

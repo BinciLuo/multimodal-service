@@ -107,7 +107,7 @@ with gr.Blocks() as demo:
 
     picGenBtn.click(generate_pic_process,[img_input, lora_dropdown, widthSlider, heightSlider],[base_image],show_progress=True)
     
-    picChangeBtn.click(change_pic_process,[base_image, img_input, lora_dropdown, img_gen_template_dropdown, mask_image], [edited_image], show_progress=True)
+    picChangeBtn.click(change_pic_process,[base_image, img_input, lora_dropdown, img_gen_template_dropdown, mask_image, image_editor], [edited_image], show_progress=True)
     
     checkBtn.click(check_status_process,[],[])
 

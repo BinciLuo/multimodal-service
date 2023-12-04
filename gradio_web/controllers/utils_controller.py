@@ -53,11 +53,11 @@ def change_base_image_process(base_img, chatbot):
             history.clear()
             history.append(("我更改了图片，新的图片有哪些部分？",msg))
             chatbot[-1] = ("我更改了图片，新的图片有哪些部分？",msg)
-    new_editor = gr.ImageEditor(value={"background":replace_black_pixels(base_img),"layers":[],"composite":None}, label='Edit', type='pil', interactive=True)
+    new_editor_dict = {"background":replace_black_pixels(base_img),"layers":[],"composite":None}
     global last_editor
     last_editor = [{"background":replace_black_pixels(base_img),"layers":[],"composite":None}]
 
-    return new_editor, chatbot
+    return new_editor_dict, chatbot
 
 def auto_mask_process(painted, init_img):
     global last_editor
@@ -65,8 +65,8 @@ def auto_mask_process(painted, init_img):
     composite_img = painted["composite"]
     auto_mask_img = auto_fill_by_blackpoints(composite_img, init_img)
     print(auto_mask_img.mode)
-    new_editor = gr.ImageEditor(value={"background":auto_mask_img,"layers":[],"composite":None}, label='Edit', type='pil', interactive=True)
-    return new_editor
+    new_editor_dict = {"background":auto_mask_img,"layers":[],"composite":auto_mask_img}
+    return new_editor_dict
 
 def undo_auto_mask_process():
     if len(last_editor) != 1:

@@ -45,31 +45,34 @@ def change_pic_process(init_img: Image, query: str, loras:list[str] = [], templa
         gr.Warning(f"Mask image size {mask_img.size} not equals init image size {init_img.size}")
         return None
     if mask_img == None:
-        gr.Warning(f"Mask is None, if you're using DALL-E, the full image will change")
+        if template != "beauty":
+            gr.Warning(f"Mask is None, if you're using DALL-E, the full image will change")
         mask_img = Image.new("RGBA", init_img.size, (0, 0, 0, 0))
-    else:
-        mask_img_str = trans_image_to_str(mask_img)
+        
+
+    
+    mask_img_str = trans_image_to_str(mask_img)
+    
 
     # ------------------------------------------------------
     # Form paras
     paras,e = form_post_img2img_paras(init_img_str, query, loras=loras, width=init_img.size[0], height=init_img.size[1],template = template, mask_img_str = mask_img_str)
     if e != None:
         gr.Warning(e)
-        return gr.Image(value=init_img ,type='pil')
+        return init_img
     
     # ------------------------------------------------------
     # Use api post_img2img
     pic_string, e = post_img2img(paras, source = paras["source"])
     if e != None:
         gr.Warning(e)
-        return gr.Image(value=init_img ,type='pil')
+        return init_img
     
     # ------------------------------------------------------
     # Get image from str and return
     image = trans_str_to_image(pic_string)
     image = image.resize(size)
-    image_show = gr.Image(value=image ,type='pil')
-    return image_show
+    return image
 
 def set_base_image(edited_img: Image):
     return edited_img

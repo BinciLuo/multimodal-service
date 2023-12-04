@@ -84,7 +84,7 @@ def post_hgface_img_segment(image: str):
             err = response.json().get("error", None)
             if err != None:
                 gr.Warning(f"🥲 Segment Error: {err}, retry {i+1}/10")
-                time.sleep(3)
+                time.sleep(5)
                 continue
             gr.Info("😃 Get Segment Success!")
             return response.json(), None

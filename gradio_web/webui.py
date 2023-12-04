@@ -53,6 +53,7 @@ with gr.Blocks() as demo:
         with gr.Column(scale=1):
             checkBtn = gr.Button("Check server status", variant="primary")
             base_image = gr.Image(label='Origin Image', type='pil', interactive=True)
+            gr.Examples(["example/"+filename for filename in os.listdir("./example") if filename.split('.')[-1].lower() in ["jpeg","jpg","png"]], base_image)
             setBaseImageBtn = gr.Button("Set as Origin Image", variant="primary")
             edited_image = gr.Image(label='Edited Image', type='pil',interactive=False)
             #sendToEditorBtn = gr.Button("Send to Editor",variant='primary')
@@ -61,6 +62,7 @@ with gr.Blocks() as demo:
                 with gr.Column():
                     chatbot = gr.Chatbot(height= 300)
                     user_input = gr.Textbox(show_label=False, placeholder="输入命令",container=False,show_copy_button=True)
+                    gr.Examples(["将Background设置为mask，然后使用提示词sunshine,street在mask上生成新的图片，然后让面部的笑容更灿烂，最后美颜"],user_input)
                 with gr.Row():
                     model_select_box = gr.Dropdown(choices=chat_config["models"].keys(), type='value', label="model", value="gpt3dot5turbo")
                     instruction_template_dropdown = gr.Dropdown(choices=[info["description"] for info in INSTRUCTION_PROMPT_FILES_INFO], type='index', label="prompt",value=0)

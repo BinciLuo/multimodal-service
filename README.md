@@ -1,5 +1,16 @@
 # 语言交互图像编辑
 
+## 效果图
+### Example 1
+<img src="./resource_for_readme/pics/1/raw.jpg" width = "180" height = "250" alt="图片名称" align=center />
+<img src="./resource_for_readme/pics/1/beauty_0.25_egg_skin.png" width = "180" height = "250" alt="图片名称" align=center />
+<img src="./resource_for_readme/pics/1/beauty_0.25_egg_skin_ModelIsNeverendingDreamNED_loraIsKoreaDoll.png" width = "180" height = "250" alt="图片名称" align=center />
+
+### Example 2
+<img src="./resource_for_readme/pics/2/raw.jpeg" width = "180" height = "250" alt="图片名称" align=center />
+<img src="./resource_for_readme/pics/2/将第一个和第三个mask掉然后使用提示词in a street在mask的部分生成新的图片然后美颜然后让她的面部笑得更开心，涂上大红色的口红，画紫色的眼影.png" width = "180" height = "250" alt="图片名称" align=center />
+
+
 
 ## Usage
 ### Demo

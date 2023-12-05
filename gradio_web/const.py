@@ -13,6 +13,8 @@ with open("config/picture_process.json", 'r') as json_file:
     picture_process_info:dict = json.load(json_file)
 with open("config/img2img_default_paras.json", 'r') as json_file:
     IMG2IMG_DEFAULT_PARAS:dict = json.load(json_file)
+with open("example/examples.json", 'r') as json_file:
+    examples_jmap:dict = json.load(json_file)
 
 # Read MIDDLEWARE_ENV from $MIDDLEWARE_ENV
 # Default Azure, you can choose 'docker'(http://middleware:8080) or 'local'(http://localhost:52780) instead.

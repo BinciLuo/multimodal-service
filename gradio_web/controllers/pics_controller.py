@@ -7,7 +7,7 @@ import io
 from modules.api.pics_api import post_txt2img, post_img2img
 from modules.utils.imaga_paras_gen import form_post_txt2img_paras,form_post_img2img_paras
 from modules.utils.image_io import trans_image_to_str, trans_str_to_image
-from modules.utils.colors import convert_to_white
+from modules.utils.colors import convert_unblack_to_white
 
 base_image = None
 
@@ -50,7 +50,7 @@ def change_pic_process(init_img: Image, query: str, loras:list[str] = [], templa
             gr.Warning(f"Mask is None, if you're using DALL-E, the full image will change")
         mask_img = Image.new("RGBA", init_img.size, (0, 0, 0, 0))
 
-    binary_image = convert_to_white(image_editor["background"])
+    binary_image = convert_unblack_to_white(image_editor["background"])
     binary_image.save("binary_image.png")    
     black_img_str = trans_image_to_str(binary_image)
     

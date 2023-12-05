@@ -11,7 +11,7 @@ def form_alwayson_scripts_from_templates(**kwargv):
     else:
         return {}, None
 
-    # some processing for control net
+    # Some processing for control net
     control_net_dict = alwayson_scripts.get("controlnet",None)
     if control_net_dict != None:
         init_img_str = kwargv.get("init_img_str",None)
@@ -24,10 +24,19 @@ def form_alwayson_scripts_from_templates(**kwargv):
 
 def form_alwayson_scripts_from_kwargv(**kwargv):
     """
-    Argv:
+    ### This method form alwayson_scripts from kwargv
+    ### Warning: First search in kwargv and then template
+    ### Args:
+    ```
         alwayson_scripts(dict|None)
         template(str|None)
         init_img_str(str|None)
+    ```
+    ### Returns:
+    ```
+        alwayson_scripts(dict): formed alwayson_scripts
+        err(str|None): error message
+    ```
     """
     e = None
     # Begin load always on scripts

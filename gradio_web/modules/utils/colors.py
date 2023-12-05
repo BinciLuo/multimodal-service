@@ -24,7 +24,8 @@ def get_max_scope(delta, array: list[int]):
         current_index += 1
     return max_index
 
-def get_background_color(image: Image):
+# FIXME: Result not ideal, may not use this.
+def get_background_color(image: Image.Image):
     r, g, b = image.split()
     r_channel = [ i for m in np.array(r) for i in m ]
     g_channel = [ i for m in np.array(g) for i in m ]
@@ -36,24 +37,46 @@ def get_background_color(image: Image):
 
     return np.array([max_r, max_g, max_b])
 
-def generate_mask_from_black(rgb_image: Image):
+def generate_mask_from_black(image: Image.Image):
+    """
+    ### This function generate transparent mask image from black points in input image
+    ### Argvs
+    ```
+        image(Image.Image): input image
+    ```
+    ### Return
+    ```
+        mask_packages(Image.Image): mask image of which mode is RGBA 
+    ```
+    """
     # 创建一个新的RGBA图像（黑色背景）
-    mask = Image.new("RGBA", rgb_image.size, (0, 0, 0, 255))
+    mask = Image.new("RGBA", image.size, (0, 0, 0, 255))
 
     # 获取RGB图像的像素数据
-    rgb_data = rgb_image.getdata()
+    rgb_data = image.getdata()
 
     # 遍历像素数据，找到全黑的像素点并将其复制到RGBA图像
     for i, pixel in enumerate(rgb_data):
         if pixel[0] == 0 and pixel[1] == 0 and pixel[2] == 0:
             # 如果是全黑的像素点，将其复制到RGBA图像
-            mask.putpixel((i % rgb_image.width, i // rgb_image.width), (0, 0, 0, 0))
+            mask.putpixel((i % image.width, i // image.width), (0, 0, 0, 0))
         else:
-            mask.putpixel((i % rgb_image.width, i // rgb_image.width), (pixel[0], pixel[1], pixel[2], 255))
+            mask.putpixel((i % image.width, i // image.width), (pixel[0], pixel[1], pixel[2], 255))
 
     return mask
 
-def convert_to_white(image):
+def convert_unblack_to_white(image: Image.Image):
+    """
+    ### This function convert pixcels which are not black to white
+    ### Argvs
+    ```
+        image(Image.Image): input image
+    ```
+    ### Return
+    ```
+        rgb_image(Image.Image): mask image of which mode is RGB and pixcel only values black or white
+    ```
+    """
     # 转换为RGB模式
     rgb_image = image.convert('RGB')
 
@@ -68,17 +91,8 @@ def convert_to_white(image):
 
             # 检查是否为全黑像素
             if r == g == b == 0:
-                # 如果是全黑像素，则转换为全白
+                # 如果是全黑像素跳过，否则转为全白
                 continue
             rgb_image.putpixel((x, y), (255, 255, 255))
 
     return rgb_image
-
-if __name__ == '__main__':
-    with open("../../tests/test_img.txt",'r') as f:
-        init_img_str = f.read()
-    #image = Image.open(BytesIO(base64.b64decode(init_img_str)))
-    image = Image.open("/Users/luobinci/Downloads/portrait.jpeg")
-    image.show()
-    print(image.size)
-    print(get_background_color(image))

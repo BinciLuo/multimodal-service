@@ -27,6 +27,19 @@ def post_txt2img(paras):
     return response.json()['images'][0],None
 
 def post_img2img(paras, source):
+    """
+    ### This function posts img2img models
+    ### Argvs
+    ```
+        paras(dict): post paras
+        source(str): which model to post, enum ['SD','DALLE']
+    ```
+    ### Return
+    ```
+        image_string(str| None): base64 string of image, None if post gets error
+        err(str|None): error message
+    ```
+    """
     # ------------------------------------------------------
     # log paras
     for key in paras.keys():
@@ -61,7 +74,12 @@ def post_img2img(paras, source):
        
 def get_loras():
     """
-    Get loras through api
+    ### Get lora list from SD server
+    ### Return
+    ```
+        lora_list(list[str]| []): list or loras, [] if error occurs
+        err(str): error message
+    ```
     """
     if "route" not in picture_process_info["loras"].keys():
         return [],f"[SD] route of loras not found"
@@ -74,6 +92,18 @@ def get_loras():
 
 @functools.lru_cache
 def post_hgface_img_segment(image: str):
+    """
+    ### This function posts image segment model in huggingface
+    ### Argvs
+    ```
+        image(str): base64 image string 
+    ```
+    ### Return
+    ```
+        mask_packages(list[dict]| None): list of mask packages, {"mask": str, "label": str, "socre": float}
+        error(str| None): error message
+    ```
+    """
     # ------------------------------------------------------
     # Begin check route
     if "route" not in picture_process_info["huggingface_img_segment"].keys():

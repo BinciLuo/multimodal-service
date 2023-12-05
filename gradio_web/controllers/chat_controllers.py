@@ -3,7 +3,7 @@ import sys
 import gradio as gr
 
 from modules.api.chat_api import post_chat
-from modules.instruction_processing import extract_instructions
+from modules.utils.instruction_processing import extract_instructions
 
 from const import *
 

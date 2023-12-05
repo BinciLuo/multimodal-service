@@ -8,10 +8,7 @@ import mdtex2html
 from PIL import Image
 from io import BytesIO
 
-from modules.api.chat_api import post_chat
-from modules.instruction_processing import extract_instructions
-from modules.api.pics_api import post_txt2img,get_loras,post_img2img
-
+from modules.api.pics_api import get_loras
 from controllers.chat_controllers import chat_process,extract_chat_process,reset_state,commands
 from controllers.pics_controller import change_pic_process,generate_pic_process, set_base_image
 from controllers.utils_controller import auto_mask_process, check_status_process,submit_mask_process,change_base_image_process,undo_auto_mask_process
@@ -62,7 +59,8 @@ with gr.Blocks() as demo:
                 with gr.Column():
                     chatbot = gr.Chatbot(height= 300)
                     user_input = gr.Textbox(show_label=False, placeholder="输入命令",container=False,show_copy_button=True)
-                    gr.Examples(["将Background设置为mask，然后使用提示词sunshine,street在mask上生成新的图片，然后让面部的笑容更灿烂，最后美颜"],user_input)
+                    # TODO : move examples to config
+                    gr.Examples(examples_jmap["query"],user_input)
                 with gr.Row():
                     model_select_box = gr.Dropdown(choices=chat_config["models"].keys(), type='value', label="model", value="gpt3dot5turbo")
                     instruction_template_dropdown = gr.Dropdown(choices=[info["description"] for info in INSTRUCTION_PROMPT_FILES_INFO], type='index', label="prompt",value=0)

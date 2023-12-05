@@ -10,9 +10,9 @@ with open("config/sd_templates.json", 'r') as json_file:
 
 def form_post_txt2img_paras(query: str, loras:list[str]=[], **kwargv):
     """
-    ## Form paras for post_txt2img
+    ### Form paras for post_txt2img
 
-    ## Argvs:
+    ### Argvs:
     ```
         query(str)
         loras(list[str]): list of lora name
@@ -31,7 +31,7 @@ def form_post_txt2img_paras(query: str, loras:list[str]=[], **kwargv):
         cfg_scale(int|None)
         alwayson_scripts(str|None)
     ```
-    ## Return:
+    ### Return:
     ```
         image_str(str)
         err_string(str|None)
@@ -67,9 +67,10 @@ def form_post_txt2img_paras(query: str, loras:list[str]=[], **kwargv):
     
 def form_post_img2img_paras(init_img_str:str ,query: str ,loras:list[str]=[], **kwargv):
     """
-    ## Form paras for post_img2img
+    ### Form paras for post_img2img
+    ### Warning: paras will first search in kwargv and then templace and then default.
 
-    ## Argvs:
+    ### Argvs:
     ```
         init_img_str(str)
         query(str)
@@ -88,9 +89,17 @@ def form_post_img2img_paras(init_img_str:str ,query: str ,loras:list[str]=[], **
         cfg_scale(int|None)
         alwayson_scripts(str|None)
 
-        mask_img_str(str|None): mask image string
+        inpainting_fill(int|None): masked area, 0:fill and 1: origin
+        inpaint_full_res(bool|None): inpaint area, False: whole picture and  True: only masked
+        inpaint_full_res_padding(int|None): Only masked padding, pixels 32
+        inpainting_mask_invert(int|None): 0: change white 1: change black
+        mask_blur(int|None): mask blur index,
+        mask(str|None): black-white mask image string for SD
+        mask_img_str(str|None): mask image string for DALLE
+        source(str|None): model source
+
     ```
-    ## Return:
+    ### Return:
     ```
         paras(dict)
         err_string(str|None)
@@ -163,8 +172,6 @@ def form_post_img2img_paras(init_img_str:str ,query: str ,loras:list[str]=[], **
     # ------------------------------------------------------
     return paras, None
 
-
-
 def form_default_paras_from_template(**kwargv):
     template_name = kwargv.get("template",None)
     if template_name != None:
@@ -173,18 +180,24 @@ def form_default_paras_from_template(**kwargv):
         return {},None
     
     template_paras = {
-        "prompt": template.get("prompt", ""),
-        "negative_prompt": template.get("negative_prompt", ""),
-        "denoising_strength": template.get("denoising_strength", 0.3),
-        "sampler_index": template.get("sampler_index", "DPM++ 2M Karras"),
-        "seed": template.get("seed", -1),
-        "steps": template.get("steps",40),
-        "width": template.get("width",512),
-        "height": template.get("height",512),
-        "cfg_scale": template.get("cfg_scale",5),
+        "prompt": template.get("prompt", None),
+        "negative_prompt": template.get("negative_prompt", None),
+        "denoising_strength": template.get("denoising_strength", None),
+        "sampler_index": template.get("sampler_index", None),
+        "seed": template.get("seed", None),
+        "steps": template.get("steps",None),
+        "width": template.get("width",None),
+        "height": template.get("height",None),
+        "cfg_scale": template.get("cfg_scale",None),
 
-        "mask_image": template.get("mask_img_str",None),
-        "source": template.get("source","DALLE")
+        "mask": template.get("mask",None),
+        "inpainting_fill":template.get("inpainting_fill", None),
+        "inpaint_full_res": template.get("inpaint_full_res", None),
+        "inpaint_full_res_padding": template.get("mask", None),
+        "inpainting_mask_invert": template.get("inpainting_mask_invert", None),
+        "mask_blur": template.get("mask_blur", None),
+        "mask_image": template.get("mask_image",None),
+        "source": template.get("source", None)
     }
 
     return template_paras, None

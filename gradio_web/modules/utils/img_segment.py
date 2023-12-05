@@ -7,9 +7,20 @@ from PIL import Image
 import gradio as gr
 
 from modules.api.pics_api import post_hgface_img_segment
-from modules.utils.image_io import trans_image_to_str
+from modules.utils.image_io import trans_image_to_str, trans_str_to_image
 
 def replace_black_pixels(image: Image):
+    """
+    ### This function convert black pixcels to (0,0,1) or (0,0,1,255)
+    ### Argvs
+    ```
+        image(Image.Image): image to convert
+    ```
+    ### Return
+    ```
+        image(Image.Image): converted image
+    ```
+    """
     if image == None:
         return None
     # 将原始图像转换为NumPy数组
@@ -27,6 +38,18 @@ def replace_black_pixels(image: Image):
 
 
 def auto_fill_black(original_image: Image, mask_images: dict):
+    """
+    ### This function auto fill masks which have black pixcels
+    ### Argvs
+    ```
+        original_image(Image.Image): image to convert
+        mask_images(dict): {"mask_packages_label": mask(Image.Image)}
+    ```
+    ### Return
+    ```
+        image(Image.Image): auto filled image
+    ```
+    """
     # 将原始图像转换为NumPy数组
     original_array = np.array(original_image)
     # 获取所有L模式的图像数组
@@ -46,10 +69,22 @@ def auto_fill_black(original_image: Image, mask_images: dict):
     # 返回处理后的图像
     return result_image
 
-def auto_fill_by_blackpoints(image: Image,init_img: Image):    
-    init_img_str = trans_image_to_str(init_img)
+def auto_fill_by_blackpoints(image: Image,base_image: Image):
+    """
+    ### This function auto fill masks which have black pixcels
+    ### Argvs
+    ```
+        image(Image.Image): image to auto fill
+        base_image(Image.Image): base image for segment
+    ```
+    ### Return
+    ```
+        image(Image.Image): auto masked image (black mask)
+    ```
+    """    
+    base_img_str = trans_image_to_str(base_image)
     # Post huggingface models and check
-    response_json, err = post_hgface_img_segment(init_img_str)
+    response_json, err = post_hgface_img_segment(base_img_str)
     if err != None:
         # clear cache
         post_hgface_img_segment.cache_clear()
@@ -66,13 +101,27 @@ def auto_fill_by_blackpoints(image: Image,init_img: Image):
     # Get all mask images
     mask_images={}
     for image_package in response_json["image_packages"]:
-        mask_image = Image.open(BytesIO(base64.b64decode(image_package['mask'])))
+        mask_image = trans_str_to_image(image_package['mask'])
         mask_images[image_package['label']] = mask_image
     
     result_image = auto_fill_black(image, mask_images)
     return result_image
 
 def auto_black_keywords(image: Image, mask_images: dict, keys_words: list[str], reverse: bool):
+    """
+    ### This function auto blcak given masks
+    ### Argvs
+    ```
+        image(Image.Image): image to auto black
+        mask_images(dict): {"mask_packages_label": mask(Image.Image)}
+        key_words(list[str]): list of mask labels
+        reverse(bool): True: mask labels not in keywords, False: mask labels in keywords
+    ```
+    ### Return
+    ```
+        image(Image.Image): auto masked image (black mask)
+    ```
+    """
     # 将原始图像转换为NumPy数组
     original_array = np.array(image)
     # 打开所有L模式的图像
@@ -96,8 +145,20 @@ def auto_black_keywords(image: Image, mask_images: dict, keys_words: list[str], 
     # 返回处理后的图像
     return result_image
 
-def auto_black_by_keywords(image: Image.Image, init_img: Image.Image, keywords: list[str], reverse: bool = False):
-    init_img_str = trans_image_to_str(init_img)
+def auto_black_by_keywords(image: Image.Image, base_image: Image.Image, keywords: list[str], reverse: bool = False):
+    """
+    ### This function auto fill masks which have black pixcels
+    ### Argvs
+    ```
+        image(Image.Image): image to auto fill
+        base_image(Image.Image): base image for segment
+    ```
+    ### Return
+    ```
+        image(Image.Image): auto masked image (black mask)
+    ```
+    """ 
+    init_img_str = trans_image_to_str(base_image)
     # Post huggingface models and check
     response_json, err = post_hgface_img_segment(init_img_str)
     if err != None:

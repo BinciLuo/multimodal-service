@@ -43,7 +43,7 @@ def extract_jarray(process_string:str):
     return jarrays
  
 
-def check_instruction(pattern_dict:dict,instruction:dict):
+def check_instruction(pattern_dict:dict, instruction:dict):
     # 如果pattern中无该指令，跳过
     if instruction["command"] not in pattern_dict.keys():
         print(f"command not match")
@@ -60,7 +60,7 @@ def check_instruction(pattern_dict:dict,instruction:dict):
     # 如果是enum且不满足，跳过
     if pattern_dict[instruction["command"]]["paras_enum"] != None:
         if instruction["paras"] not in pattern_dict[instruction["command"]]["paras_enum"]:
-            for para, enum in zip(instruction["paras"],pattern_dict[instruction["command"]]["paras_enum"]):
+            for para, enum in zip(instruction["paras"], pattern_dict[instruction["command"]]["paras_enum"]):
                 if enum != None and para not in enum:
                     print(f"enum not match")
                     return False
@@ -108,7 +108,7 @@ def extract_instructions(pattern_file_path:str, string:str):
         for instruction in instraction_list:
             if type(instruction) != dict:
                 continue
-            if check_instruction(pattern_dict,instruction):
+            if check_instruction(pattern_dict, instruction):
                 instructions.append(instruction)
     
     return instructions
@@ -130,4 +130,4 @@ if __name__ == '__main__':
 
     description = """根据描述，我们需要对图片进行美颜、背景颜色更改为白色、裁剪矩形区域并提高分辨率。具体实现方式如下：\n\n1. 美颜：使用beauty命令，参数为50，表示美颜50%。\n2. 背景颜色更改为白色：使用change background color命令，参数为\"white\"。\n3. 裁剪矩形区域：使用split命令，参数为[ a, b, c, d]表示裁剪矩形区域(a,b)到(c,d)。\n4. 提高分辨率：使用super resolution命令，参数为3.0。\n\n综上所述，可以得到以下JSON数组：\n```json\n[\n    {\n        \"command\" : \"change background color\",\n        \"paras\" : \"white\",\n        \"command\" : \"beauty\",\n        \"paras\" : 50,\n        \"command\" : \"split\",\n        \"paras\" : [0.25, 0.25, 0.75, 0.75]\n    },\n    {\n        \"command\" : \"super resolution\",\n        \"paras\" : 3.0\n    }\n]\n```"""
     print(description)
-    print(extract_instructions(absolute_path,description))
+    print(extract_instructions(absolute_path, description))

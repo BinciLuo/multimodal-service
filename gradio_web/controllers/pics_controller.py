@@ -5,7 +5,7 @@ import gradio as gr
 import io
 
 from modules.api.pics_api import post_txt2img, post_img2img
-from modules.utils.imaga_paras_gen import form_post_txt2img_paras,form_post_img2img_paras
+from modules.utils.imaga_paras_gen import form_post_txt2img_paras, form_post_img2img_paras
 from modules.utils.image_io import trans_image_to_str, trans_str_to_image
 from modules.utils.colors import convert_unblack_to_white
 
@@ -30,9 +30,8 @@ def generate_pic_process(query: str, loras:list[str]=[], width:int=512, height:i
     # ------------------------------------------------------
     # Get image from str and return
     image = Image.open(BytesIO(base64.b64decode(pic_string)))
-    image_show = gr.Image(value=image ,type='pil')
+    image_show = gr.Image(value=image , type='pil')
     return image_show
-
 
 def change_pic_process(init_img: Image, query: str, loras:list[str] = [], template = None, mask_img: Image = None, image_editor: dict = None):
     # ------------------------------------------------------
@@ -59,7 +58,14 @@ def change_pic_process(init_img: Image, query: str, loras:list[str] = [], templa
 
     # ------------------------------------------------------
     # Form paras
-    paras,e = form_post_img2img_paras(init_img_str, query, loras=loras, width=init_img.size[0], height=init_img.size[1],template = template, mask_img_str = mask_img_str, black_img_str = black_img_str)
+    paras, e = form_post_img2img_paras(init_img_str, 
+                                       query, 
+                                       loras=loras, 
+                                       width=init_img.size[0], 
+                                       height=init_img.size[1], 
+                                       template = template, 
+                                       mask_img_str = mask_img_str, 
+                                       black_img_str = black_img_str)
     if e != None:
         gr.Warning(e)
         return init_img
@@ -73,7 +79,7 @@ def change_pic_process(init_img: Image, query: str, loras:list[str] = [], templa
             paras["source"] = "DALLE"
             pic_string, e = post_img2img(paras, source = paras["source"])
         if e != None:
-            gr.Error(e)
+            gr.Warning(f"{e} \nSkip {template}")
             return init_img
     
     # ------------------------------------------------------

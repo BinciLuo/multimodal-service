@@ -19,7 +19,7 @@ def chat_process(inputs, model_name, prompt_index=0, chatbot=None):
     prompt_file_name = INSTRUCTION_PROMPT_FILES_INFO[prompt_index]["file_path"]
     with open(prompt_file_name,'r') as f:
         infer_text = f.read()
-    infer_text = infer_text.replace(INSTRUCTION_PROMPT_FILES_INFO[prompt_index]["user_input_replace"],inputs)
+    infer_text = infer_text.replace(INSTRUCTION_PROMPT_FILES_INFO[prompt_index]["user_input_replace"], inputs)
     answer, e = post_chat(model_name, infer_text, SERVER_URL, history)
     if e != None:
         gr.Warning(e)
@@ -31,7 +31,7 @@ def chat_process(inputs, model_name, prompt_index=0, chatbot=None):
 
     return chatbot, None
 
-def extract_chat_process(chatbot,command_dropdown):
+def extract_chat_process(chatbot, command_dropdown):
     """
     extractBtn process function
     """
@@ -39,12 +39,12 @@ def extract_chat_process(chatbot,command_dropdown):
         gr.Warning("No conversation to extract.")
         return chatbot, command_dropdown
     global commands
-    extracted_commands = extract_instructions(PATTERN_FILE_PATH,chatbot[-1][-1])
+    extracted_commands = extract_instructions(PATTERN_FILE_PATH, chatbot[-1][-1])
     commands.extend([cmd for cmd in extracted_commands])
     extracted_commands_string = ""
     for cmd in extracted_commands:
         extracted_commands_string += f'操作为: {cmd["command"]} 参数为: {cmd["paras"]}\n'
-    #extracted_commands_string = json.dumps(extracted_commands,ensure_ascii=False)
+    #extracted_commands_string = json.dumps(extracted_commands, ensure_ascii=False)
 
     
     chatbot[-1][-1] = extracted_commands_string if extracted_commands_string != "" else chatbot[-1][-1]
@@ -57,4 +57,4 @@ def extract_chat_process(chatbot,command_dropdown):
 def reset_state():
     global commands
     commands = []
-    return [], [], gr.Dropdown(choices=commands, type='index', label="command", multiselect=True),None
+    return [], [], gr.Dropdown(choices=commands, type='index', label="command", multiselect=True), None

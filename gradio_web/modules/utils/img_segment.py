@@ -69,7 +69,7 @@ def auto_fill_black(original_image: Image, mask_images: dict):
     # 返回处理后的图像
     return result_image
 
-def auto_fill_by_blackpoints(image: Image,base_image: Image):
+def auto_fill_by_blackpoints(image: Image, base_image: Image):
     """
     ### This function auto fill masks which have black pixcels
     ### Argvs
@@ -92,7 +92,7 @@ def auto_fill_by_blackpoints(image: Image,base_image: Image):
         gr.Warning(err+". Cache cleared")
         return image
     try:
-        labels_and_scores = [(image_package['label'],image_package['score']) for image_package in response_json["image_packages"]]
+        labels_and_scores = [(image_package['label'], image_package['score']) for image_package in response_json["image_packages"]]
         print(labels_and_scores)
     except:
         print(response_json)
@@ -168,7 +168,7 @@ def auto_black_by_keywords(image: Image.Image, base_image: Image.Image, keywords
         gr.Warning(err+". Cache cleared")
         return image
     try:
-        labels_and_scores = [(image_package['label'],image_package['score']) for image_package in response_json["image_packages"]]
+        labels_and_scores = [(image_package['label'], image_package['score']) for image_package in response_json["image_packages"]]
         print(labels_and_scores)
     except:
         print(response_json)

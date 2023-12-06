@@ -56,16 +56,16 @@ def form_post_txt2img_paras(query: str, loras:list[str]=[], **kwargv):
         "denoising_strength": kwargv.get("denoising_strength", 0.2),
         "sampler_index": kwargv.get("sampler_index", "DPM++ 2M Karras"),
         "seed": kwargv.get("seed", -1),
-        "steps": kwargv.get("steps",40),
-        "width": kwargv.get("width",512),
-        "height": kwargv.get("height",512),
-        "cfg_scale": kwargv.get("cfg_scale",5),
+        "steps": kwargv.get("steps", 40),
+        "width": kwargv.get("width", 512),
+        "height": kwargv.get("height", 512),
+        "cfg_scale": kwargv.get("cfg_scale", 5),
         "alwayson_scripts": alwayson_scripts,
     }
 
     return paras, None
     
-def form_post_img2img_paras(init_img_str:str ,query: str ,loras:list[str]=[], **kwargv):
+def form_post_img2img_paras(init_img_str:str , query: str , loras:list[str]=[], **kwargv):
     """
     ### Form paras for post_img2img
     ### Warning: paras will first search in kwargv and then templace and then default.
@@ -154,9 +154,9 @@ def form_post_img2img_paras(init_img_str:str ,query: str ,loras:list[str]=[], **
         "inpaint_full_res_padding": kwargv.get("inpaint_full_res_padding", template_paras.get("inpaint_full_res_padding", None)),
         "inpainting_mask_invert": kwargv.get("inpainting_mask_invert", template_paras.get("inpainting_mask_invert", None)),
         "mask_blur": 4,
-        "mask": kwargv.get("black_img_str", template_paras.get("black_image",None)),
-        "mask_image": kwargv.get("mask_img_str", template_paras.get("mask_image",None)),
-        "source": kwargv.get("source", template_paras.get("source",None))
+        "mask": kwargv.get("black_img_str", template_paras.get("black_image", None)),
+        "mask_image": kwargv.get("mask_img_str", template_paras.get("mask_image", None)),
+        "source": kwargv.get("source", template_paras.get("source", None))
     }
 
     template_name = kwargv.get("template", None)
@@ -173,11 +173,11 @@ def form_post_img2img_paras(init_img_str:str ,query: str ,loras:list[str]=[], **
     return paras, None
 
 def form_default_paras_from_template(**kwargv):
-    template_name = kwargv.get("template",None)
+    template_name = kwargv.get("template", None)
     if template_name != None:
         template = templates_dict.get(template_name, {})
     else:
-        return {},None
+        return {}, None
     
     template_paras = {
         "prompt": template.get("prompt", None),
@@ -185,18 +185,18 @@ def form_default_paras_from_template(**kwargv):
         "denoising_strength": template.get("denoising_strength", None),
         "sampler_index": template.get("sampler_index", None),
         "seed": template.get("seed", None),
-        "steps": template.get("steps",None),
-        "width": template.get("width",None),
-        "height": template.get("height",None),
-        "cfg_scale": template.get("cfg_scale",None),
+        "steps": template.get("steps", None),
+        "width": template.get("width", None),
+        "height": template.get("height", None),
+        "cfg_scale": template.get("cfg_scale", None),
 
-        "mask": template.get("mask",None),
+        "mask": template.get("mask", None),
         "inpainting_fill":template.get("inpainting_fill", None),
         "inpaint_full_res": template.get("inpaint_full_res", None),
         "inpaint_full_res_padding": template.get("mask", None),
         "inpainting_mask_invert": template.get("inpainting_mask_invert", None),
         "mask_blur": template.get("mask_blur", None),
-        "mask_image": template.get("mask_image",None),
+        "mask_image": template.get("mask_image", None),
         "source": template.get("source", None)
     }
 

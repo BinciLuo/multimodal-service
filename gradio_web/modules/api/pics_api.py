@@ -17,14 +17,14 @@ def post_txt2img(paras):
     # ------------------------------------------------------
     # Begin check route and get loras
     if "route" not in picture_process_info["txt2img"].keys():
-        return None,f"[SD] route of txt2img not found"
+        return None, f"[SD] route of txt2img not found"
     
     # ------------------------------------------------------
     # Begin send request
     response = requests.post(SERVER_URL+picture_process_info["txt2img"]["route"], data=json.dumps(paras))
     if response.status_code != 200:
         return None, f"[SD] txt2img failed"
-    return response.json()['images'][0],None
+    return response.json()['images'][0], None
 
 def post_img2img(paras, source):
     """
@@ -63,6 +63,7 @@ def post_img2img(paras, source):
         try:
             return response.json()["images"][0], None
         except:
+            print(response)
             return None, f"[IMG] DALLE failed."
     if source == "Tencent":
         response = requests.post(SERVER_URL+picture_process_info["tencent_cloud_img2img"]["route"], data=json.dumps(paras))
@@ -82,12 +83,12 @@ def get_loras():
     ```
     """
     if "route" not in picture_process_info["loras"].keys():
-        return [],f"[SD] route of loras not found"
+        return [], f"[SD] route of loras not found"
     try:
         response = requests.get(url=SERVER_URL+picture_process_info["loras"]["route"])
-        return response.json()["loras"],None
+        return response.json()["loras"], None
     except:
-        return [],f'[SD] Get loras failed'
+        return [], f'[SD] Get loras failed'
 
 
 @functools.lru_cache
@@ -113,7 +114,10 @@ def post_hgface_img_segment(image: str):
     # ------------------------------------------------------
     # Begin post, set max retry time 10
     for i in range(100):
-        response = requests.post(SERVER_URL+route, data=json.dumps({"image": image}))
+        try:
+            response = requests.post(SERVER_URL+route, data=json.dumps({"image": image}))
+        except Exception as e:
+            return None, str(e)
         print(response)
         try:
             err = response.json().get("error", None)

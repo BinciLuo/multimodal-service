@@ -12,12 +12,12 @@ from const import *
 
 
 ## Chat
-def each_chat_check(model_name, err_info_list):
+def each_chat_check(model_name: str, err_info_list: list):
     _, e = post_chat(model_name, '123', SERVER_URL, [])
     if e != None:
         err_info_list.append(e)
 
-def check_chat_api_chat(err_info_list):
+def check_chat_api_chat(err_info_list: list):
     threads_list = [threading.Thread(target=each_chat_check, args=(model_name, err_info_list)) for model_name in model_info.keys() ] 
     for each_thread in threads_list:
         each_thread.start()
@@ -26,12 +26,12 @@ def check_chat_api_chat(err_info_list):
 
 
 ## SD
-def check_sd_api_loras(err_info_list):
+def check_sd_api_loras(err_info_list: list):
     _, e = get_loras()
     if e != None:
         err_info_list.append(e)
 
-def check_sd_api_txt2img(err_info_list):
+def check_sd_api_txt2img(err_info_list: list):
     paras, e = form_post_txt2img_paras('',[])
     if e != None:
         err_info_list.append(e)
@@ -39,7 +39,7 @@ def check_sd_api_txt2img(err_info_list):
     if e != None:
         err_info_list.append(e)
 
-def check_sd_api_img2img(err_info_list):
+def check_sd_api_img2img(err_info_list: list):
     with open("tests/test_img.txt",'r') as f:
         init_img_str = f.read()
     

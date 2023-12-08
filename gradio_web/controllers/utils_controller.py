@@ -1,4 +1,3 @@
-import json
 import gradio as gr
 import threading
 import time
@@ -36,7 +35,7 @@ def check_status_process():
     for err_info in err_info_list:
         gr.Warning('🤡'+err_info.upper()+'🥲')
 
-def submit_mask_process(painted):
+def submit_mask_process(painted: dict):
     return generate_mask_from_black(painted['composite']), {"background":painted["composite"],"layers":[],"composite":None}
 
 def change_base_image_process(base_img, chatbot):
@@ -61,7 +60,7 @@ def change_base_image_process(base_img, chatbot):
 
     return new_editor_dict, chatbot
 
-def auto_mask_process(painted, init_img):
+def auto_mask_process(painted: dict, init_img: Image.Image):
     global last_editor
     last_editor.append(painted)
     composite_img = painted["composite"]

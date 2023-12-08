@@ -2,7 +2,6 @@ import base64
 from io import BytesIO
 import io
 import numpy as np
-import requests
 from PIL import Image
 import gradio as gr
 

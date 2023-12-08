@@ -2,7 +2,6 @@ import base64
 from PIL import Image
 from io import BytesIO
 import gradio as gr
-import io
 
 from modules.api.pics_api import post_txt2img, post_img2img
 from modules.utils.imaga_paras_gen import form_post_txt2img_paras, form_post_img2img_paras

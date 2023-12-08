@@ -1,5 +1,3 @@
-import json
-import sys
 import gradio as gr
 
 from modules.api.chat_api import post_chat

@@ -1,16 +1,43 @@
-# 语言交互图像编辑系统
+# Chat Image Editor
 
-## 效果图
-### Example 1
-<img src="./resource_for_readme/pics/1/raw.jpg" width = "180" height = "250" alt="图片名称" align=center />
-<img src="./resource_for_readme/pics/1/beauty_0.25_egg_skin.png" width = "180" height = "250" alt="图片名称" align=center />
-<img src="./resource_for_readme/pics/1/beauty_0.25_egg_skin_ModelIsNeverendingDreamNED_loraIsKoreaDoll.png" width = "180" height = "250" alt="图片名称" align=center />
+## Examples
+- Example 1
+[origin image](resource_for_readme/pics/1/raw.jpg)
+[edited skin 1](resource_for_readme/pics/1/beauty_0.25_egg_skin.png)
+[edited skin 2](./resource_for_readme/pics/1/beauty_0.25_egg_skin_ModelIsNeverendingDreamNED_loraIsKoreaDoll.png)
 
-### Example 2
-<img src="./resource_for_readme/pics/2/raw.jpeg" width = "200" height = "250" alt="图片名称" align=center />
-<img src="./resource_for_readme/pics/2/将第一个和第三个mask掉然后使用提示词in a street在mask的部分生成新的图片然后美颜然后让她的面部笑得更开心，涂上大红色的口红，画紫色的眼影.png" width = "200" height = "250" alt="图片名称" align=center />
+- Example 2
+[origin image](./resource_for_readme/pics/2/raw.jpeg) 
+[Change background and larger smile purple eye-shadow](./resource_for_readme/pics/2/Change_background_and_larger_smile_purple_eye-shadow.png)
 
+#### TODO:
+`Develop:`
+- [x] Auto segment image
+- [x] Build a GUI using gradio 
+- [x] Build a middleware using beego 
 
+`Deploy:`
+- [x] Auto build Docker images
+- [x] Auto deploy in Azure  
+
+`Features:`
+- [x] Use ChatGPT3.5turbo and enable history
+- [x] Use StableDiffusion to edit image
+- [x] Use DALLE to edit image while StableDiffusion is not available
+- [x] Auto mask image by segment result
+- [ ] Use ChatGLM2-6B and enable history (histort not implement)
+
+## Architecture
+```
+gradio_web(Image preprocessing, GUI)
+      |
+     api       |---api---> StableDiffusion
+      |        |
+middleware <===|---api---> OpenAI
+               |          (GPT3.5turbo, DALLE)
+               |
+               |---api---> ChatGLM2-6B
+```
 
 ## Usage
 ### Demo
@@ -43,22 +70,6 @@ A demo is deployed in Azure. [Try it here](https://gradio-app.azurewebsites.net)
    - `pip install -r requirements.txt`
    - `bash local_gradio.sh`
 3. Open `127.0.0.1:27777`
-# 系统架构
-前端-->后端-->gpt glm stablediffusion
-## [前端](./gradio_web)
-### 实现方式
-使用Python实现，主要使用gradio
-## [后端](./middleware)
-### 实现方式
-使用Golang实现，主要使用beego
-## [GPT3Dot5Turbo](https://openai.com/chatgpt)
-调取OpenAI的接口实现
-## [ChatGLM2-6B](./chatglm2-6b)
-### 实现方式
-使用fastapi封装ChatGLM2-6B
-## StableDiffsion
-### 实现方式
-基于开源项目[stable-diffusion-webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui.git)的API，对其进行了API的扩充
 
 ## Trouble Shooting
 ### Can't open gradio_web

@@ -3,7 +3,7 @@ import requests
 
 from const import *
 
-def post_chat(model_name: str, query: str, sever_url:str, history=[]):
+def post_chat(model_name: str, query: str, sever_url:str, history: list[tuple]=[]):
     """
     ### This function posts LLM
     ### Argvs

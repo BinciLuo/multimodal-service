@@ -2,7 +2,6 @@
 from modules.api.chat_api import post_chat
 from modules.api.pics_api import post_txt2img, post_img2img, form_post_img2img_paras, form_post_txt2img_paras
 from modules.api.pics_api import get_loras
-import json
 
 def show_err(api_name, example, e):
         print(f"Test {api_name} failed. \n    Example: {example}\n    Error: {e}\n")

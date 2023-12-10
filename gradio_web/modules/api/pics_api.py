@@ -1,8 +1,6 @@
 import base64
 import functools
-from io import BytesIO
 import json
-import sys
 import time
 import gradio as gr
 from PIL import Image
@@ -12,7 +10,7 @@ from modules.utils.imaga_paras_gen import form_default_paras_from_template
 
 from const import *
 
-def post_txt2img(paras):
+def post_txt2img(paras: dict):
     
     # ------------------------------------------------------
     # Begin check route and get loras
@@ -26,7 +24,7 @@ def post_txt2img(paras):
         return None, f"[SD] txt2img failed"
     return response.json()['images'][0], None
 
-def post_img2img(paras, source):
+def post_img2img(paras: dict, source: str):
     """
     ### This function posts img2img models
     ### Argvs

@@ -6,7 +6,7 @@ from controllers.pics_controller import change_pic_process
 from controllers.chat_controllers import commands
 from controllers.utils_controller import submit_mask_process
 
-def exec_command(command_package, base_image: Image.Image, image_editor: dict, mask_image: Image.Image, edited_image: Image.Image, img_input: str, lora_dropdown: list[str]):
+def exec_command(command_package: dict, base_image: Image.Image, image_editor: dict, mask_image: Image.Image, edited_image: Image.Image, img_input: str, lora_dropdown: list[str]):
     # ---------------------------------------------------------------------------------------------------------------------------------------------
     if command_package['command'] == 'mask_selected':
         new_composite = auto_black_by_keywords(image_editor["background"], edited_image, command_package["paras"][0], False)

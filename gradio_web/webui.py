@@ -1,12 +1,6 @@
-import base64
-import io
 import os
-import sys
 import gradio as gr
-import json
-import mdtex2html
 from PIL import Image
-from io import BytesIO
 
 from modules.api.pics_api import get_loras
 from controllers.chat_controllers import chat_process, extract_chat_process, reset_state, commands

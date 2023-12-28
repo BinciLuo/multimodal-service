@@ -123,7 +123,7 @@ with gr.Blocks() as demo:
     #sendToEditorBtn.click(send_to_editor_process,[base_image],[image_editor])
 
     # events
-    base_image.change(change_base_image_process,[base_image, chatbot],[image_editor, chatbot])
+    base_image.change(change_base_image_process,[base_image, chatbot],[image_editor, chatbot, command_dropdown])
     chatbot.change(extract_chat_process,[chatbot, command_dropdown],[chatbot, command_dropdown])
 
 

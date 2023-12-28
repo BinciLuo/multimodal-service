@@ -1,2 +1,2 @@
 export BEE_PORT=52780
-bee run
+/Users/binciluo/go/bin/bee run

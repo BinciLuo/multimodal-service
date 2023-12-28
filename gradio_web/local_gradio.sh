@@ -1,3 +1,3 @@
 export MIDDLEWARE_ENV=local
 export GRADIO_ENV=local
-python webui.py
+/opt/homebrew/Caskroom/miniconda/base/bin/python -u webui.py

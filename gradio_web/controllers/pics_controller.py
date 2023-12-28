@@ -48,8 +48,7 @@ def change_pic_process(init_img: Image, query: str, loras:list[str] = [], templa
             gr.Warning(f"Mask is None, if you're using DALL-E, the full image will change")
         mask_img = Image.new("RGBA", init_img.size, (0, 0, 0, 0))
 
-    binary_image = convert_unblack_to_white(image_editor["background"])
-    binary_image.save("binary_image.png")    
+    binary_image = convert_unblack_to_white(image_editor["background"])    
     black_img_str = trans_image_to_str(binary_image)
     
     mask_img_str = trans_image_to_str(mask_img)

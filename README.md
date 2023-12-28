@@ -27,6 +27,9 @@
 - [x] Auto mask image by segment result
 - [ ] Use ChatGLM2-6B and enable history (histort not implement)
 
+`FIXME`
+- [x] Clear commands when updating base image
+
 ## Architecture
 ```
 gradio_web(Image preprocessing, GUI)

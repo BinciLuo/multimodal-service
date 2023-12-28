@@ -8,7 +8,7 @@ from modules.utils.colors import generate_mask_from_black
 from modules.utils.img_segment import auto_fill_by_blackpoints, replace_black_pixels
 from modules.api.pics_api import post_hgface_img_segment
 from modules.utils.image_io import trans_image_to_str
-from controllers.chat_controllers import history
+from controllers.chat_controllers import history, commands
 
 last_editor = []
 
@@ -57,8 +57,10 @@ def change_base_image_process(base_img, chatbot):
     new_editor_dict = {"background":replace_black_pixels(base_img),"layers":[],"composite":None}
     global last_editor
     last_editor = [{"background":replace_black_pixels(base_img),"layers":[],"composite":None}]
+    global commands
+    commands.clear()
 
-    return new_editor_dict, chatbot
+    return new_editor_dict, chatbot, gr.Dropdown(choices=[f'操作为: {cmd["command"]} 参数为: {cmd["paras"]}' for cmd in commands], type='index', label="command", multiselect=True)
 
 def auto_mask_process(painted: dict, init_img: Image.Image):
     global last_editor

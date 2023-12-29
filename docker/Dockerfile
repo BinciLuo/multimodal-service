@@ -12,4 +12,4 @@ WORKDIR /root/multimodal-service/
 RUN pipx install gradio
 EXPOSE 80
 
-CMD  bash runner.sh
+CMD  bash runner.sh && sleep infinity

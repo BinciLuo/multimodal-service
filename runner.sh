@@ -6,11 +6,11 @@ kill -TERM $(ps aux | grep 'webui.py' | awk '{print $2}')
 # Change directory to middleware
 cd middleware
 
-# Run local_middleware.sh in the background
+# Run Middleware
 bash docker.sh &
 
 # Change directory to gradio_web
 cd ../gradio_web
 
-# Run local_gradio.sh
-bash docker.sh &
+# Run Gradio
+bash docker.sh

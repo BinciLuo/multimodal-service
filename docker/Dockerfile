@@ -22,8 +22,8 @@ WORKDIR /root/multimodal-service/
 RUN python3 -m venv venv && \
     . venv/bin/activate && \
     pip install gradio && \
-    echo '. venv/bin/activate' >> ~/.bashrc
+    echo '. venv/bin/activate' >> /root/.bashrc
 
 EXPOSE 80
 
-CMD . ~/.bashrc && bash runner.sh
+CMD bash /root/.bashrc && bash runner.sh

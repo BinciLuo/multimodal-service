@@ -43,4 +43,4 @@ jobs:
         app-name: 'multimodal-service'
         slot-name: 'production'
         publish-profile: ${{ secrets.AzureAppService_PublishProfile_189b4794df64454d8019186cf92d4f69 }}
-        images: 'index.docker.io/${{ secrets.AzureAppService_ContainerUsername_39f9fa9ed01849b49cebf0dcaa251705 }}/binciluo/multimodal:${{ github.sha }}'
+        images: ${{ secrets.DOCKERHUB_USERNAME }}/multimodal:${{ github.sha }}'

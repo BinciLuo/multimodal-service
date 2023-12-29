@@ -11,6 +11,5 @@ RUN go install github.com/beego/bee/v2@latest
 WORKDIR /root/multimodal-service/
 RUN pipx install gradio
 EXPOSE 80
-RUN bash runner.sh
 
 CMD  bash runner.sh

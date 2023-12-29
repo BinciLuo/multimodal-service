@@ -26,4 +26,4 @@ RUN python3 -m venv venv && \
 
 EXPOSE 80
 
-CMD bash /root/.bashrc && bash runner.sh
+CMD . venv/bin/activate && bash runner.sh

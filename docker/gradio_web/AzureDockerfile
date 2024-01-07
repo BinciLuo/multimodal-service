@@ -5,7 +5,7 @@ RUN apt-get update && \
 RUN git clone  https://github.com/BinciLuo/multimodal-service.git --depth=1
 WORKDIR /root/multimodal-service/gradio_web/
 RUN pip install --upgrade pip && \
-    pip install -r requirements.txt
+    pip install gradio
 EXPOSE 80
 
 CMD  export GRADIO_ENV=Azure && python webui.py

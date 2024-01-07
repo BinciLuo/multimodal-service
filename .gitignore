@@ -4,3 +4,4 @@ middleware/middleware
 __pycache__/
 */__pycache__
 gradio_web/gradio_cached_examples
+mac_runner.sh

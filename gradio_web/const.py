@@ -31,6 +31,7 @@ elif MIDDLEWARE_ENV == "local":
 else:
     print(f"Middleware Running in Azure, set server url {global_variables['server_url']}")
     SERVER_URL = global_variables["server_url"]
+print(f"[INIT] Set MIDDLEWARE_ENV:{MIDDLEWARE_ENV}, middleware running in port {SERVER_URL}")
 
 # Read GRADIO_ENV from $GRADIO_ENV
 # Default '':8080, you can choose 'Azure':80 or 'local':27777 instead.
@@ -41,6 +42,15 @@ elif GRADIO_ENV == "local" or "k8s":
     GRADIO_PORT = 27777
 else:
     GRADIO_PORT = 8080
+print(f"[INIT] Set GRADIO_ENV:{GRADIO_ENV}, webui running in {GRADIO_PORT}")
+
+# Read SEG_MODEL_ENV from $SEG_MODEL_ENV
+# Default '':huggingface, you can choose 'local'
+SEG_MODEL_ENV = os.environ.get("SEG_MODEL_ENV")
+if SEG_MODEL_ENV == 'local':
+    print("[INIT] Segment Model Running in Local")
+else:
+    print("[INIT] Use Segment Model through API")
 
 PATTERN_FILE_PATH = global_variables["pattern_file_path"]
 

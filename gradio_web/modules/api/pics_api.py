@@ -7,8 +7,11 @@ from PIL import Image
 import requests
 from modules.utils.scripts_gen import form_alwayson_scripts_from_kwargv
 from modules.utils.imaga_paras_gen import form_default_paras_from_template
+from modules.utils.image_io import trans_str_to_image
 
 from const import *
+if SEG_MODEL_ENV == 'local':
+    from modules.utils.model import get_mask_data_json
 
 def post_txt2img(paras: dict):
     
@@ -103,6 +106,13 @@ def post_hgface_img_segment(image: str):
         error(str| None): error message
     ```
     """
+    if SEG_MODEL_ENV == 'local':
+        try:
+            return get_mask_data_json(trans_str_to_image(image)), None
+        except:
+            gr.Warning("Local segment model not availible, fallback to api.")
+        
+
     # ------------------------------------------------------
     # Begin check route
     if "route" not in picture_process_info["huggingface_img_segment"].keys():

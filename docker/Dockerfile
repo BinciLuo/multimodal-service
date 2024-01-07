@@ -21,7 +21,7 @@ WORKDIR /root/multimodal-service/
 # 创建虚拟环境并安装 Gradio
 RUN python3 -m venv venv && \
     . venv/bin/activate && \
-    pip install gradio && \
+    pip install gradio transformers torch && \
     echo '. venv/bin/activate' >> /root/.bashrc
 
 EXPOSE 80

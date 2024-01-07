@@ -1,1 +1,4 @@
 gradio
+transformers
+torch
+numpy

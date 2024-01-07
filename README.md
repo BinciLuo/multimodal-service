@@ -45,34 +45,26 @@ middleware <===|---api---> OpenAI
 ## Usage
 ### Demo
 A demo is deployed in Azure. [Try it here](https://gradio-app.azurewebsites.net)
-### Run through Kubernetes (Recommend)
+
+### Run through Docker (Recommend)
+1. Run multimodal-service
+   - `docker pull binciluo/multimodal:latest`
+   - `docker run --name multimodal -p 27777:80 binciluo/multimodal:latest`
+
+2. Open `127.0.0.1:27777`
+
+### Run through Kubernetes
 1. `cd k8s`
 2. `kubectl apply -f pod.yaml` (`kubectl apply -f pod_arm.yaml` if you are using Arm)
 3. If your OS is not Linux, run `kubectl port-forward mm-service-pod  -n default  27777:27777`
 4. Open `127.0.0.1:27777`
 
-### Run through Docker
-1. Run middleware
-   - `docker pull binciluo/middleware:latest`
-   - `docker run --name middleware -p 8080:8080 binciluo/middleware:latest`
-2. Run webui
-   - `docker pull binciluo/gradio_web:latest`
-   - `docker run --name webui -p 27777:27777 binciluo/gradio_web:latest`
-3. Build a network
-   - `docker network creat mm-service`
-   - `docker network connect mm-service middleware`
-   - `docker network connect mm-service webui`
-4. Open `127.0.0.1:27777`
-
 ### Run in local
-1. Run middleware(`golang`,`beego` required)
-   - `cd middleware`
-   - `bash local_middleware.sh`
-2. Run webui
-   - `cd gradio_web`
-   - `pip install -r requirements.txt`
-   - `bash local_gradio.sh`
-3. Open `127.0.0.1:27777`
+1. Install requirements(`golang`,`beego` required)
+   - Install golang
+   - Install beego: `go install github.com/beego/bee/v2@latest`
+   - Install python requirements: `pip install -r gradio_web/requirements.txt`
+2. Run `bash mutimodal_runner.sh`
 
 ## Trouble Shooting
 ### Can't open gradio_web

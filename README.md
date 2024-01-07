@@ -48,8 +48,8 @@ A demo is deployed in Azure. [Try it here](https://gradio-app.azurewebsites.net)
 
 ### Run through Docker (Recommend)
 1. Run multimodal-service
-   - `docker pull binciluo/multimodal:latest`
-   - `docker run --name multimodal -p 27777:80 binciluo/multimodal:latest`
+   - run `docker run --name multimodal -p 27777:80 binciluo/multimodal:latest` if you'd like to run models in local
+   - run `docker run --name multimodal -p 27777:80 binciluo/multimodal:mini_latest` if you want to use api in huggingface
 
 2. Open `127.0.0.1:27777`
 

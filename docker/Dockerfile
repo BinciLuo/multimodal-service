@@ -24,6 +24,9 @@ RUN python3 -m venv venv && \
     pip install gradio transformers torch && \
     echo '. venv/bin/activate' >> /root/.bashrc
 
+# 下载模型
+RUN . venv/bin/activate && \
+    python3 gradio_web/load_seg_model.py
 EXPOSE 80
 
 CMD . venv/bin/activate && bash runner_local.sh

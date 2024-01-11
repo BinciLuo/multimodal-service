@@ -67,6 +67,21 @@
                         "threshold_b": 20
                     }
                 ]
+            },
+            "roop": {
+                "args": [
+                    "",
+                    true,
+                    0,
+                    "/app/stable-diffusion-webui/models/roop/inswapper_128.onnx",
+                    "CodeFormer",
+                    1,
+                    null,
+                    1,
+                    null,
+                    false,
+                    true
+                ]
             }
         }
     }

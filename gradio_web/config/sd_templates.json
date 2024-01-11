@@ -26,7 +26,7 @@
         "width": 512,
         "height": 512,
         "cfg_scale": 5,
-        "restore_faces": true,
+        "restore_faces": false,
         "mask_image": null,
         "source": "SD",
         "alwayson_scripts": {
@@ -53,7 +53,7 @@
         "width": 512,
         "height": 512,
         "cfg_scale": 3.5,
-        "restore_faces": true,
+        "restore_faces": false,
         "mask_image": null,
         "source": "SD",
         "alwayson_scripts": {

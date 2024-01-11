@@ -147,6 +147,7 @@ def form_post_img2img_paras(init_img_str:str , query: str , loras:list[str]=[], 
         "width": kwargv.get("width", template_paras.get("width", None)),
         "height": kwargv.get("height", template_paras.get("height", None)),
         "cfg_scale": kwargv.get("cfg_scale", template_paras.get("cfg_scale", None)),
+        "restore_faces": kwargv.get("restore_faces", template_paras.get("restore_faces", None)),
         "alwayson_scripts": alwayson_scripts,
 
         "inpainting_fill": kwargv.get("inpainting_fill", template_paras.get("inpainting_fill", None)),
@@ -165,7 +166,7 @@ def form_post_img2img_paras(init_img_str:str , query: str , loras:list[str]=[], 
         
 
     for key in IMG2IMG_DEFAULT_PARAS.keys():
-        paras[key] = paras[key] if paras[key] != None else default_paras[key]
+        paras[key] = paras[key] if paras.get(key, None) != None else default_paras[key]
         if key == "prompt":
             paras[key] = query + paras[key]
     

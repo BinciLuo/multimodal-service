@@ -26,6 +26,7 @@
 - [x] Use DALLE to edit image while StableDiffusion is not available
 - [x] Auto mask image by segment result
 - [ ] Use ChatGLM2-6B and enable history (histort not implement)
+- [ ] Use roop to replace face
 
 `FIXME`
 - [x] Clear commands when updating base image
@@ -48,8 +49,8 @@ A demo is deployed in Azure. [Try it here](https://gradio-app.azurewebsites.net)
 
 ### Run through Docker (Recommend)
 1. Run multimodal-service
-   - run `docker run --name multimodal -p 27777:80 binciluo/multimodal:latest` if you'd like to run models in local
-   - run `docker run --name multimodal -p 27777:80 binciluo/multimodal:mini_latest` if you want to use api in huggingface
+   - run `docker run --name multimodal -p 27777:80 binciluo/multimodal:latest` if you'd like to run image segment model in local
+   - run `docker run --name multimodal -p 27777:80 binciluo/multimodal:mini_latest` if you want to use image segment through api in huggingface
 
 2. Open `127.0.0.1:27777`
 
@@ -64,7 +65,7 @@ A demo is deployed in Azure. [Try it here](https://gradio-app.azurewebsites.net)
    - Install golang
    - Install beego: `go install github.com/beego/bee/v2@latest`
    - Install python requirements: `pip install -r gradio_web/requirements.txt`
-2. Run `bash mutimodal_runner.sh`
+2. Run `bash runner.sh`( or `bash runner_local.sh` if you want to run image segment model in local)
 
 ## Trouble Shooting
 ### Can't open gradio_web

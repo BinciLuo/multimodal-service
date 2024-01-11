@@ -19,6 +19,15 @@ def form_alwayson_scripts_from_templates(**kwargv):
             return None, "You need init_img_str when using controlnet"
         control_net_dict["args"][0]["input_image"] = init_img_str
         alwayson_scripts["controlnet"] = control_net_dict
+    
+    # Some processing for roop
+    roop_dict = alwayson_scripts.get("roop", None)
+    if roop_dict != None:
+        init_img_str = kwargv.get("init_img_str", None)
+        if init_img_str == None:
+            return None, "You need init_img_str when using roop"
+        roop_dict["args"][0] = init_img_str
+        alwayson_scripts["roop"] = roop_dict
 
     return alwayson_scripts, None
 

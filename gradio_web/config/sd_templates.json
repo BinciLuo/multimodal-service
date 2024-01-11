@@ -67,6 +67,33 @@
                         "threshold_b": 20
                     }
                 ]
+            }
+        }
+    },
+    "replace_face": {
+        "prompt": ", best quality, masterpiece, ultra high res,1girl, looking at viewer, professional 3d model Sri Lankan",
+        "negative_prompt": "(worst quality:2),(low quality:2),(normal quality:2),lowres,watermark, bad_pictures, EasyNegative, negative_hand-neg",
+        "denoising_strength": 0.3,
+        "sampler_index": "DPM++ 2M Karras",
+        "seed": -1,
+        "steps": 40,
+        "width": 512,
+        "height": 512,
+        "cfg_scale": 3.5,
+        "restore_faces": false,
+        "mask_image": null,
+        "source": "SD",
+        "alwayson_scripts": {
+            "controlnet": {
+                "args": [
+                    {
+                        "module": "canny",
+                        "model": "coadapter-canny-sd15v1 [0f01fb68]",
+                        "input_image": "",
+                        "threshold_a": 10,
+                        "threshold_b": 20
+                    }
+                ]
             },
             "roop": {
                 "args": [

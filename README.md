@@ -26,6 +26,7 @@
 - [x] Use DALLE to edit image while StableDiffusion is not available
 - [x] Auto mask image by segment result
 - [ ] Use ChatGLM2-6B and enable history (histort not implement)
+- [ ] Use roop to replace face
 
 `FIXME`
 - [x] Clear commands when updating base image

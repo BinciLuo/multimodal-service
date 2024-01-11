@@ -14,6 +14,7 @@
     "width": 512,
     "height": 512,
     "cfg_scale": 5,
+    "restore_faces": true,
     "alwayson_scripts": {},
 
     "source": "DALLE"

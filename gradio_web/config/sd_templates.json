@@ -70,7 +70,7 @@
             },
             "roop": {
                 "args": [
-                    "",
+                    "BASE_IMAGE",
                     true,
                     0,
                     "/app/stable-diffusion-webui/models/roop/inswapper_128.onnx",

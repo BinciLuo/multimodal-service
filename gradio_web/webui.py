@@ -37,7 +37,6 @@ def refresh_loras():
 
 
 with gr.Blocks() as demo:
-    
     gr.HTML("""<h1 align="center">Chat Image Editor</h1>""")
 
     with gr.Accordion("Operation Board"):
@@ -49,17 +48,22 @@ with gr.Blocks() as demo:
                 execAllBtn = gr.Button("Exec all commands", variant='primary')
         extractBtn = gr.Button("Extract Instruction", visible=False)
     
+
+
     with gr.Row():
         with gr.Column(scale=1):
-            checkBtn = gr.Button("Check server status", variant="primary")
             with gr.Tab("Base Image"):
                 base_image = gr.Image(label='Base Image', type='pil', interactive=True)
                 with gr.Accordion("Examples", open=False): 
                     gr.Examples(["example/"+filename for filename in os.listdir("./example") if filename.split('.')[-1].lower() in ["jpeg","jpg","png"]], base_image)
+
             with gr.Tab("Edited Image"):
-                setBaseImageBtn = gr.Button("Set as Base Image", variant="primary")
                 edited_image = gr.Image(label='Edited Image', type='pil', interactive=False)
+                setBaseImageBtn = gr.Button("Set as Base Image", variant="primary")
+            checkBtn = gr.Button("Check server status", variant="primary")
             #sendToEditorBtn = gr.Button("Send to Editor", variant='primary')
+
+
         with gr.Column(scale=1):
             with gr.Tab("Chat"):
                 with gr.Accordion("Chat"):
@@ -74,6 +78,7 @@ with gr.Blocks() as demo:
                     with gr.Row():
                         submitBtn = gr.Button("Submit", variant="primary")
                         emptyBtn = gr.Button("Clear History", variant="stop")
+
             with gr.Tab("Edit Image"):
                 with gr.Accordion("Editor"):
                     with gr.Row():
@@ -84,25 +89,21 @@ with gr.Blocks() as demo:
                             autoFillBtn = gr.Button("Auto Fill", variant='primary', size='sm')
                             undoAutoFillBtn = gr.Button("Undo Auto Fill", variant='primary', size='sm')
                         submitMaskBtn = gr.Button("Get Mask", variant='primary')
-
                 with gr.Accordion("Change Face"):
                     faceTargetImage = gr.Image(label='Target', type='pil', interactive=True)
                     changeFaceBtn = gr.Button("Change Face", variant='primary')
                     with gr.Accordion("Examples", open=False):
                         gr.Examples(["example/"+filename for filename in os.listdir("./example") if filename.split('.')[-1].lower() in ["jpeg","jpg","png"]], faceTargetImage)
-                        
-                    
-  
-                with gr.Tab("Operations"):
-                    img_gen_template_dropdown = gr.Dropdown(choices=img_gen_template_dict.keys(), type='value', label="img template", value="default")
-                    img_input = gr.Textbox(show_label=False, placeholder="输入生成图像指令", lines=1, container=False, show_copy_button=True)
-                    picGenBtn = gr.Button("Generate a Picture", variant="primary")
-                    picChangeBtn = gr.Button("Change Picture", variant="primary")
-                with gr.Tab("Pic Settings"):
-                    widthSlider = gr.Slider(0, 1920, value=512, step=1)
-                    heightSlider = gr.Slider(0, 1080, value=512, step=1)
-                    lora_dropdown = gr.Dropdown(choices=loras, type='value', label="lora", multiselect=True)
-                    loraRefreshBtn = gr.Button("Refresh loras", variant="primary", scale=1, size='sm')
+                img_gen_template_dropdown = gr.Dropdown(choices=img_gen_template_dict.keys(), type='value', label="img template", value="default")
+                img_input = gr.Textbox(show_label=False, placeholder="输入生成图像指令", lines=1, container=False, show_copy_button=True)
+                picGenBtn = gr.Button("Generate a Picture", variant="primary")
+                picChangeBtn = gr.Button("Change Picture", variant="primary")
+
+            with gr.Tab("Pic Settings"):
+                widthSlider = gr.Slider(0, 1920, value=512, step=1)
+                heightSlider = gr.Slider(0, 1080, value=512, step=1)
+                lora_dropdown = gr.Dropdown(choices=loras, type='value', label="lora", multiselect=True)
+                loraRefreshBtn = gr.Button("Refresh loras", variant="primary", scale=1, size='sm')
             
             
 

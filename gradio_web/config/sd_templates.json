@@ -63,8 +63,8 @@
                         "module": "canny",
                         "model": "coadapter-canny-sd15v1 [0f01fb68]",
                         "input_image": "",
-                        "threshold_a": 10,
-                        "threshold_b": 20
+                        "threshold_a": 100,
+                        "threshold_b": 250
                     }
                 ]
             }

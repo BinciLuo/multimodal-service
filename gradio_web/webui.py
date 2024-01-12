@@ -41,9 +41,12 @@ with gr.Blocks() as demo:
     gr.HTML("""<h1 align="center">Chat Image Editor</h1>""")
 
     with gr.Accordion("Operation Board"):
+        with gr.Row():
+            with gr.Column(scale=5):
                 command_dropdown = gr.Dropdown(choices=commands, type='index', label="command", multiselect=True)
-                extractBtn = gr.Button("Extract Instruction", visible=False)
+            with gr.Column(scale=1):
                 execBtn = gr.Button("Exec Selected commands", variant="primary")
+        extractBtn = gr.Button("Extract Instruction", visible=False)
     
     with gr.Row():
         with gr.Column(scale=1):

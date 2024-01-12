@@ -45,7 +45,9 @@ with gr.Blocks() as demo:
             checkBtn = gr.Button("Check server status", variant="primary")
             with gr.Accordion("Base Image"):
                 base_image = gr.Image(label='Base Image', type='pil', interactive=True)
-            with gr.Accordion("Edited Image", open= False):
+                with gr.Accordion("Examples", open=False): 
+                    gr.Examples(["example/"+filename for filename in os.listdir("./example") if filename.split('.')[-1].lower() in ["jpeg","jpg","png"]], base_image)
+            with gr.Accordion("Edited Image"):
                 setBaseImageBtn = gr.Button("Set as Base Image", variant="primary")
                 edited_image = gr.Image(label='Edited Image', type='pil', interactive=False)
             #sendToEditorBtn = gr.Button("Send to Editor", variant='primary')
@@ -55,6 +57,8 @@ with gr.Blocks() as demo:
                     with gr.Column():
                         chatbot = gr.Chatbot(height= 300)
                         user_input = gr.Textbox(show_label=False, placeholder="输入命令", container=False, show_copy_button=True, lines=3)
+                        with gr.Accordion("Examples", open=False):
+                            gr.Examples(examples_jmap["query"], user_input)
                     with gr.Row():
                         model_select_box = gr.Dropdown(choices=chat_config["models"].keys(), type='value', label="model", value="gpt3dot5turbo")
                         instruction_template_dropdown = gr.Dropdown(choices=[info["description"] for info in INSTRUCTION_PROMPT_FILES_INFO], type='index', label="prompt", value=0)
@@ -94,11 +98,7 @@ with gr.Blocks() as demo:
                 command_dropdown = gr.Dropdown(choices=commands, type='index', label="command", multiselect=True)
                 extractBtn = gr.Button("Extract Instruction", visible=False)
                 execBtn = gr.Button("Exec Selected commands", variant="primary")
-            with gr.Accordion("Examples", open=False):
-                with gr.Tab("Pics"): 
-                    gr.Examples(["example/"+filename for filename in os.listdir("./example") if filename.split('.')[-1].lower() in ["jpeg","jpg","png"]], base_image)
-                with gr.Tab("Inputs"):
-                    gr.Examples(examples_jmap["query"], user_input)
+            
 
 
     history = gr.State([])

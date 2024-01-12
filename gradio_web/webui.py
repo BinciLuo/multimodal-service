@@ -38,7 +38,12 @@ def refresh_loras():
 
 with gr.Blocks() as demo:
     
-    gr.HTML("""<h1 align="center">Test</h1>""")
+    gr.HTML("""<h1 align="center">Chat Image Editor</h1>""")
+
+    with gr.Accordion("Operation Board"):
+                command_dropdown = gr.Dropdown(choices=commands, type='index', label="command", multiselect=True)
+                extractBtn = gr.Button("Extract Instruction", visible=False)
+                execBtn = gr.Button("Exec Selected commands", variant="primary")
     
     with gr.Row():
         with gr.Column(scale=1):
@@ -94,10 +99,7 @@ with gr.Blocks() as demo:
                     heightSlider = gr.Slider(0, 1080, value=512, step=1)
                     lora_dropdown = gr.Dropdown(choices=loras, type='value', label="lora", multiselect=True)
                     loraRefreshBtn = gr.Button("Refresh loras", variant="primary", scale=1, size='sm')
-            with gr.Accordion("Operation Board"):
-                command_dropdown = gr.Dropdown(choices=commands, type='index', label="command", multiselect=True)
-                extractBtn = gr.Button("Extract Instruction", visible=False)
-                execBtn = gr.Button("Exec Selected commands", variant="primary")
+            
             
 
 

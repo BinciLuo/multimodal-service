@@ -46,7 +46,7 @@ def check_sd_api_img2img(err_info_list: list):
     paras, e = form_post_img2img_paras(init_img_str,'',[])
     if e != None:
         err_info_list.append(e)
-    _, e = post_img2img(paras)
+    _, e = post_img2img(paras, source='SD')
     if e != None:
         err_info_list.append(e)
 

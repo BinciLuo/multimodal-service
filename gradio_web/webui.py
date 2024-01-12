@@ -52,11 +52,11 @@ with gr.Blocks() as demo:
     with gr.Row():
         with gr.Column(scale=1):
             checkBtn = gr.Button("Check server status", variant="primary")
-            with gr.Accordion("Base Image"):
+            with gr.Tab("Base Image"):
                 base_image = gr.Image(label='Base Image', type='pil', interactive=True)
                 with gr.Accordion("Examples", open=False): 
                     gr.Examples(["example/"+filename for filename in os.listdir("./example") if filename.split('.')[-1].lower() in ["jpeg","jpg","png"]], base_image)
-            with gr.Accordion("Edited Image"):
+            with gr.Tab("Edited Image"):
                 setBaseImageBtn = gr.Button("Set as Base Image", variant="primary")
                 edited_image = gr.Image(label='Edited Image', type='pil', interactive=False)
             #sendToEditorBtn = gr.Button("Send to Editor", variant='primary')

@@ -1,5 +1,6 @@
 # Chat Image Editor
-
+### Demo
+A demo is deployed in Azure. [Try it here](https://gradio-app.azurewebsites.net)
 ## Examples
 - Example 1
 [origin image](resource_for_readme/pics/1/raw.jpg)
@@ -44,9 +45,6 @@ middleware <===|---api---> OpenAI
 ```
 
 ## Usage
-### Demo
-A demo is deployed in Azure. [Try it here](https://gradio-app.azurewebsites.net)
-
 ### Run through Docker (Recommend)
 1. Run multimodal-service
    - run `docker run --name multimodal -p 27777:80 binciluo/multimodal:latest` if you'd like to run image segment model in local

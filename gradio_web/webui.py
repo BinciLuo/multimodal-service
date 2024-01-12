@@ -75,6 +75,9 @@ with gr.Blocks() as demo:
                 with gr.Accordion("Change Face"):
                     faceTargetImage = gr.Image(label='Target', type='pil', interactive=True)
                     changeFaceBtn = gr.Button("Change Face", variant='primary')
+                    with gr.Accordion("Examples", open=False):
+                        gr.Examples(["example/"+filename for filename in os.listdir("./example") if filename.split('.')[-1].lower() in ["jpeg","jpg","png"]], faceTargetImage)
+                        
                     
   
                 with gr.Tab("Operations"):

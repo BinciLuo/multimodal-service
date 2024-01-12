@@ -23,10 +23,10 @@ def form_alwayson_scripts_from_templates(**kwargv):
     # Some processing for roop
     roop_dict = alwayson_scripts.get("roop", None)
     if roop_dict != None:
-        init_img_str = kwargv.get("init_img_str", None)
-        if init_img_str == None:
-            return None, "You need init_img_str when using roop"
-        roop_dict["args"][0] = init_img_str
+        face_target_img_str = kwargv.get("face_target_img_str", None)
+        if face_target_img_str == None:
+            return None, "You need face_target_img_str when using roop"
+        roop_dict["args"][0] = face_target_img_str
         alwayson_scripts["roop"] = roop_dict
 
     return alwayson_scripts, None

@@ -6,7 +6,7 @@ from modules.api.pics_api import get_loras
 from controllers.chat_controllers import chat_process, extract_chat_process, reset_state, commands
 from controllers.pics_controller import change_pic_process, generate_pic_process, set_base_image, change_face_process
 from controllers.utils_controller import auto_mask_process, check_status_process, submit_mask_process, change_base_image_process, undo_auto_mask_process
-from controllers.mutimodal_controllers import exec_commands_process
+from controllers.mutimodal_controllers import exec_commands_process, exec_all_commands_process
 
 from const import *
 
@@ -45,7 +45,8 @@ with gr.Blocks() as demo:
             with gr.Column(scale=5):
                 command_dropdown = gr.Dropdown(choices=commands, type='index', label="command", multiselect=True)
             with gr.Column(scale=1):
-                execBtn = gr.Button("Exec Selected commands", variant="primary")
+                execSelectedBtn = gr.Button("Exec Selected commands", variant="primary")
+                execAllBtn = gr.Button("Exec all commands", variant='primary')
         extractBtn = gr.Button("Extract Instruction", visible=False)
     
     with gr.Row():
@@ -135,7 +136,9 @@ with gr.Blocks() as demo:
 
     changeFaceBtn.click(change_face_process, [base_image, faceTargetImage], [edited_image], show_progress=True)
 
-    execBtn.click(exec_commands_process,[command_dropdown, base_image, imageEditor, maskImage, edited_image, img_input, lora_dropdown], [imageEditor, maskImage, edited_image])
+    execSelectedBtn.click(exec_commands_process,[command_dropdown, base_image, imageEditor, maskImage, edited_image, img_input, lora_dropdown], [imageEditor, maskImage, edited_image])
+    execAllBtn.click(exec_all_commands_process,[base_image, imageEditor, maskImage, edited_image, img_input, lora_dropdown], [imageEditor, maskImage, edited_image])
+
     #sendToEditorBtn.click(send_to_editor_process,[base_image],[image_editor])
 
     # events

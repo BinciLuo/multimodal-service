@@ -32,7 +32,7 @@ def generate_pic_process(query: str, loras:list[str]=[], width:int=512, height:i
     image_show = gr.Image(value=image , type='pil')
     return image_show
 
-def change_pic_process(init_img: Image, query: str, loras:list[str] = [], template = None, mask_img: Image = None, image_editor: dict = None):
+def change_pic_process(init_img: Image.Image, query: str, loras:list[str] = [], template = None, mask_img: Image.Image = None, image_editor: dict = None):
     # ------------------------------------------------------
     # Check init_img and get init_img_str and get size
     size = init_img.size
@@ -83,8 +83,50 @@ def change_pic_process(init_img: Image, query: str, loras:list[str] = [], templa
     # ------------------------------------------------------
     # Get image from str and return
     image = trans_str_to_image(pic_string)
-    image = image.resize(size)
+    if image.size != size:
+        image = image.resize(size)
     return image
 
-def set_base_image(edited_img: Image):
+def set_base_image(edited_img: Image.Image):
     return edited_img
+
+def change_face_process(init_img: Image.Image, target_img: Image.Image):
+    # ------------------------------------------------------
+    # Check init_img
+    if init_img == None:
+        gr.Warning("No base image provided.")
+        return None
+    init_img_str = trans_image_to_str(init_img)
+
+    # ------------------------------------------------------
+    # Check target_img
+    if target_img == None:
+        gr.Warning("No target image provided.")
+        return init_img
+    target_img_str = trans_image_to_str(target_img)
+    
+    # ------------------------------------------------------
+    # Form paras
+    paras, e = form_post_img2img_paras(init_img_str, 
+                                       '', 
+                                       loras=[], 
+                                       width=init_img.size[0], 
+                                       height=init_img.size[1], 
+                                       template = "change_face",
+                                       face_target_img_str = target_img_str 
+                                       )
+    if e != None:
+        gr.Warning(e)
+        return init_img
+    
+    # ------------------------------------------------------
+    # Use api post_img2img
+    pic_string, e = post_img2img(paras, source = paras["source"])
+    if e != None:
+        gr.Warning(f"{e} \nSkip")
+        return init_img
+    
+    # ------------------------------------------------------
+    # Get image from str and return
+    image = trans_str_to_image(pic_string)
+    return image

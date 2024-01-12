@@ -4,7 +4,7 @@ from PIL import Image
 
 from modules.api.pics_api import get_loras
 from controllers.chat_controllers import chat_process, extract_chat_process, reset_state, commands
-from controllers.pics_controller import change_pic_process, generate_pic_process, set_base_image
+from controllers.pics_controller import change_pic_process, generate_pic_process, set_base_image, change_face_process
 from controllers.utils_controller import auto_mask_process, check_status_process, submit_mask_process, change_base_image_process, undo_auto_mask_process
 from controllers.mutimodal_controllers import exec_commands_process
 
@@ -64,13 +64,19 @@ with gr.Blocks() as demo:
             with gr.Tab("Edit Image"):
                 with gr.Accordion("Editor"):
                     with gr.Row():
-                        image_editor = gr.ImageMask(label='Edit', type='pil', interactive=True, show_download_button= True)
-                        mask_image = gr.Image(label='Mask Image', type='pil', interactive=False, image_mode='RGBA')
+                        imageEditor = gr.ImageMask(label='Edit', type='pil', interactive=True, show_download_button= True)
+                        maskImage = gr.Image(label='Mask Image', type='pil', interactive=False, image_mode='RGBA')
                     with gr.Row():
                         with gr.Column():
                             autoFillBtn = gr.Button("Auto Fill", variant='primary', size='sm')
                             undoAutoFillBtn = gr.Button("Undo Auto Fill", variant='primary', size='sm')
                         submitMaskBtn = gr.Button("Get Mask", variant='primary')
+
+                with gr.Accordion("Change Face"):
+                    faceTargetImage = gr.Image(label='Target', type='pil', interactive=True)
+                    changeFaceBtn = gr.Button("Change Face", variant='primary')
+                    
+  
                 with gr.Tab("Operations"):
                     img_gen_template_dropdown = gr.Dropdown(choices=img_gen_template_dict.keys(), type='value', label="img template", value="default")
                     img_input = gr.Textbox(show_label=False, placeholder="输入生成图像指令", lines=1, container=False, show_copy_button=True)
@@ -105,7 +111,7 @@ with gr.Blocks() as demo:
 
     picGenBtn.click(generate_pic_process,[img_input, lora_dropdown, widthSlider, heightSlider],[base_image], show_progress=True)
     
-    picChangeBtn.click(change_pic_process,[base_image, img_input, lora_dropdown, img_gen_template_dropdown, mask_image, image_editor], [edited_image], show_progress=True)
+    picChangeBtn.click(change_pic_process,[base_image, img_input, lora_dropdown, img_gen_template_dropdown, maskImage, imageEditor], [edited_image], show_progress=True)
     
     checkBtn.click(check_status_process,[],[])
 
@@ -113,17 +119,19 @@ with gr.Blocks() as demo:
 
     setBaseImageBtn.click(set_base_image,[edited_image],[base_image])
 
-    submitMaskBtn.click(submit_mask_process,[image_editor],[mask_image, image_editor])
+    submitMaskBtn.click(submit_mask_process,[imageEditor],[maskImage, imageEditor])
 
-    autoFillBtn.click(auto_mask_process,[image_editor, base_image],[image_editor])
+    autoFillBtn.click(auto_mask_process,[imageEditor, base_image],[imageEditor])
 
-    undoAutoFillBtn.click(undo_auto_mask_process,[],[image_editor])
+    undoAutoFillBtn.click(undo_auto_mask_process,[],[imageEditor])
 
-    execBtn.click(exec_commands_process,[command_dropdown, base_image, image_editor, mask_image, edited_image, img_input, lora_dropdown], [image_editor, mask_image, edited_image])
+    changeFaceBtn.click(change_face_process, [base_image, faceTargetImage], [edited_image], show_progress=True)
+
+    execBtn.click(exec_commands_process,[command_dropdown, base_image, imageEditor, maskImage, edited_image, img_input, lora_dropdown], [imageEditor, maskImage, edited_image])
     #sendToEditorBtn.click(send_to_editor_process,[base_image],[image_editor])
 
     # events
-    base_image.change(change_base_image_process,[base_image, chatbot],[image_editor, chatbot, command_dropdown])
+    base_image.change(change_base_image_process,[base_image, chatbot],[imageEditor, chatbot, command_dropdown])
     chatbot.change(extract_chat_process,[chatbot, command_dropdown],[chatbot, command_dropdown])
 
 

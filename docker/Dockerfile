@@ -30,4 +30,4 @@ RUN . venv/bin/activate && \
     python3 gradio_web/load_seg_model.py
 EXPOSE 80
 
-CMD . venv/bin/activate && bash runner_local.sh
+CMD . venv/bin/activate && export SEG_MODEL_ENV='local' && bash runner.sh

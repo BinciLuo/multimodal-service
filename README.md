@@ -63,7 +63,7 @@ middleware <===|---api---> OpenAI
    - Install golang
    - Install beego: `go install github.com/beego/bee/v2@latest`
    - Install python requirements: `pip install -r gradio_web/requirements.txt`
-2. Run `bash runner.sh`( or `bash runner_local.sh` if you want to run image segment model in local)
+2. Run `bash runner.sh`( or `export SEG_MODEL_ENV='local' && bash runner_local.sh` if you want to run image segment model in local)
 
 ## Trouble Shooting
 ### Can't open gradio_web

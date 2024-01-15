@@ -39,7 +39,7 @@ def submit_mask_process(painted: dict):
     return generate_mask_from_black(painted['composite']), {"background":painted["composite"],"layers":[],"composite":None}
 
 def change_base_image_process(base_img, chatbot):
-    base_img_str = trans_image_to_str(base_img)
+    base_img_str = trans_image_to_str(base_img) if base_img != None else None
     if base_img_str != None:
         response_json, err = post_hgface_img_segment(base_img_str)
         if err != None:

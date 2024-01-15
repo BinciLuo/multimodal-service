@@ -35,6 +35,9 @@ def generate_pic_process(query: str, loras:list[str]=[], width:int=512, height:i
 def change_pic_process(init_img: Image.Image, query: str, loras:list[str] = [], template = None, mask_img: Image.Image = None, image_editor: dict = None):
     # ------------------------------------------------------
     # Check init_img and get init_img_str and get size
+    if init_img == None:
+        gr.Warning(f"Base Image not Provided")
+        return None
     size = init_img.size
     init_img_str = trans_image_to_str(init_img)
 

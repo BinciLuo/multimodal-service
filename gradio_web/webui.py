@@ -55,7 +55,7 @@ with gr.Blocks() as demo:
             with gr.Tab("Base Image"):
                 base_image = gr.Image(label='Base Image', type='pil', interactive=True)
                 with gr.Accordion("Examples", open=False): 
-                    gr.Examples([Image.open("example/"+filename, mode='r') for filename in os.listdir("./example") if filename.split('.')[-1].lower() in ["jpeg","jpg","png"]], base_image)
+                    gr.Examples(["example/"+filename for filename in os.listdir("./example") if filename.split('.')[-1].lower() in ["jpeg","jpg","png"]], base_image)
 
             with gr.Tab("Edited Image"):
                 edited_image = gr.Image(label='Edited Image', type='pil', interactive=False)

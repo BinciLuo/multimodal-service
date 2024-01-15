@@ -63,12 +63,12 @@ middleware <===|---api---> OpenAI
    - Install golang
    - Install beego: `go install github.com/beego/bee/v2@latest`
    - Install python requirements: `pip install -r gradio_web/requirements.txt`
-2. Run `bash runner.sh`( or `bash runner_local.sh` if you want to run image segment model in local)
+2. Run `bash runner.sh`( or `export SEG_MODEL_ENV='local' && bash runner_local.sh` if you want to run image segment model in local)
 
 ## Trouble Shooting
 ### Can't open gradio_web
 1. Check if webui.py is running.
-2. Check  `$GRADIO_ENV` using `echo $GRADIO_ENV`. If the value is `Azure` it will be launched in port **80**. If the value is `local` or `k8s` in port **27777**. Otherwise, it will be launched in port **8080**.
+2. Check  `$GR_PORT` using `echo $GR_PORT`.
 3. If it is still unavailable and you are using it through k8s or docker, check if you successfully set the network mentioned in [Usage](#usage).
 ### Can't connect to middleware
 1. check if middleware is running.

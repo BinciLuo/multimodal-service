@@ -14,7 +14,7 @@ spec:
       image: binciluo/gradio_web:latest
       command: ["/bin/sh", "-c"]
       args:
-        - "export MIDDLEWARE_ENV=k8s && export GRADIO_ENV=k8s && python webui.py"
+        - "export MIDDLEWARE_ENV=k8s && export GR_PORT=27777 && python webui.py"
       ports:
         - containerPort: 27777
   dnsPolicy: Default  # 默认情况下，Pod可以访问外部网络

@@ -8,4 +8,4 @@ RUN pip install --upgrade pip && \
     pip install gradio
 EXPOSE 80
 
-CMD  export GRADIO_ENV=Azure && python webui.py
+CMD  export GR_PORT=80 && python webui.py

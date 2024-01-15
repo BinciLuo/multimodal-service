@@ -148,4 +148,4 @@ with gr.Blocks() as demo:
 
 
 
-demo.queue().launch(share=False, inbrowser=True, server_name='0.0.0.0', server_port=GRADIO_PORT, debug=True)
+demo.queue().launch(share=False, inbrowser=True, server_name='0.0.0.0', server_port=GR_PORT, debug=True)

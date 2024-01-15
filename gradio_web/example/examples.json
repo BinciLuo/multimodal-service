@@ -1,6 +1,0 @@
-{
-    "query":[
-        "将Background设置为mask，然后使用提示词sunshine,street在mask上生成新的图片，然后让面部的笑容更灿烂，最后美颜",
-        "除了Face和Hair其他全设置为mask，然后使用提示词sunshine,street在mask上生成新的图片，然后让面部的笑容更灿烂，最后美颜"
-    ]
-}

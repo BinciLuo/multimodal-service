@@ -1,4 +1,0 @@
-gradio
-transformers
-torch
-numpy

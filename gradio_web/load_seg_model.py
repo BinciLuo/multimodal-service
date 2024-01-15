@@ -1,4 +1,0 @@
-from transformers import SegformerImageProcessor, AutoModelForSemanticSegmentation
-
-processor = SegformerImageProcessor.from_pretrained("mattmdjaga/segformer_b2_clothes")
-model = AutoModelForSemanticSegmentation.from_pretrained("mattmdjaga/segformer_b2_clothes")

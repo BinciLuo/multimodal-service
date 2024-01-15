@@ -121,7 +121,7 @@ def post_hgface_img_segment(image: str):
 
     # ------------------------------------------------------
     # Begin post, set max retry time 10
-    for i in range(100):
+    for i in range(10):
         try:
             response = requests.post(SERVER_URL+route, data=json.dumps({"image": image}))
         except Exception as e:

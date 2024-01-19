@@ -19,6 +19,7 @@ def chat_process(inputs, model_name, prompt_index=0, chatbot=None):
         infer_text = f.read()
     infer_text = infer_text.replace(INSTRUCTION_PROMPT_FILES_INFO[prompt_index]["user_input_replace"], inputs)
     answer, e = post_chat(model_name, infer_text, SERVER_URL, history)
+    print(answer)
     if e != None:
         gr.Warning(e)
         return chatbot, None
@@ -37,7 +38,6 @@ def extract_chat_process(chatbot, command_dropdown):
         gr.Warning("No conversation to extract.")
         return chatbot, command_dropdown
     global commands
-    print(chatbot[-1])
     extracted_commands = extract_instructions(PATTERN_FILE_PATH, chatbot[-1][-1])
     commands.extend([cmd for cmd in extracted_commands])
     extracted_commands_string = ""

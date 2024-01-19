@@ -37,6 +37,7 @@ def extract_chat_process(chatbot, command_dropdown):
         gr.Warning("No conversation to extract.")
         return chatbot, command_dropdown
     global commands
+    print(chatbot[-1])
     extracted_commands = extract_instructions(PATTERN_FILE_PATH, chatbot[-1][-1])
     commands.extend([cmd for cmd in extracted_commands])
     extracted_commands_string = ""

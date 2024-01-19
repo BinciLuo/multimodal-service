@@ -19,6 +19,7 @@ def chat_process(inputs, model_name, prompt_index=0, chatbot=None):
         infer_text = f.read()
     infer_text = infer_text.replace(INSTRUCTION_PROMPT_FILES_INFO[prompt_index]["user_input_replace"], inputs)
     answer, e = post_chat(model_name, infer_text, SERVER_URL, history)
+    print(answer)
     if e != None:
         gr.Warning(e)
         return chatbot, None

@@ -45,7 +45,7 @@ def extract_jarray(process_string:str):
 
 def check_instruction(pattern_dict:dict, instruction:dict):
     # 如果pattern中无该指令，跳过
-    if instruction["command"] not in pattern_dict.keys():
+    if instruction.get("command", "key_err") not in pattern_dict.keys():
         print(f"command not match")
         return False
     # 如果paras类型不符，跳过

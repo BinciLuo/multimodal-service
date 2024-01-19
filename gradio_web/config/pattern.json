@@ -49,5 +49,13 @@
         "paras_enum": null,
         "paras_min": null,
         "paras_max": null
+    },
+    "advice": {
+        "paras_type":[
+            "<class 'str'>"
+        ],
+        "paras_enum": null,
+        "paras_min": null,
+        "paras_max": null
     }
 }

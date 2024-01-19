@@ -19,10 +19,6 @@
     {
         "command" : "face",
         "paras" : [ ${query} ]
-    },
-    {
-        "command" : "advice",
-        "paras" : [ ${advice you given} ]
     }
 ]
 其中mask_selected为将所选tag标记为mask，paras为一个列表，第一个元素表示所选tag的名称的列表

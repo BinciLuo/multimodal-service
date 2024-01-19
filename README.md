@@ -26,8 +26,9 @@ A demo is deployed in Azure. [Try it here](https://gradio-app.azurewebsites.net)
 - [x] Use StableDiffusion to edit image
 - [x] Use DALLE to edit image while StableDiffusion is not available
 - [x] Auto mask image by segment result
-- [ ] Use ChatGLM2-6B and enable history (histort not implement)
+- [x] Use ChatGLM2-6B and enable history (histort not implement)
 - [x] Use roop to replace face
+- [ ] Enable advice 
 
 `FIXME`
 - [x] Clear commands when updating base image

@@ -7,16 +7,18 @@ app = FastAPI()
 tokenizer = AutoTokenizer.from_pretrained("/ark-contexts/imported_models/chatglm2-6b/huggingface/THUDM/chatglm2-6b", trust_remote_code=True)
 model = AutoModel.from_pretrained("/ark-contexts/imported_models/chatglm2-6b/huggingface/THUDM/chatglm2-6b", trust_remote_code=True, device='cuda')
 model = model.eval()
-history = []
+with open("chatGPT_head.txt", mode='r') as f:
+    prompt = f.read()
 
 from pydantic import BaseModel
 class Chat_Chatglm26b_Params(BaseModel):
     query: str
+    history: list
 
 
 @app.post("/chat/chatglm2-6b")
 async def chat(params: Chat_Chatglm26b_Params):
-    global history
+    history = [(prompt, "OK")]+[(round[0],round[1]) for round in params.history]
     response, history = model.chat(tokenizer, params.query, history=history)
     return {"chat": response}
 

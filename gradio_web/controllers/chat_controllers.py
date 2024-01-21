@@ -41,8 +41,13 @@ def extract_chat_process(chatbot, command_dropdown):
     extracted_commands = extract_instructions(PATTERN_FILE_PATH, chatbot[-1][-1])
     commands.extend([cmd for cmd in extracted_commands])
     extracted_commands_string = ""
+    advice = ""
     for cmd in extracted_commands:
-        extracted_commands_string += f'操作为: {cmd["command"]} 参数为: {cmd["paras"]}\n'
+        if cmd["command"] == 'advice':
+            advice = f'给出的建议是:\n  {cmd["paras"][0]}'
+        else:
+            extracted_commands_string += f'操作为: {cmd["command"]} 参数为: {cmd["paras"]}\n'
+    extracted_commands_string += advice
     #extracted_commands_string = json.dumps(extracted_commands, ensure_ascii=False)
 
     

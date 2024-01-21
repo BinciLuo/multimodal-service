@@ -6,7 +6,7 @@ import gradio as gr
 from PIL import Image
 import requests
 from modules.utils.scripts_gen import form_alwayson_scripts_from_kwargv
-from modules.utils.imaga_paras_gen import form_default_paras_from_template
+from modules.utils.image_paras_gen import form_default_paras_from_template
 from modules.utils.image_io import trans_str_to_image
 
 from const import *

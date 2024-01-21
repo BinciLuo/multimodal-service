@@ -1,7 +1,7 @@
 import unittest
 
 from modules.utils.scripts_gen import form_alwayson_scripts_from_templates
-from modules.utils.imaga_paras_gen import form_post_img2img_paras, form_post_txt2img_paras
+from modules.utils.image_paras_gen import form_post_img2img_paras, form_post_txt2img_paras
 
 class TestSD(unittest.TestCase):
     def test_form_post_img2img_paras(self):

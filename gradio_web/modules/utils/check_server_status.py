@@ -6,7 +6,7 @@ import time
 
 from modules.api.chat_api import post_chat
 from modules.api.pics_api import get_loras, post_img2img, post_txt2img
-from modules.utils.imaga_paras_gen import form_post_txt2img_paras, form_post_img2img_paras
+from modules.utils.image_paras_gen import form_post_txt2img_paras, form_post_img2img_paras
 
 from const import *
 

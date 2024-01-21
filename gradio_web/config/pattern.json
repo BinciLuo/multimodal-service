@@ -60,7 +60,7 @@
     },
     "change": {
         "paras_type": [
-            "<class 'str'>",
+            "<class 'list'>",
             "<class 'str'>"
         ],
         "paras_enum": null,

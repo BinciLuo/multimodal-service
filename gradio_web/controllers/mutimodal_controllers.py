@@ -2,6 +2,7 @@ import time
 import gradio as gr
 from PIL import Image
 from modules.utils.img_segment import auto_black_by_keywords
+from modules.utils.commands import combine_commands
 from controllers.pics_controller import change_pic_process
 from controllers.chat_controllers import commands
 from controllers.utils_controller import submit_mask_process
@@ -99,6 +100,10 @@ def exec_command(command_package: dict, base_image: Image.Image, image_editor: d
         gr.Info(f"Finish {command_package['command']}")
 
     # ---------------------------------------------------------------------------------------------------------------------------------------------
+    elif command_package['command'] == 'advice':
+        pass
+
+    # ---------------------------------------------------------------------------------------------------------------------------------------------
     else:
         gr.Warning(f"exec_command failed, command_package:{command_package}")
         print(f"exec_command failed, command_package:{command_package}")
@@ -123,34 +128,3 @@ def exec_all_commands_process(base_image: Image.Image, image_editor: dict, mask_
     for command_package in combine_commands(command_packages):
         base_image, image_editor, mask_image, edited_image = exec_command(command_package, edited_image, image_editor, mask_image, edited_image, img_input, lora_dropdown)
     return {"background":image_editor["background"],"layers":[],"composite":None}, mask_image, edited_image
-
-def combine_commands(command_packages: list[dict]):
-    merged_command_packages = []
-    merged_change_command_package = {}  # 用于存储 'change' 类型的命令的合并结果
-
-    for command_package in command_packages:
-        # if command == 'change', add to change_commands
-        if command_package['command'] == 'change':
-            if merged_change_command_package == {}:
-                merged_change_command_package = command_package
-                continue
-            # merge tags
-            merged_change_command_package['paras'][0] = merged_change_command_package['paras'][0]+[tag for tag in command_package['paras'][0] if tag not in merged_change_command_package['paras'][0]]
-            # merge prompt
-            merged_change_command_package['paras'][1] = merged_change_command_package['paras'][1]+f', {command_package["paras"][1]}'
-        else:
-            merged_command_packages.append(command_package)
-
-    if merged_change_command_package != {}:
-        merged_command_packages.append(merged_change_command_package)
-
-    return merged_command_packages
-
-if __name__ == '__main__':
-    # 测试
-    input_commands = [
-        {'command': 'change', 'paras': [['Background'], 'Beach']},
-        {'command': 'advice', 'paras': ['你可以尝试给图片增加一些夏天的元素，比如添加一把太阳伞或者沙滩玩具等等。']},
-        {'command': 'change', 'paras': [['Upper-clothes'], 'Red dress']}
-    ]
-    print(combine_commands(input_commands))

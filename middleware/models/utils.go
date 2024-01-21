@@ -39,7 +39,7 @@ func convertRGBToRGBA(inputPath, outputPath string, mask bool) error {
 			if mask && uint8(r) == 0 && uint8(g) == 0 && uint8(b) == 0 {
 				rgbaImg.Set(x, y, color.RGBA{0, 0, 0, 0})
 			} else {
-				rgbaImg.Set(x, y, color.RGBA{uint8(r), uint8(g), uint8(b), 255})
+				rgbaImg.Set(x, y, color.RGBA{uint8(r), uint8(g), uint8(b), 254})
 			}
 		}
 	}

@@ -111,7 +111,7 @@ def exec_commands_process(command_dropdown: list, base_image: Image.Image, image
     edited_image = base_image
     global commands
     command_packages = [commands[index] for index in command_dropdown]
-    for command_package in command_packages:
+    for command_package in combine_commands(command_packages):
         base_image, image_editor, mask_image, edited_image = exec_command(command_package, edited_image, image_editor, mask_image, edited_image, img_input, lora_dropdown)
     return {"background":image_editor["background"],"layers":[],"composite":None}, mask_image, edited_image
 
@@ -120,6 +120,37 @@ def exec_all_commands_process(base_image: Image.Image, image_editor: dict, mask_
     edited_image = base_image
     global commands
     command_packages = commands
-    for command_package in command_packages:
+    for command_package in combine_commands(command_packages):
         base_image, image_editor, mask_image, edited_image = exec_command(command_package, edited_image, image_editor, mask_image, edited_image, img_input, lora_dropdown)
     return {"background":image_editor["background"],"layers":[],"composite":None}, mask_image, edited_image
+
+def combine_commands(command_packages: list[dict]):
+    merged_command_packages = []
+    merged_change_command_package = {}  # 用于存储 'change' 类型的命令的合并结果
+
+    for command_package in command_packages:
+        # if command == 'change', add to change_commands
+        if command_package['command'] == 'change':
+            if merged_change_command_package == {}:
+                merged_change_command_package = command_package
+                continue
+            # merge tags
+            merged_change_command_package['paras'][0] = merged_change_command_package['paras'][0]+[tag for tag in command_package['paras'][0] if tag not in merged_change_command_package['paras'][0]]
+            # merge prompt
+            merged_change_command_package['paras'][1] = merged_change_command_package['paras'][1]+f', {command_package["paras"][1]}'
+        else:
+            merged_command_packages.append(command_package)
+
+    if merged_change_command_package != {}:
+        merged_command_packages.append(merged_change_command_package)
+
+    return merged_command_packages
+
+if __name__ == '__main__':
+    # 测试
+    input_commands = [
+        {'command': 'change', 'paras': [['Background'], 'Beach']},
+        {'command': 'advice', 'paras': ['你可以尝试给图片增加一些夏天的元素，比如添加一把太阳伞或者沙滩玩具等等。']},
+        {'command': 'change', 'paras': [['Upper-clothes'], 'Red dress']}
+    ]
+    print(combine_commands(input_commands))

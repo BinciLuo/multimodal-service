@@ -78,7 +78,26 @@ def exec_command(command_package: dict, base_image: Image.Image, image_editor: d
         edited_image = change_pic_process(edited_image, img_input if img_input is not None and img_input != "" else command_package['paras'][1], lora_dropdown, "inpaintSD", mask_image, image_editor)
         image_editor["composite"] = image_editor["background"]
         gr.Info(f"Finish {command_package['command']}")
+    # ---------------------------------------------------------------------------------------------------------------------------------------------
+    elif command_package['command'] == 'change':
+        # Check
+        if base_image == None or edited_image == None:
+            gr.Warning("Base Image Empty.\nSkip mask_selected.")
+            return base_image, image_editor, mask_image, edited_image
+        if image_editor["background"] == None:
+            gr.Warning("Image Editor Empty.\nSkip mask_selected.")
+            return base_image, image_editor, mask_image, edited_image
         
+        #Run
+        new_composite = auto_black_by_keywords(image_editor["background"], edited_image, command_package["paras"][0], False)
+        image_editor = {"background":new_composite,"layers":[],"composite":new_composite}
+        mask_image, image_editor = submit_mask_process(image_editor)
+        image_editor["composite"] = image_editor["background"]
+        mask_image, image_editor = submit_mask_process(image_editor)
+        edited_image = change_pic_process(edited_image, img_input if img_input is not None and img_input != "" else command_package['paras'][1], lora_dropdown, "inpaintSD", mask_image, image_editor)
+        image_editor["composite"] = image_editor["background"]
+        gr.Info(f"Finish {command_package['command']}")
+
     # ---------------------------------------------------------------------------------------------------------------------------------------------
     else:
         gr.Warning(f"exec_command failed, command_package:{command_package}")

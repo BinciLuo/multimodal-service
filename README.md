@@ -32,6 +32,7 @@ A demo is deployed in Azure. [Try it here](https://gradio-app.azurewebsites.net)
 
 `FIXME`
 - [x] Clear commands when updating base image
+- [ ] Refactor multimodal architecture
 
 ## Architecture
 ```

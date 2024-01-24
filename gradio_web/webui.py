@@ -30,6 +30,7 @@ def reset_user_input():
 def refresh_loras():
     global loras
     loras, err = get_loras()
+    print(loras)
     if err != None:
         gr.Warning(f"Refresh loras failed: {err}")
     return gr.Dropdown(choices=loras, type='value', label="lora", multiselect=True, scale=2)

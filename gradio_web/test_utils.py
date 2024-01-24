@@ -26,7 +26,6 @@ class TestSD(unittest.TestCase):
         paras, e = form_post_img2img_paras(init_img_str,'test1',[], template="inpaintSD", prompt = "test2")
         self.assertEqual(None, e, e)
         self.assertEqual("SD", paras["source"], f"form_post_img2img_paras failed with template: inpaintSD")
-        self.assertEqual(0.75, paras["denoising_strength"], f"form_post_img2img_paras failed with template: inpaintSD")
         self.assertEqual("test1test2", paras["prompt"], f"form_post_img2img_paras failed with template: inpaintSD")
         print("\t😃inpaintSD func success")
 

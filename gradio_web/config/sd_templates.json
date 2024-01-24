@@ -5,7 +5,7 @@
     },
     "inpaintSD": {
         "inpainting_fill": 0,
-        "inpaint_full_res": true,
+        "inpaint_full_res": false,
         "inpaint_full_res_padding": 32,
         "inpainting_mask_invert": 1,
         "mask_blur": 4,

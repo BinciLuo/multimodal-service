@@ -109,7 +109,7 @@ with gr.Blocks() as demo:
             with gr.Tab("Pic Settings"):
                 widthSlider = gr.Slider(0, 1920, label='width', value=512, step=1)
                 heightSlider = gr.Slider(0, 1080, label='height', value=512, step=1)
-                denoisingInpaintSlider = gr.Slider(0, 1, label='img2img_denoising_strength', value=0.6, step=0.5)
+                denoisingInpaintSlider = gr.Slider(0, 1, label='img2img_denoising_strength', value=0.6, step=0.05)
                 lora_dropdown = gr.Dropdown(choices=loras, type='value', label="lora", multiselect=True)
                 loraRefreshBtn = gr.Button("Refresh loras", variant="primary", scale=1, size='sm')
             

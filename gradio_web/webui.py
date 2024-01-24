@@ -37,6 +37,8 @@ def refresh_loras():
         return gr.Dropdown(choices=loras, type='value', label="lora", multiselect=True, scale=2)
     except:
         loras = [ lora_package['alias'] for lora_package in loras ]
+        return gr.Dropdown(choices=loras, type='value', label="lora", multiselect=True, scale=2)
+
 
 
 

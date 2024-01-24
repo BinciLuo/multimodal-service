@@ -107,8 +107,9 @@ with gr.Blocks() as demo:
                 picChangeBtn = gr.Button("Change Picture", variant="primary")
 
             with gr.Tab("Pic Settings"):
-                widthSlider = gr.Slider(0, 1920, value=512, step=1)
-                heightSlider = gr.Slider(0, 1080, value=512, step=1)
+                widthSlider = gr.Slider(0, 1920, label='width', value=512, step=1)
+                heightSlider = gr.Slider(0, 1080, label='height', value=512, step=1)
+                denoisingInpaintSlider = gr.Slider(0, 1, label='img2img_denoising_strength', value=0.6, step=0.5)
                 lora_dropdown = gr.Dropdown(choices=loras, type='value', label="lora", multiselect=True)
                 loraRefreshBtn = gr.Button("Refresh loras", variant="primary", scale=1, size='sm')
             
@@ -144,8 +145,8 @@ with gr.Blocks() as demo:
 
     changeFaceBtn.click(change_face_process, [base_image, faceTargetImage], [edited_image], show_progress=True)
 
-    execSelectedBtn.click(exec_commands_process,[command_dropdown, base_image, imageEditor, maskImage, edited_image, img_input, lora_dropdown], [imageEditor, maskImage, edited_image])
-    execAllBtn.click(exec_all_commands_process,[base_image, imageEditor, maskImage, edited_image, img_input, lora_dropdown], [imageEditor, maskImage, edited_image])
+    execSelectedBtn.click(exec_commands_process,[command_dropdown, base_image, imageEditor, maskImage, edited_image, img_input, lora_dropdown, denoisingInpaintSlider], [imageEditor, maskImage, edited_image])
+    execAllBtn.click(exec_all_commands_process,[base_image, imageEditor, maskImage, edited_image, img_input, lora_dropdown, denoisingInpaintSlider], [imageEditor, maskImage, edited_image])
 
     #sendToEditorBtn.click(send_to_editor_process,[base_image],[image_editor])
 

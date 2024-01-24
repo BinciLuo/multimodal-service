@@ -33,7 +33,10 @@ def refresh_loras():
     print(loras)
     if err != None:
         gr.Warning(f"Refresh loras failed: {err}")
-    return gr.Dropdown(choices=loras, type='value', label="lora", multiselect=True, scale=2)
+    try:
+        return gr.Dropdown(choices=loras, type='value', label="lora", multiselect=True, scale=2)
+    except:
+        loras = [ lora_package['alias'] for lora_package in loras ]
 
 
 

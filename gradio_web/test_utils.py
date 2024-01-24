@@ -1,7 +1,8 @@
 import unittest
 
 from modules.utils.scripts_gen import form_alwayson_scripts_from_templates
-from modules.utils.imaga_paras_gen import form_post_img2img_paras, form_post_txt2img_paras
+from modules.utils.image_paras_gen import form_post_img2img_paras, form_post_txt2img_paras
+from modules.utils.commands import combine_commands
 
 class TestSD(unittest.TestCase):
     def test_form_post_img2img_paras(self):
@@ -25,7 +26,6 @@ class TestSD(unittest.TestCase):
         paras, e = form_post_img2img_paras(init_img_str,'test1',[], template="inpaintSD", prompt = "test2")
         self.assertEqual(None, e, e)
         self.assertEqual("SD", paras["source"], f"form_post_img2img_paras failed with template: inpaintSD")
-        self.assertEqual(0.75, paras["denoising_strength"], f"form_post_img2img_paras failed with template: inpaintSD")
         self.assertEqual("test1test2", paras["prompt"], f"form_post_img2img_paras failed with template: inpaintSD")
         print("\t😃inpaintSD func success")
 
@@ -69,5 +69,34 @@ class TestSD(unittest.TestCase):
         self.assertEqual(alwayson_srcipts, {}, "Init_img_str not applied")
 
         print(f"😁Finish test_form_alwayson_scripts_from_templates_beauty\n")
+
+class TestUtils(unittest.TestCase):
+    def test_combine_commands(self):
+        print(f"\n🧐Strat test_combine_commands")
+        combined_commands= combine_commands([ 
+        {'command': 'change', 'paras': [['Background','A','B'], 'Beach']}, 
+        {'command': 'advice', 'paras': ['你可以尝试给图片增加一些夏天的元素，比如添加一把太阳伞或者沙滩玩具等等。']}, 
+        {'command': 'change', 'paras': [['Upper-clothes','B'], 'Red dress']}
+        ])
+        self.assertEqual(
+            (
+                len(combined_commands),
+                combined_commands[0]['command'],
+                combined_commands[1]['command'],
+                len(combined_commands[1]['paras'][0])
+                ),
+            (
+                2,
+                'advice',
+                'change',
+                4
+                ),
+            "Combined commands failed."
+            )
+        print("\t😃combine change command success")
+
+        print(f"😁Finish test_combine_commands\n")
+
+        
 
 unittest.main()

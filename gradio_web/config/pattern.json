@@ -57,5 +57,14 @@
         "paras_enum": null,
         "paras_min": null,
         "paras_max": null
+    },
+    "change": {
+        "paras_type": [
+            "<class 'list'>",
+            "<class 'str'>"
+        ],
+        "paras_enum": null,
+        "paras_min": null,
+        "paras_max": null
     }
 }

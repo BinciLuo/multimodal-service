@@ -113,11 +113,6 @@ with gr.Blocks() as demo:
                 picGenBtn = gr.Button("Generate a Picture", variant="primary")
                 picChangeBtn = gr.Button("Change Picture", variant="primary")
 
-            
-            
-            
-
-
     history = gr.State([])
 
     # Btn

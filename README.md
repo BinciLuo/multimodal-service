@@ -29,6 +29,7 @@ A demo is deployed in Azure. [Try it here](https://gradio-app.azurewebsites.net)
 - [x] Use ChatGLM2-6B and enable history (histort not implement)
 - [x] Use roop to replace face
 - [ ] Enable advice 
+- [ ] Add control net paras
 
 `FIXME`
 - [x] Clear commands when updating base image

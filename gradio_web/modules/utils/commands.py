@@ -1,17 +1,28 @@
 import json
 from const import PATTERN_FILE_PATH
 
-patterns = json.load(open(PATTERN_FILE_PATH,'r'))
+patterns: dict = json.load(open(PATTERN_FILE_PATH,'r'))
 able2merge_commands = [command for command in patterns.keys() if patterns[command]['combine'] == True]
 
 
 def combine_commands(command_packages: list[dict]):
     merged_command_packages = []
+
+    # Merge
     merged_change = merge_change(command_packages)
     merged_command_packages.append(merged_change) if merged_change != None else None
-    [merged_command_packages.append(command_package) for command_package in command_packages if command_package['command'] not in able2merge_commands]
 
-    return merged_command_packages
+    merged_face = merge_face(command_packages)
+    merged_command_packages.append(merged_face) if merged_face != None else None
+
+    # Add commands that not able to merge
+    [merged_command_packages.append(command_package) for command_package in command_packages if command_package['command'] not in able2merge_commands]
+    
+
+    # Sort commands through priority
+    sorted_merged_command_packages = sorted(merged_command_packages, key=lambda item: patterns[item['command']]['priority'], reverse= True)
+
+    return sorted_merged_command_packages
 
 def merge_change(command_packages: list[dict]):
     change_command_packages = [command_package for command_package in command_packages if command_package['command'] == 'change']
@@ -28,6 +39,20 @@ def merge_change(command_packages: list[dict]):
     merged_change_command_package['paras'] = [tags, prompt]
 
     return merged_change_command_package
+
+def merge_face(command_packages: list[dict]):
+    face_command_packages = [command_package for command_package in command_packages if command_package['command'] == 'face']
+    if len(face_command_packages) < 1:
+        return None
+    merged_face_command_package = {'command': 'face'}
+    # merge prompt
+    prompt = ''
+    for change_command_package in face_command_packages:
+        prompt += f', {change_command_package["paras"][0]}' if prompt != '' else change_command_package["paras"][0]
+    
+    merged_face_command_package['paras'] = [prompt]
+
+    return merged_face_command_package
 
 
 if __name__ == '__main__':

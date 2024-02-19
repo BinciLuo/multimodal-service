@@ -54,6 +54,12 @@ with gr.Blocks() as demo:
                 execSelectedBtn = gr.Button("Exec Selected commands", variant="primary")
                 execAllBtn = gr.Button("Exec all commands", variant='primary')
         extractBtn = gr.Button("Extract Instruction", visible=False)
+    with gr.Accordion("Pic Settings"):
+        widthSlider = gr.Slider(0, 1920, label='width', value=512, step=1)
+        heightSlider = gr.Slider(0, 1080, label='height', value=512, step=1)
+        denoisingInpaintSlider = gr.Slider(0, 1, label='img2img_denoising_strength', value=0.6, step=0.05)
+        lora_dropdown = gr.Dropdown(choices=loras, type='value', label="lora", multiselect=True)
+        loraRefreshBtn = gr.Button("Refresh loras", variant="primary", scale=1, size='sm')
     
 
 
@@ -106,12 +112,7 @@ with gr.Blocks() as demo:
                 picGenBtn = gr.Button("Generate a Picture", variant="primary")
                 picChangeBtn = gr.Button("Change Picture", variant="primary")
 
-            with gr.Tab("Pic Settings"):
-                widthSlider = gr.Slider(0, 1920, label='width', value=512, step=1)
-                heightSlider = gr.Slider(0, 1080, label='height', value=512, step=1)
-                denoisingInpaintSlider = gr.Slider(0, 1, label='img2img_denoising_strength', value=0.6, step=0.05)
-                lora_dropdown = gr.Dropdown(choices=loras, type='value', label="lora", multiselect=True)
-                loraRefreshBtn = gr.Button("Refresh loras", variant="primary", scale=1, size='sm')
+            
             
             
 

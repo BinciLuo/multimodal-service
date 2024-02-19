@@ -54,7 +54,7 @@ with gr.Blocks() as demo:
                 execSelectedBtn = gr.Button("Exec Selected commands", variant="primary")
                 execAllBtn = gr.Button("Exec all commands", variant='primary')
         extractBtn = gr.Button("Extract Instruction", visible=False)
-    with gr.Accordion("Settings"):
+    with gr.Accordion("Settings", open=False):
         with gr.Tab("Pic"):
             widthSlider = gr.Slider(0, 1920, label='width', value=512, step=1)
             heightSlider = gr.Slider(0, 1080, label='height', value=512, step=1)

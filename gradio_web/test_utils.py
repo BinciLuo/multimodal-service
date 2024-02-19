@@ -83,12 +83,12 @@ class TestUtils(unittest.TestCase):
                 len(combined_commands),
                 combined_commands[0]['command'],
                 combined_commands[1]['command'],
-                len(combined_commands[1]['paras'][0])
+                len(combined_commands[0]['paras'][0])
                 ),
             (
                 2,
-                'advice',
                 'change',
+                'advice',
                 4
                 ),
             "Combined commands failed."

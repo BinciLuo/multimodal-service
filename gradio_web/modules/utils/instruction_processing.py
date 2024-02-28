@@ -123,7 +123,7 @@ if __name__ == '__main__':
     current_script_dir = os.path.dirname(current_script_path)
 
     # 构建相对路径，相对于当前脚本文件所在的目录
-    absolute_path = os.path.join(current_script_dir, "../config/pattern.json")
+    absolute_path = os.path.join(current_script_dir, "../config/cmd_pattern.json")
 
     # 打印绝对路径
     print("绝对路径:", absolute_path)

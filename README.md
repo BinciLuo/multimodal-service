@@ -18,8 +18,8 @@ A demo is deployed in Azure. [Try it here](https://gradio-app.azurewebsites.net)
 - [x] Build a middleware using beego 
 
 `Deploy:`
-- [x] Auto build Docker images
-- [x] Auto deploy in Azure  
+- [x] Automatically build Docker images
+- [x] Automatically deploy in Azure  
 
 `Features:`
 - [x] Use ChatGPT3.5turbo and enable history
@@ -29,10 +29,12 @@ A demo is deployed in Azure. [Try it here](https://gradio-app.azurewebsites.net)
 - [x] Use ChatGLM2-6B and enable history (histort not implement)
 - [x] Use roop to replace face
 - [ ] Enable advice 
+- [ ] Add control net paras
 
 `FIXME`
 - [x] Clear commands when updating base image
-- [ ] Refactor multimodal architecture
+- [ ] Combine and sort commands (only finish 'face' and 'change')
+- [x] Refactor multimodal architecture
 
 ## Architecture
 ```

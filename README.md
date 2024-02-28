@@ -18,8 +18,8 @@ A demo is deployed in Azure. [Try it here](https://gradio-app.azurewebsites.net)
 - [x] Build a middleware using beego 
 
 `Deploy:`
-- [x] Auto build Docker images
-- [x] Auto deploy in Azure  
+- [x] Automatically build Docker images
+- [x] Automatically deploy in Azure  
 
 `Features:`
 - [x] Use ChatGPT3.5turbo and enable history
@@ -34,7 +34,7 @@ A demo is deployed in Azure. [Try it here](https://gradio-app.azurewebsites.net)
 `FIXME`
 - [x] Clear commands when updating base image
 - [ ] Combine and sort commands (only finish 'face' and 'change')
-- [ ] Refactor multimodal architecture
+- [x] Refactor multimodal architecture
 
 ## Architecture
 ```

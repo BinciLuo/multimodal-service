@@ -77,3 +77,6 @@ def undo_auto_mask_process():
     else:
         gr.Warning("It is the init image, can't undo anymore")
         return last_editor[0]
+
+def clear_commands_process():
+    return gr.Dropdown(choices=[])

@@ -45,8 +45,7 @@ def refresh_loras():
 
 with gr.Blocks() as demo:
     gr.HTML("""<h1 align="center">Chat Image Editor</h1>""")
-    with gr.Accordion("Manual", open=False):
-        gr.Markdown(open('man.md', 'r').read())
+
     with gr.Accordion("Operation Board"):
         with gr.Row():
             with gr.Column(scale=5):
@@ -119,6 +118,9 @@ with gr.Blocks() as demo:
                 picGenBtn = gr.Button("Generate a Picture", variant="primary")
                 picChangeBtn = gr.Button("Change Picture", variant="primary")
 
+    with gr.Accordion("Manual", open=False):
+        gr.Markdown(open('man.md', 'r').read())
+    
     history = gr.State([])
 
     # Btn

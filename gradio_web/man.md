@@ -1,6 +1,4 @@
-## Manual
-
-### How to use Chat Image Editor
+## How to use Chat Image Editor
 #### Upload base image
 You can upload your base image or use examples in Tab `Base Image`.
 #### Chat with chatbot

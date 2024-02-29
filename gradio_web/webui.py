@@ -51,9 +51,9 @@ with gr.Blocks() as demo:
             with gr.Column(scale=5):
                 command_dropdown = gr.Dropdown(choices=commands, type='index', label="command", multiselect=True)
             with gr.Column(scale=1):
-                execSelectedBtn = gr.Button("Exec Selected commands", variant="primary")
-                execAllBtn = gr.Button("Exec all commands", variant='primary')
-                clearCmdsBtn = gr.Button("Clear commands", variant='stop')
+                execSelectedBtn = gr.Button("Exec Selected Commands", variant="primary")
+                execAllBtn = gr.Button("Exec All Commands", variant='primary')
+                clearCmdsBtn = gr.Button("Clear Commands", variant='stop')
         extractBtn = gr.Button("Extract Instruction", visible=False)
     with gr.Accordion("Settings", open=False):
         with gr.Tab("Pic"):
@@ -79,7 +79,7 @@ with gr.Blocks() as demo:
             with gr.Tab("Edited Image"):
                 edited_image = gr.Image(label='Edited Image', type='pil', interactive=False)
                 setBaseImageBtn = gr.Button("Set as Base Image", variant="primary")
-            checkBtn = gr.Button("Check server status", variant="primary")
+            checkBtn = gr.Button("Check Server Status", variant="primary")
             #sendToEditorBtn = gr.Button("Send to Editor", variant='primary')
 
 

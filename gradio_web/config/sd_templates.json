@@ -13,6 +13,7 @@
         "width": 512,
         "height": 512,
         "source": "SD",
+        "cfg_scale": 7,
         "alwayson_scripts": {
             "controlnet": {
                 "args": [

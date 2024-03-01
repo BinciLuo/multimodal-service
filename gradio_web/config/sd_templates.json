@@ -34,7 +34,7 @@
                 "args": [
                     {
                         "module": "canny",
-                        "model": "coadapter-canny-sd15v1 [0f01fb68]",
+                        "model": "diffusers_xl_canny_full [2b69fca4]",
                         "input_image": "",
                         "threshold_a": 10,
                         "threshold_b": 100
@@ -61,7 +61,7 @@
                 "args": [
                     {
                         "module": "canny",
-                        "model": "coadapter-canny-sd15v1 [0f01fb68]",
+                        "model": "diffusers_xl_canny_full [2b69fca4]",
                         "input_image": "",
                         "threshold_a": 100,
                         "threshold_b": 250
@@ -88,7 +88,7 @@
                 "args": [
                     {
                         "module": "canny",
-                        "model": "coadapter-canny-sd15v1 [0f01fb68]",
+                        "model": "diffusers_xl_canny_full [2b69fca4]",
                         "input_image": "",
                         "threshold_a": 10,
                         "threshold_b": 20

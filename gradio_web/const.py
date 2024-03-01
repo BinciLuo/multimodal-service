@@ -3,14 +3,14 @@ import os
 
 # ---------------------------------------------------------------
 # Read config files
-with open("config/conf.json", 'r') as json_file:
+with open("config/server_config.json", 'r') as json_file:
     global_variables:dict = json.load(json_file)
 with open("config/chat_config.json", 'r') as json_file:
     chat_config:dict = json.load(json_file)
     model_info:dict = chat_config["models"]
 with open("config/sd_templates.json", 'r') as json_file:
     img_gen_template_dict:dict = json.load(json_file)
-with open("config/picture_process.json", 'r') as json_file:
+with open("config/picture_routes.json", 'r') as json_file:
     picture_process_info:dict = json.load(json_file)
 with open("config/img2img_default_paras.json", 'r') as json_file:
     IMG2IMG_DEFAULT_PARAS:dict = json.load(json_file)

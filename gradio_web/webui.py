@@ -5,7 +5,7 @@ from PIL import Image
 from modules.api.pics_api import get_loras
 from controllers.chat_controllers import chat_process, extract_chat_process, reset_state, commands
 from controllers.pics_controller import change_pic_process, generate_pic_process, set_base_image, change_face_process
-from controllers.utils_controller import auto_mask_process, check_status_process, submit_mask_process, change_base_image_process, undo_auto_mask_process
+from controllers.utils_controller import auto_mask_process, check_status_process, submit_mask_process, change_base_image_process, undo_auto_mask_process, clear_commands_process
 from controllers.mutimodal_controllers import exec_commands_process, exec_all_commands_process
 
 from const import *
@@ -51,8 +51,9 @@ with gr.Blocks() as demo:
             with gr.Column(scale=5):
                 command_dropdown = gr.Dropdown(choices=commands, type='index', label="command", multiselect=True)
             with gr.Column(scale=1):
-                execSelectedBtn = gr.Button("Exec Selected commands", variant="primary")
-                execAllBtn = gr.Button("Exec all commands", variant='primary')
+                execSelectedBtn = gr.Button("Exec Selected Commands", variant="primary")
+                execAllBtn = gr.Button("Exec All Commands", variant='primary')
+                clearCmdsBtn = gr.Button("Clear Commands", variant='stop')
         extractBtn = gr.Button("Extract Instruction", visible=False)
     with gr.Accordion("Settings", open=False):
         with gr.Tab("Pic"):
@@ -78,7 +79,7 @@ with gr.Blocks() as demo:
             with gr.Tab("Edited Image"):
                 edited_image = gr.Image(label='Edited Image', type='pil', interactive=False)
                 setBaseImageBtn = gr.Button("Set as Base Image", variant="primary")
-            checkBtn = gr.Button("Check server status", variant="primary")
+            checkBtn = gr.Button("Check Server Status", variant="primary")
             #sendToEditorBtn = gr.Button("Send to Editor", variant='primary')
 
 
@@ -117,6 +118,9 @@ with gr.Blocks() as demo:
                 picGenBtn = gr.Button("Generate a Picture", variant="primary")
                 picChangeBtn = gr.Button("Change Picture", variant="primary")
 
+    with gr.Accordion("Manual", open=False):
+        gr.Markdown(open('man.md', 'r').read())
+    
     history = gr.State([])
 
     # Btn
@@ -148,6 +152,7 @@ with gr.Blocks() as demo:
 
     execSelectedBtn.click(exec_commands_process,[command_dropdown, base_image, imageEditor, maskImage, edited_image, img_input, lora_dropdown, denoisingInpaintSlider], [imageEditor, maskImage, edited_image])
     execAllBtn.click(exec_all_commands_process,[base_image, imageEditor, maskImage, edited_image, img_input, lora_dropdown, denoisingInpaintSlider], [imageEditor, maskImage, edited_image])
+    clearCmdsBtn.click(clear_commands_process,[],[command_dropdown])
 
     #sendToEditorBtn.click(send_to_editor_process,[base_image],[image_editor])
 

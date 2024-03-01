@@ -79,4 +79,6 @@ def undo_auto_mask_process():
         return last_editor[0]
 
 def clear_commands_process():
+    global commands
+    commands.clear()
     return gr.Dropdown(choices=[])

@@ -2,7 +2,7 @@ name: Test Gradio Web
 
 on:
   pull_request:
-    branches: [ "main" ]
+    branches: [ "main", "dev" ]
 
 jobs:
   test:

@@ -33,7 +33,7 @@ class TestSD(unittest.TestCase):
         paras, e = form_post_img2img_paras(init_img_str,'test1',[], template="face", prompt = "test2")
         self.assertEqual(None, e, e)
         self.assertEqual("SD", paras["source"], f"form_post_img2img_paras failed with template: face")
-        self.assertEqual(0.3, paras["denoising_strength"], f"form_post_img2img_paras failed with template: face")
+        self.assertEqual(0.2, paras["denoising_strength"], f"form_post_img2img_paras failed with template: face")
         self.assertEqual("test1test2", paras["prompt"], f"form_post_img2img_paras failed with template: face")
         self.assertEqual(paras["alwayson_scripts"]["controlnet"]["args"][0]["input_image"], init_img_str, "Init_img_str not applied")
         print("\t😃face func success")
@@ -66,7 +66,7 @@ class TestSD(unittest.TestCase):
         # inpaintSD
         print("\t😃template inpaintSD success")
         alwayson_srcipts = form_alwayson_scripts_from_templates(template = "inpaintSD", init_img_str = init_img_str)[0]
-        self.assertEqual(alwayson_srcipts, {}, "Init_img_str not applied")
+        self.assertEqual(alwayson_srcipts["controlnet"]["args"][0]["input_image"], init_img_str, "Init_img_str not applied")
 
         print(f"😁Finish test_form_alwayson_scripts_from_templates_beauty\n")
 

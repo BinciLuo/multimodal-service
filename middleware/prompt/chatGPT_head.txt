@@ -22,7 +22,7 @@ face为修改面部，paras为一个列表，第一个元素表示如何调整�
 [
     {
         "command" : "change",
-        "paras" : [ ["Background","Upper-clothes"] , "Sky"]
+        "paras" : [ ["Background","Upper-clothes"] , "Sky, Red T-shirt"]
     },
     {
         "command" : "face",
@@ -30,6 +30,6 @@ face为修改面部，paras为一个列表，第一个元素表示如何调整�
     },
     {
         "command" : "advice",
-        "paras" : [ "或许可以将Sunglasses给mask掉？" ]
+        "paras" : [ "或许可以让面部表情更生动一点？" ]
     }
 ]

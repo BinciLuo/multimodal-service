@@ -117,7 +117,7 @@ def exec_commands_process(command_dropdown: list, base_image: Image.Image, image
     global commands
     command_packages = [commands[index] for index in command_dropdown]
     for command_package in combine_commands(command_packages):
-        base_image, image_editor, mask_image, edited_image = exec_command(command_package, edited_image, image_editor, mask_image, edited_image, img_input, lora_dropdown)
+        base_image, image_editor, mask_image, edited_image = exec_command(command_package, edited_image, image_editor, mask_image, edited_image, img_input, lora_dropdown, denoisingInpaintSlider)
     return {"background":image_editor["background"],"layers":[],"composite":None}, mask_image, edited_image
 
 def exec_all_commands_process(base_image: Image.Image, image_editor: dict, mask_image: Image.Image, edited_image: Image.Image, img_input: str, lora_dropdown: list[str], denoisingInpaintSlider: float):

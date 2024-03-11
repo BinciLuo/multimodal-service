@@ -170,7 +170,7 @@ def form_post_img2img_paras(init_img_str:str , query: str , loras:list[str]=[], 
     for key in IMG2IMG_DEFAULT_PARAS.keys():
         paras[key] = paras[key] if paras.get(key, None) != None else default_paras[key]
         if key == "prompt":
-            paras[key] = query + paras[key]
+            paras[key] = f"({query}:2)" + paras[key]
     
     # ------------------------------------------------------
     return paras, None

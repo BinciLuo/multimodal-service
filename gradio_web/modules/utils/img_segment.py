@@ -162,7 +162,7 @@ def auto_black_keywords(image: Image.Image, mask_images: dict, keys_words: list[
             original_array[l_pixel_255] = [ 0, 0, 0]
     # 创建新的图像对象
     result_image = Image.fromarray(original_array)
-    eroded_image = erode_image(result_image, int(image.size[0]/80) * 2 + 1)
+    eroded_image = erode_image(result_image, int(image.size[0]/40) * 2 + 1)
     # 返回处理后的图像
     return eroded_image
 

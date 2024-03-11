@@ -111,7 +111,7 @@
                 "args": [
                     "BASE_IMAGE",
                     true,
-                    0,
+                    "0",
                     "/app/stable-diffusion-webui/models/roop/inswapper_128.onnx",
                     "GFPGAN",
                     1,

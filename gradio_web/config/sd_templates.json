@@ -115,6 +115,7 @@
                     "/app/stable-diffusion-webui/models/roop/inswapper_128.onnx",
                     "GFPGAN",
                     1,
+                    true,
                     "R-ESRGAN 4x+",
                     1,
                     1,

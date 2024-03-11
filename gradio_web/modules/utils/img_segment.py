@@ -21,7 +21,7 @@ def erode_image(image: Image.Image, erode_range: int):
         for y in range(image.height):
             eroded_pixel = eroded_image.getpixel((x, y))
 
-            if eroded_pixel == (0, 0, 0):
+            if eroded_pixel == 0:
                 result_image.putpixel((x, y), (0, 0, 0))  # 设置为黑色
             else:
                 result_image.putpixel((x, y), image.getpixel((x, y)))

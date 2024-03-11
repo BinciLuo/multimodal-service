@@ -13,6 +13,7 @@ def erode_image(image: Image.Image, erode_range: int):
     gray_image = image.convert('L')
 
     # 使用滤波器进行腐蚀操作
+    gray_image = gray_image.filter(ImageFilter.BoxBlur(2))
     eroded_image = gray_image.filter(ImageFilter.MinFilter(erode_range))
 
     # 将原始图像与腐蚀后的图像进行比较，将相同位置的像素设置为黑色
@@ -161,7 +162,7 @@ def auto_black_keywords(image: Image.Image, mask_images: dict, keys_words: list[
             original_array[l_pixel_255] = [ 0, 0, 0]
     # 创建新的图像对象
     result_image = Image.fromarray(original_array)
-    eroded_image = erode_image(result_image, int(image.size[0]/40) * 2 + 1)
+    eroded_image = erode_image(result_image, int(image.size[0]/80) * 2 + 1)
     # 返回处理后的图像
     return eroded_image
 

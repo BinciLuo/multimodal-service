@@ -8,7 +8,7 @@ import gradio as gr
 from modules.api.pics_api import post_hgface_img_segment
 from modules.utils.image_io import trans_image_to_str, trans_str_to_image
 
-def erode_image(image: Image.Image, erode_range=9):
+def erode_image(image: Image.Image, erode_range: int):
     # 将图像转换为灰度图
     gray_image = image.convert('L')
 
@@ -162,7 +162,7 @@ def auto_black_keywords(image: Image.Image, mask_images: dict, keys_words: list[
             original_array[l_pixel_255] = [ 0, 0, 0]
     # 创建新的图像对象
     result_image = Image.fromarray(original_array)
-    eroded_image = erode_image(result_image, int(image.size[0]/40) * 2 + 1)
+    eroded_image = erode_image(result_image, int(image.size[0]/20) * 2 + 1)
     # 返回处理后的图像
     return eroded_image
 

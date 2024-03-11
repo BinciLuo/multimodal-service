@@ -2,11 +2,32 @@ import base64
 from io import BytesIO
 import io
 import numpy as np
-from PIL import Image
+from PIL import Image, ImageFilter
 import gradio as gr
 
 from modules.api.pics_api import post_hgface_img_segment
 from modules.utils.image_io import trans_image_to_str, trans_str_to_image
+
+def erode_image(image: Image.Image, erode_range=10):
+    # 将图像转换为灰度图
+    gray_image = image.convert('L')
+
+    # 使用滤波器进行腐蚀操作
+    eroded_image = gray_image.filter(ImageFilter.MinFilter(erode_range))
+
+    # 将原始图像与腐蚀后的图像进行比较，将相同位置的像素设置为黑色
+    result_image = Image.new('RGB', image.size)
+    for x in range(image.width):
+        for y in range(image.height):
+            original_pixel = image.getpixel((x, y))
+            eroded_pixel = eroded_image.getpixel((x, y))
+
+            if original_pixel == eroded_pixel:
+                result_image.putpixel((x, y), (0, 0, 0))  # 设置为黑色
+            else:
+                result_image.putpixel((x, y), original_pixel)
+
+    return result_image
 
 def replace_black_pixels(image: Image):
     """
@@ -106,7 +127,7 @@ def auto_fill_by_blackpoints(image: Image, base_image: Image):
     result_image = auto_fill_black(image, mask_images)
     return result_image
 
-def auto_black_keywords(image: Image, mask_images: dict, keys_words: list[str], reverse: bool):
+def auto_black_keywords(image: Image.Image, mask_images: dict, keys_words: list[str], reverse: bool):
     """
     ### This function auto blcak given masks
     ### Argvs
@@ -141,8 +162,9 @@ def auto_black_keywords(image: Image, mask_images: dict, keys_words: list[str], 
             original_array[l_pixel_255] = [ 0, 0, 0]
     # 创建新的图像对象
     result_image = Image.fromarray(original_array)
+    eroded_image = erode_image(result_image, int(image.size[0]/20))
     # 返回处理后的图像
-    return result_image
+    return eroded_image
 
 def auto_black_by_keywords(image: Image.Image, base_image: Image.Image, keywords: list[str], reverse: bool = False):
     """

@@ -7,6 +7,8 @@ from modules.api.pics_api import post_txt2img, post_img2img
 from modules.utils.image_paras_gen import form_post_txt2img_paras, form_post_img2img_paras
 from modules.utils.image_io import trans_image_to_str, trans_str_to_image
 from modules.utils.colors import convert_unblack_to_white
+from modules.utils.img_segment import erode_image
+from const import MASK_ERODE_RATE
 
 base_image = None
 
@@ -51,7 +53,8 @@ def change_pic_process(init_img: Image.Image, query: str, loras:list[str] = [], 
             gr.Warning(f"Mask is None, if you're using DALL-E, the full image will change")
         mask_img = Image.new("RGBA", init_img.size, (0, 0, 0, 0))
 
-    binary_image = convert_unblack_to_white(image_editor["background"])    
+    eroded_image = erode_image(image_editor["background"], int(image.size[0]/MASK_ERODE_RATE) * 2 + 1)
+    binary_image = convert_unblack_to_white(eroded_image)    
     black_img_str = trans_image_to_str(binary_image)
     
     mask_img_str = trans_image_to_str(mask_img)
@@ -152,8 +155,8 @@ def change_pic(init_img: Image.Image, query: str, loras:list[str] = [], template
         if template != "beauty" and template != "face":
             gr.Warning(f"Mask is None, if you're using DALL-E, the full image will change")
         mask_img = Image.new("RGBA", init_img.size, (0, 0, 0, 0))
-
-    binary_image = convert_unblack_to_white(image_editor["background"])    
+    eroded_image = erode_image(image_editor["background"], int(image.size[0]/MASK_ERODE_RATE) * 2 + 1)
+    binary_image = convert_unblack_to_white(eroded_image)    
     black_img_str = trans_image_to_str(binary_image)
     
     mask_img_str = trans_image_to_str(mask_img)

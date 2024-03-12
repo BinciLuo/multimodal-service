@@ -126,8 +126,8 @@ def auto_fill_by_blackpoints(image: Image, base_image: Image):
         mask_images[image_package['label']] = mask_image
     
     result_image = auto_fill_black(image, mask_images)
-    eroded_image = erode_image(result_image, int(image.size[0]/MASK_ERODE_RATE) * 2 + 1)
-    return eroded_image
+    #eroded_image = erode_image(result_image, int(image.size[0]/MASK_ERODE_RATE) * 2 + 1)
+    return result_image
 
 def auto_black_keywords(image: Image.Image, mask_images: dict, keys_words: list[str], reverse: bool):
     """
@@ -164,9 +164,9 @@ def auto_black_keywords(image: Image.Image, mask_images: dict, keys_words: list[
             original_array[l_pixel_255] = [ 0, 0, 0]
     # 创建新的图像对象
     result_image = Image.fromarray(original_array)
-    eroded_image = erode_image(result_image, int(image.size[0]/MASK_ERODE_RATE) * 2 + 1)
+    # eroded_image = erode_image(result_image, int(image.size[0]/MASK_ERODE_RATE) * 2 + 1)
     # 返回处理后的图像
-    return eroded_image
+    return result_image
 
 def auto_black_by_keywords(image: Image.Image, base_image: Image.Image, keywords: list[str], reverse: bool = False):
     """

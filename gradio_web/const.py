@@ -58,3 +58,6 @@ else:
 # ---------------------------------------------------------------
 PATTERN_FILE_PATH = global_variables["pattern_file_path"]
 INSTRUCTION_PROMPT_FILES_INFO = chat_config["prompt_templates"]["instruction_gen"]
+
+# ---------------------------------------------------------------
+MASK_ERODE_RATE = 40

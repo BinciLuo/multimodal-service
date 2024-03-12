@@ -2,6 +2,8 @@ import base64
 from io import BytesIO
 from PIL import Image
 import numpy as np
+from modules.utils.img_segment import erode_image
+from const import MASK_ERODE_RATE
 
 
 # FIXME: Result not ideal, may not use this.
@@ -52,8 +54,11 @@ def generate_mask_from_black(image: Image.Image):
     # 创建一个新的RGBA图像（黑色背景）
     mask = Image.new("RGBA", image.size, (0, 0, 0, 255))
 
+    # 腐蚀图片
+    eroded_image = erode_image(image, int(image.size[0]/MASK_ERODE_RATE) * 2 + 1)
+
     # 获取RGB图像的像素数据
-    rgb_data = image.getdata()
+    rgb_data = eroded_image.getdata()
 
     # 遍历像素数据，找到全黑的像素点并将其复制到RGBA图像
     for i, pixel in enumerate(rgb_data):

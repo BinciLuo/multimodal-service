@@ -14,7 +14,7 @@ def erode_image(image: Image.Image, erode_range: int):
     gray_image = image.convert('L')
 
     # 使用滤波器进行腐蚀操作
-    gray_image = gray_image.filter(ImageFilter.MaxFilter(5))
+    gray_image = gray_image.filter(ImageFilter.MaxFilter(3))
     #gray_image = gray_image.filter(ImageFilter.BoxBlur(2))
     eroded_image = gray_image.filter(ImageFilter.MinFilter(erode_range))
 

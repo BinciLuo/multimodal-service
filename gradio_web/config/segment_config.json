@@ -5,6 +5,9 @@
         },
         "Upper-clothes": {
             "rate": 40
+        },
+        "Dress": {
+            "rate": 40
         }
     }
 }

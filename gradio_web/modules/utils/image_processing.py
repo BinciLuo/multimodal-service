@@ -119,7 +119,7 @@ def get_gray_mask_0(key_and_images: list[(str, Image.Image)], size):
     filtered_image = Image.new('L', size)
     for x in range(size[0]):
         for y in range(size[1]):
-            min = gray_pixel_filter_min(gray_image, (x,y), [0, 255]) if gray_image.getpixel((x, y)) not in [0, 255] and eroded_image.getpixel((x, y)) == 255 else gray_image.getpixel((x, y))
+            min = gray_pixel_filter_min(gray_image, (x,y), [0, 255]) if gray_image.getpixel((x, y)) not in [0, 255] and eroded_image.getpixel((x, y)) == 0 else gray_image.getpixel((x, y))
             filtered_image.putpixel((x, y), min if min == 0 else 255)
     # debug
     filtered_image.save("/Users/binciluo/Desktop/multimodal-service/gradio_web/debug/filtered_image.png")

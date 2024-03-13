@@ -84,6 +84,13 @@ def erode_image(image: Image.Image, erode_range: int):
 
     return result_image
 
+def erode_gray_image(image: Image.Image, erode_range: int):
+    # 使用滤波器进行腐蚀操作
+    gray_image = gray_image.filter(ImageFilter.MaxFilter(3))
+    eroded_image = gray_image.filter(ImageFilter.MinFilter(erode_range *2 + 1))
+
+    return eroded_image
+
 def gray_pixel_filter_min(image: Image.Image, xy: tuple[int, int], ignore: list[int]):
     kernel_half = image.getpixel(xy)
     if kernel_half in ignore:
@@ -106,7 +113,7 @@ def get_gray_mask_0(key_and_images: list[(str, Image.Image)], size):
     # debug
     gray_image.save("/Users/binciluo/Desktop/multimodal-service/gradio_web/debug/gray_image.png")
 
-    eroded_image = erode_image(gray_image, MASK_ERODE_RATE)
+    eroded_image = erode_gray_image(gray_image, MASK_ERODE_RATE)
     eroded_image.save("/Users/binciluo/Desktop/multimodal-service/gradio_web/debug/eroded_image.png")
 
     filtered_image = Image.new('L', size)

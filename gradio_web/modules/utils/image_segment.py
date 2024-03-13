@@ -134,27 +134,6 @@ def auto_black_keywords(image: Image.Image, mask_images: dict, keys_words: list[
                 except:
                     image.putpixel((x, y), (0, 0, 0, 255))
     return image
-    # # 打开所有L模式的图像
-    # if reverse == False:
-    #     l_images = [mask_images[key] for key in keys_words if key in mask_images.keys()]
-    # else:
-    #     l_images = [mask_images[key] for key in mask_images.keys() if key not in keys_words]
-    # # 将L模式的图像转换为NumPy数组
-    # l_arrays = [np.array(l_image) for l_image in l_images]
-    # # 找到L模式的图像中值为255的像素点
-    # l_pixels_255 = [l_array == 255 for l_array in l_arrays]
-    # # 在原始图像中将对应位置的像素值设置为纯黑色（0）
-    # for l_pixel_255 in l_pixels_255:
-    #     original_array[l_pixel_255] = 0
-    #     try:
-    #         original_array[l_pixel_255] = [ 0, 0, 0, 255]
-    #     except:
-    #         original_array[l_pixel_255] = [ 0, 0, 0]
-    # # 创建新的图像对象
-    # result_image = Image.fromarray(original_array)
-    
-    # # 返回处理后的图像
-    # return result_image
 
 def auto_black_by_keywords(image: Image.Image, base_image: Image.Image, keywords: list[str], reverse: bool = False):
     """

@@ -4,7 +4,7 @@ import time
 from PIL import Image
 
 from modules.utils.check_server_status import  check_chat_api_chat, check_sd_api_img2img, check_sd_api_loras, check_sd_api_txt2img
-from modules.utils.colors import generate_mask_from_black
+from gradio_web.modules.utils.image_processing import generate_mask_from_black
 from modules.utils.img_segment import auto_fill_by_blackpoints, replace_black_pixels
 from modules.api.pics_api import post_hgface_img_segment
 from modules.utils.image_io import trans_image_to_str

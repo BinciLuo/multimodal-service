@@ -1,8 +1,8 @@
 import base64
 from io import BytesIO
-from PIL import Image
+from PIL import Image, ImageFilter
 import numpy as np
-from modules.utils.img_segment import erode_image
+from modules.utils.image_processing import erode_image
 from const import MASK_ERODE_RATE
 
 def generate_mask_from_black(image: Image.Image):
@@ -63,3 +63,24 @@ def convert_unblack_to_white(image: Image.Image):
                 continue
             rgb_image.putpixel((x, y), (255, 255, 255))
     return rgb_image
+
+def erode_image(image: Image.Image, erode_range: int):
+    # 将图像转换为灰度图
+    gray_image = image.convert('L')
+
+    # 使用滤波器进行腐蚀操作
+    gray_image = gray_image.filter(ImageFilter.MaxFilter(3))
+    eroded_image = gray_image.filter(ImageFilter.MinFilter(erode_range))
+
+    # 将原始图像与腐蚀后的图像进行比较，将相同位置的像素设置为黑色
+    result_image = Image.new('RGB', image.size)
+    for x in range(image.width):
+        for y in range(image.height):
+            eroded_pixel = eroded_image.getpixel((x, y))
+
+            if eroded_pixel == 0:
+                result_image.putpixel((x, y), (0, 0, 0))  # 设置为黑色
+            else:
+                result_image.putpixel((x, y), image.getpixel((x, y)))
+
+    return result_image

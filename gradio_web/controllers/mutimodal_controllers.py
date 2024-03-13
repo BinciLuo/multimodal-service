@@ -95,7 +95,7 @@ def exec_command(command_package: dict, base_image: Image.Image, image_editor: d
         mask_image, image_editor = submit_mask_process(image_editor)
         image_editor["composite"] = image_editor["background"]
         mask_image, image_editor = submit_mask_process(image_editor)
-        edited_image = change_pic(edited_image, img_input if img_input is not None and img_input != "" else command_package['paras'][1], lora_dropdown, "inpaintSD", mask_image, image_editor, denoising_strength = denoisingInpaintSlider})
+        edited_image = change_pic(edited_image, img_input if img_input is not None and img_input != "" else command_package['paras'][1], lora_dropdown, "inpaintSD", mask_image, image_editor, denoising_strength = denoisingInpaintSlider)
         image_editor["composite"] = image_editor["background"]
         gr.Info(f"Finish {command_package['command']}")
 

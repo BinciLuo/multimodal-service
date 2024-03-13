@@ -53,7 +53,8 @@ def change_pic_process(init_img: Image.Image, query: str, loras:list[str] = [], 
             gr.Warning(f"Mask is None, if you're using DALL-E, the full image will change")
         mask_img = Image.new("RGBA", init_img.size, (0, 0, 0, 0))
 
-    eroded_image = erode_image(image_editor["background"], int(image_editor["background"].size[0]/MASK_ERODE_RATE) * 2 + 1)
+    #eroded_image = erode_image(image_editor["background"], int(image_editor["background"].size[0]/MASK_ERODE_RATE) * 2 + 1)
+    eroded_image = image_editor["background"]
     binary_image = convert_unblack_to_white(eroded_image)    
     black_img_str = trans_image_to_str(binary_image)
     

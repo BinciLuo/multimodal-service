@@ -7,7 +7,8 @@ import gradio as gr
 
 from modules.api.pics_api import post_hgface_img_segment
 from modules.utils.image_io import trans_image_to_str, trans_str_to_image
-from const import MASK_ERODE_RATE
+from const import MASK_ERODE_RATE, segment_config
+from modules.utils.image_processing import erode_gray_image
 
 def replace_black_pixels(image: Image):
     """
@@ -124,6 +125,11 @@ def auto_black_keywords(image: Image.Image, mask_images: dict, keys_words: list[
     """
     # 将原始图像转换为NumPy数组
     original_array = np.array(image)
+    # 对于不同的部分进行腐蚀
+    for key in keys_words:
+        if key in mask_images.keys() and key in segment_config['erode'].keys():
+            mask_images[key] = erode_gray_image(mask_images[key], int(mask_images[key].size[0]/segment_config['erode'][key]['rate']) *2 + 1)
+
     # 打开所有L模式的图像
     if reverse == False:
         l_images = [mask_images[key] for key in keys_words if key in mask_images.keys()]

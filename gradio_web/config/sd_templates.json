@@ -18,7 +18,19 @@
         "height": 512,
         "source": "SD",
         "cfg_scale": 7,
-        "alwayson_scripts": {}
+        "alwayson_scripts": {
+            "controlnet": {
+                "args": [
+                    {
+                        "module": "canny",
+                        "model": "control_v11p_sd15_canny [d14c016b]",
+                        "input_image": "",
+                        "threshold_a": 200,
+                        "threshold_b": 250
+                    }
+                ]
+            }
+        }
     },
     "beauty": {
         "prompt": ", best quality, masterpiece, ultra high ress",

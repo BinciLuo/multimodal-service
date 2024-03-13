@@ -150,7 +150,7 @@ def auto_black_keywords(image: Image.Image, mask_images: dict, keys_words: list[
         new_array[l_pixel_255] = original_array[l_pixel_255]
 
     # 创建新的图像对象
-    result_image = Image.fromarray(original_array)
+    result_image = Image.fromarray(new_array)
     
     # 返回处理后的图像
     return result_image

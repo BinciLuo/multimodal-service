@@ -138,7 +138,7 @@ def change_face_process(init_img: Image.Image, target_img: Image.Image):
     image = trans_str_to_image(pic_string)
     return image
 
-def change_pic(init_img: Image.Image, query: str, loras:list[str] = [], template = None, mask_img: Image.Image = None, image_editor: dict = None, kwargv: dict={}):
+def change_pic(init_img: Image.Image, query: str, loras:list[str] = [], template = None, mask_img: Image.Image = None, image_editor: dict = None, **kwargv):
     # ------------------------------------------------------
     # Check init_img and get init_img_str and get size
     if init_img == None:

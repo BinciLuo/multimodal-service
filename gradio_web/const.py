@@ -61,4 +61,4 @@ INSTRUCTION_PROMPT_FILES_INFO = chat_config["prompt_templates"]["instruction_gen
 
 # ---------------------------------------------------------------
 # |<----->| pixcels / rate = half kernel size
-MASK_ERODE_RATE = 80
+MASK_ERODE_RATE = 40

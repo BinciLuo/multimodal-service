@@ -19,9 +19,9 @@ def generate_mask_from_black(image: Image.Image):
     # 创建一个新的RGBA图像（黑色背景）
     mask = Image.new("RGBA", image.size, (0, 0, 0, 255))
 
-    # 腐蚀图片
-    eroded_image = erode_image(image, int(image.size[0]/MASK_ERODE_RATE) * 2 + 1)
-
+    # 腐蚀图片 FIXME: rm
+    #eroded_image = erode_image(image, int(image.size[0]/MASK_ERODE_RATE) * 2 + 1)
+    erode_image = image
     # 获取RGB图像的像素数据
     rgb_data = eroded_image.getdata()
 

@@ -126,8 +126,8 @@ def auto_black_keywords(image: Image.Image, mask_images: dict, keys_words: list[
     # 将原始图像转换为NumPy数组
     original_array = np.array(image)
     # 对于不同的部分进行收缩
-    for key in keys_words:
-        if key in mask_images.keys() and key in segment_config['erode'].keys():
+    for key in mask_images.keys():
+        if key not in keys_words and key in segment_config['erode'].keys():
             mask_images[key] = shrink_gray_image_255(mask_images[key], int(mask_images[key].size[0]/segment_config['erode'][key]['rate']) *2 + 1)
 
     # 打开所有未被选中的部分

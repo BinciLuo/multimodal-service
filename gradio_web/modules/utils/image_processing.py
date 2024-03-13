@@ -2,7 +2,7 @@ import base64
 from io import BytesIO
 from PIL import Image, ImageFilter
 import numpy as np
-from const import MASK_ERODE_RATE
+from const import MASK_ERODE_RATE, segment_config
 
 def generate_mask_from_black(image: Image.Image):
     """
@@ -84,21 +84,30 @@ def erode_image(image: Image.Image, erode_range: int):
 
     return result_image
 
-def shrink_gray_image_255(image: Image.Image, erode_range: int):
+def gray_pixel_filter_max(image: Image.Image, xy: tuple[int, int], ignore: list[int]):
+    if image.getpixel(xy) in ignore:
+        return image.getpixel(xy)
+    kernel_half = image.getpixel(xy)
+    max = image.getpixel(xy)
+    for i in range(xy[0]-kernel_half if xy[0]-kernel_half >=0 else 0, xy[0]+kernel_half+1 if xy[0]+kernel_half+1 <= image.size[0] else image.size[0]):
+        for j in range(xy[1]-kernel_half if xy[1]-kernel_half >=0 else 0, xy[1]+kernel_half+1 if xy[1]+kernel_half+1 <= image.size[1] else image.size[1]):
+            max = image.getpixel(xy) if image.getpixel(xy) > max else max
+    return max
+
+
+def get_gray_mask_0(key_and_images: list[(str, Image.Image)], size):
     # 使用滤波器进行腐蚀操作
+    gray_image = Image.new('L', size)
+    for key,image in key_and_images:
+        for x in range(size[0]):
+            for y in range(size[1]):
+                if image.getpixel((x, y)) == 255:
+                    gray_image.putpixel((x, y), int(size[0]/segment_config['erode'][key]['rate']) if key in segment_config['erode'].keys() else 255)
     
-    shrinked_image = image.filter(ImageFilter.MinFilter(erode_range))
-
-    # # 将原始图像与腐蚀后的图像进行比较，将相同位置的像素设置为白色
-    # result_image = Image.new('L', image.size)
-    # for x in range(image.width):
-    #     for y in range(image.height):
-    #         shrinked_image = image.getpixel((x, y))
-
-    #         if shrinked_image == 0:
-    #             result_image.putpixel((x, y), 0)  # 设置白黑色
-    #         else:
-    #             result_image.putpixel((x, y), image.getpixel((x, y)))
-
-    # return result_image
-    return shrinked_image
+    filtered_image = Image.new('L', size)
+    for x in range(size[0]):
+        for y in range(size[1]):
+            max = gray_pixel_filter_max(gray_image, (x,y), [0, 255])
+            filtered_image.putpixel((x, y), max if max == 0 else 255)
+    
+    return filtered_image

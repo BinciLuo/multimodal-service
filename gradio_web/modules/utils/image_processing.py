@@ -103,11 +103,14 @@ def get_gray_mask_0(key_and_images: list[(str, Image.Image)], size):
             for y in range(size[1]):
                 if image.getpixel((x, y)) == 255:
                     gray_image.putpixel((x, y), int(size[0]/segment_config['erode'][key]['rate']) if key in segment_config['erode'].keys() else 255)
-    
+    # debug
+    gray_image.save("debug/gray_image.png")
     filtered_image = Image.new('L', size)
     for x in range(size[0]):
         for y in range(size[1]):
             max = gray_pixel_filter_max(gray_image, (x,y), [0, 255])
             filtered_image.putpixel((x, y), max if max == 0 else 255)
-    
+    # debug
+    filtered_image.save("debug/filtered_image.png")
+
     return filtered_image

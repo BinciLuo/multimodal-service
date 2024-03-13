@@ -138,7 +138,7 @@ def auto_black_keywords(image: Image.Image, mask_images: dict, keys_words: list[
 
 @functools.lru_cache(32)
 # TODO: change instruction
-def auto_black_by_keywords(image: str, base_image: str, keywords: tuple[str], reverse: bool = False):
+def auto_black_by_keywords(image: str, base_image: str, keywords: str, reverse: bool = False):
     """
     ### This function auto fill masks which have black pixcels
     ### Argvs
@@ -151,6 +151,7 @@ def auto_black_by_keywords(image: str, base_image: str, keywords: tuple[str], re
         image(Image.Image): auto masked image (black mask)
     ```
     """
+    keywords = keywords.split(' ')
     image = trans_str_to_image(image)
     base_image = trans_str_to_image(base_image)
     keywords = list(keywords)

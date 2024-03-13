@@ -20,7 +20,7 @@ def exec_command(command_package: dict, base_image: Image.Image, image_editor: d
             return base_image, image_editor, mask_image, edited_image
         
         # Run
-        new_composite = auto_black_by_keywords(trans_image_to_str(image_editor["background"]), trans_image_to_str(edited_image), tuple(sorted(command_package["paras"][0])), False)
+        new_composite = auto_black_by_keywords(trans_image_to_str(image_editor["background"]), trans_image_to_str(edited_image), ' '.join(command_package["paras"][0]), False)
         image_editor = {"background":new_composite,"layers":[],"composite":new_composite}
         mask_image, image_editor = submit_mask_process(image_editor)
         image_editor["composite"] = image_editor["background"]
@@ -36,7 +36,7 @@ def exec_command(command_package: dict, base_image: Image.Image, image_editor: d
             return base_image, image_editor, mask_image, edited_image
         
         # Run
-        new_composite = auto_black_by_keywords(trans_image_to_str(image_editor["background"]), trans_image_to_str(base_image), tuple(sorted(command_package["paras"][0])), True)
+        new_composite = auto_black_by_keywords(trans_image_to_str(image_editor["background"]), trans_image_to_str(base_image), ' '.join(command_package["paras"][0]), True)
         image_editor = {"background":new_composite,"layers":[],"composite":new_composite}
         mask_image, image_editor = submit_mask_process(image_editor)
         image_editor["composite"] = image_editor["background"]
@@ -91,7 +91,7 @@ def exec_command(command_package: dict, base_image: Image.Image, image_editor: d
             return base_image, image_editor, mask_image, edited_image
         
         #Run
-        new_composite = auto_black_by_keywords(trans_image_to_str(image_editor["background"]), trans_image_to_str(edited_image), tuple(sorted(command_package["paras"][0])), False)
+        new_composite = auto_black_by_keywords(trans_image_to_str(image_editor["background"]), trans_image_to_str(edited_image), ' '.join(command_package["paras"][0]), False)
         image_editor = {"background":new_composite,"layers":[],"composite":new_composite}
         mask_image, image_editor = submit_mask_process(image_editor)
         image_editor["composite"] = image_editor["background"]

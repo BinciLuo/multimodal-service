@@ -4,8 +4,8 @@
         "source": "DALLE"
     },
     "inpaintSD": {
-        "prompt": ", best quality, masterpiece, ultra high res",
-        "negative_prompt": "(worst quality:2),(low quality:2),(normal quality:2),lowres,watermark, bad_pictures, EasyNegative, negative_hand-neg",
+        "prompt": ", best quality,masterpiece,1girl,solo, extremely detailed eyes and face",
+        "negative_prompt": "ng_deepnegative_v1_75t,(badhandv4:1.2),2 girl,(worst quality:2),(low quality:2),(normal quality:2),lowres,bad anatomy,bad hands,((monochrome)),((grayscale)) watermark,moles",
         "inpainting_fill": 0,
         "inpaint_full_res": false,
         "inpaint_full_res_padding": 32,

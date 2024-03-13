@@ -3,6 +3,8 @@ from io import BytesIO
 from PIL import Image, ImageFilter
 import numpy as np
 from const import MASK_ERODE_RATE, segment_config
+import functools
+from modules.utils.image_io import trans_str_to_image
 
 def generate_mask_from_black(image: Image.Image):
     """
@@ -101,9 +103,10 @@ def gray_pixel_filter_min(image: Image.Image, xy: tuple[int, int], ignore: list[
             min = image.getpixel((i, j)) if image.getpixel((i, j)) < min else min
     return min
 
-
-def get_gray_mask_0(key_and_images: list[(str, Image.Image)], size):
+@functools.lru_cache()
+def get_gray_mask_0(key_and_images: list[(str, str)], size):
     # 使用滤波器进行腐蚀操作
+    key_and_images = [(key_and_image[0],trans_str_to_image(key_and_image[1])) for key_and_image in key_and_images]
     gray_image = Image.new('L', size)
     for key,image in key_and_images:
         for x in range(size[0]):

@@ -104,7 +104,7 @@ def gray_pixel_filter_min(image: Image.Image, xy: tuple[int, int], ignore: list[
     return min
 
 @functools.lru_cache()
-def get_gray_mask_0(key_and_images: list[(str, str)], size):
+def get_gray_mask_0(key_and_images: tuple[(str, str)], size):
     # 使用滤波器进行腐蚀操作
     key_and_images = [(key_and_image[0],trans_str_to_image(key_and_image[1])) for key_and_image in key_and_images]
     gray_image = Image.new('L', size)

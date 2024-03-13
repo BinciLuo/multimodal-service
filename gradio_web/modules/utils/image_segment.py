@@ -8,7 +8,7 @@ import gradio as gr
 from modules.api.pics_api import post_hgface_img_segment
 from modules.utils.image_io import trans_image_to_str, trans_str_to_image
 from const import MASK_ERODE_RATE, segment_config
-from modules.utils.image_processing import erode_gray_image
+from modules.utils.image_processing import shrink_gray_image_255
 
 def replace_black_pixels(image: Image):
     """
@@ -125,32 +125,57 @@ def auto_black_keywords(image: Image.Image, mask_images: dict, keys_words: list[
     """
     # 将原始图像转换为NumPy数组
     original_array = np.array(image)
-    # 对于不同的部分进行腐蚀
+    # 对于不同的部分进行收缩
     for key in keys_words:
         if key in mask_images.keys() and key in segment_config['erode'].keys():
-            mask_images[key] = erode_gray_image(mask_images[key], int(mask_images[key].size[0]/segment_config['erode'][key]['rate']) *2 + 1)
+            mask_images[key] = shrink_gray_image_255(mask_images[key], int(mask_images[key].size[0]/segment_config['erode'][key]['rate']) *2 + 1)
 
-    # 打开所有L模式的图像
+    # 打开所有未被选中的部分
     if reverse == False:
-        l_images = [mask_images[key] for key in keys_words if key in mask_images.keys()]
-    else:
         l_images = [mask_images[key] for key in mask_images.keys() if key not in keys_words]
+    else:
+        l_images = [mask_images[key] for key in keys_words if key in mask_images.keys()]
+
     # 将L模式的图像转换为NumPy数组
     l_arrays = [np.array(l_image) for l_image in l_images]
-    # 找到L模式的图像中值为255的像素点
+
+    # 找到L模式的图像中值不为255的像素点
     l_pixels_255 = [l_array == 255 for l_array in l_arrays]
+
     # 在原始图像中将对应位置的像素值设置为纯黑色（0）
+
+    new_array = np.zeros(original_array.shape)
+
     for l_pixel_255 in l_pixels_255:
-        original_array[l_pixel_255] = 0
-        try:
-            original_array[l_pixel_255] = [ 0, 0, 0, 255]
-        except:
-            original_array[l_pixel_255] = [ 0, 0, 0]
+        new_array[l_pixel_255] = original_array[l_pixel_255]
+
     # 创建新的图像对象
     result_image = Image.fromarray(original_array)
     
     # 返回处理后的图像
     return result_image
+
+    # # 打开所有L模式的图像
+    # if reverse == False:
+    #     l_images = [mask_images[key] for key in keys_words if key in mask_images.keys()]
+    # else:
+    #     l_images = [mask_images[key] for key in mask_images.keys() if key not in keys_words]
+    # # 将L模式的图像转换为NumPy数组
+    # l_arrays = [np.array(l_image) for l_image in l_images]
+    # # 找到L模式的图像中值为255的像素点
+    # l_pixels_255 = [l_array == 255 for l_array in l_arrays]
+    # # 在原始图像中将对应位置的像素值设置为纯黑色（0）
+    # for l_pixel_255 in l_pixels_255:
+    #     original_array[l_pixel_255] = 0
+    #     try:
+    #         original_array[l_pixel_255] = [ 0, 0, 0, 255]
+    #     except:
+    #         original_array[l_pixel_255] = [ 0, 0, 0]
+    # # 创建新的图像对象
+    # result_image = Image.fromarray(original_array)
+    
+    # # 返回处理后的图像
+    # return result_image
 
 def auto_black_by_keywords(image: Image.Image, base_image: Image.Image, keywords: list[str], reverse: bool = False):
     """

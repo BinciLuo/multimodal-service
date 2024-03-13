@@ -91,7 +91,7 @@ def gray_pixel_filter_min(image: Image.Image, xy: tuple[int, int], ignore: list[
     min = image.getpixel(xy)
     for i in range(xy[0]-kernel_half if xy[0]-kernel_half >=0 else 0, xy[0]+kernel_half+1 if xy[0]+kernel_half+1 <= image.size[0] else image.size[0]):
         for j in range(xy[1]-kernel_half if xy[1]-kernel_half >=0 else 0, xy[1]+kernel_half+1 if xy[1]+kernel_half+1 <= image.size[1] else image.size[1]):
-            min = image.getpixel(xy) if image.getpixel(xy) < min else min
+            min = image.getpixel((i, j)) if image.getpixel((i, j)) < min else min
     return min
 
 
@@ -105,11 +105,12 @@ def get_gray_mask_0(key_and_images: list[(str, Image.Image)], size):
                     gray_image.putpixel((x, y), int(size[0]/segment_config['erode'][key]['rate']) if key in segment_config['erode'].keys() else 255)
     # debug
     gray_image.save("/Users/binciluo/Desktop/multimodal-service/gradio_web/debug/gray_image.png")
+
     filtered_image = Image.new('L', size)
     for x in range(size[0]):
         for y in range(size[1]):
-            max = gray_pixel_filter_min(gray_image, (x,y), [0, 255])
-            filtered_image.putpixel((x, y), max if max == 0 else 255)
+            min = gray_pixel_filter_min(gray_image, (x,y), [0, 255])
+            filtered_image.putpixel((x, y), min if min == 0 else 255)
     # debug
     filtered_image.save("/Users/binciluo/Desktop/multimodal-service/gradio_web/debug/filtered_image.png")
 

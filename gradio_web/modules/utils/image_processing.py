@@ -2,7 +2,6 @@ import base64
 from io import BytesIO
 from PIL import Image, ImageFilter
 import numpy as np
-from modules.utils.image_processing import erode_image
 from const import MASK_ERODE_RATE
 
 def generate_mask_from_black(image: Image.Image):

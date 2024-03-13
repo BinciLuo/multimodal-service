@@ -84,15 +84,15 @@ def erode_image(image: Image.Image, erode_range: int):
 
     return result_image
 
-def gray_pixel_filter_max(image: Image.Image, xy: tuple[int, int], ignore: list[int]):
+def gray_pixel_filter_min(image: Image.Image, xy: tuple[int, int], ignore: list[int]):
     if image.getpixel(xy) in ignore:
         return image.getpixel(xy)
     kernel_half = image.getpixel(xy)
-    max = image.getpixel(xy)
+    min = image.getpixel(xy)
     for i in range(xy[0]-kernel_half if xy[0]-kernel_half >=0 else 0, xy[0]+kernel_half+1 if xy[0]+kernel_half+1 <= image.size[0] else image.size[0]):
         for j in range(xy[1]-kernel_half if xy[1]-kernel_half >=0 else 0, xy[1]+kernel_half+1 if xy[1]+kernel_half+1 <= image.size[1] else image.size[1]):
-            max = image.getpixel(xy) if image.getpixel(xy) > max else max
-    return max
+            min = image.getpixel(xy) if image.getpixel(xy) < min else min
+    return min
 
 
 def get_gray_mask_0(key_and_images: list[(str, Image.Image)], size):
@@ -108,7 +108,7 @@ def get_gray_mask_0(key_and_images: list[(str, Image.Image)], size):
     filtered_image = Image.new('L', size)
     for x in range(size[0]):
         for y in range(size[1]):
-            max = gray_pixel_filter_max(gray_image, (x,y), [0, 255])
+            max = gray_pixel_filter_min(gray_image, (x,y), [0, 255])
             filtered_image.putpixel((x, y), max if max == 0 else 255)
     # debug
     filtered_image.save("/Users/binciluo/Desktop/multimodal-service/gradio_web/debug/filtered_image.png")

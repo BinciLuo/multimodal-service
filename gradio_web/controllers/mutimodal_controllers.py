@@ -1,7 +1,7 @@
 import time
 import gradio as gr
 from PIL import Image
-from modules.utils.img_segment import auto_black_by_keywords
+from modules.utils.image_segment import auto_black_by_keywords
 from modules.utils.instruction_processing import combine_commands
 from controllers.pics_controller import change_pic_process, change_pic
 from controllers.chat_controllers import commands

@@ -1,0 +1,26 @@
+{
+    "txt2img" :
+    {
+        "route" : "/v1/pics/txt2img"
+    },
+    "loras" :
+    {
+        "route" : "/v1/pics/loras"
+    },
+    "img2img" :
+    {
+        "route" : "/v1/pics/img2img"
+    },
+    "tencent_cloud_img2img" :
+    {
+        "route" : "/v1/pics/tencent/img2img"
+    },
+    "dall-e-2_img2img" :
+    {
+        "route" : "/v1/pics/openai/img2img"
+    },
+    "huggingface_img_segment" :
+    {
+        "route" : "/v1/pics//huggingface/segment"
+    }
+}

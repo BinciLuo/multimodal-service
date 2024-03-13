@@ -2,6 +2,9 @@
     "erode":{
         "Hair": {
             "rate": 40
+        },
+        "Upper-clothes": {
+            "rate": 40
         }
     }
 }

@@ -17,7 +17,7 @@
     },
     "dall-e-2_img2img" :
     {
-        "route" : "/v1/pics/openai/img2im"
+        "route" : "/v1/pics/openai/img2img"
     },
     "huggingface_img_segment" :
     {

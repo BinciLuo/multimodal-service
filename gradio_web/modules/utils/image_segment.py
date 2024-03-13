@@ -124,7 +124,7 @@ def auto_black_keywords(image: Image.Image, mask_images: dict, keys_words: list[
     ```
     """
     # 对于不同的部分进行腐蚀
-    shrinked_gray_image = get_gray_mask_0([(key,trans_str_to_image(mask_images[key])) for key in mask_images.keys() if key not in keys_words], image.size)
+    shrinked_gray_image = get_gray_mask_0([(key,trans_image_to_str(mask_images[key])) for key in mask_images.keys() if key not in keys_words], image.size)
 
     for x in range(image.width):
         for y in range(image.height):

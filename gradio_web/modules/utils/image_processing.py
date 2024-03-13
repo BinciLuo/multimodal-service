@@ -69,7 +69,7 @@ def erode_image(image: Image.Image, erode_range: int):
 
     # 使用滤波器进行腐蚀操作
     gray_image = gray_image.filter(ImageFilter.MaxFilter(3))
-    eroded_image = gray_image.filter(ImageFilter.MinFilter(erode_range))
+    eroded_image = gray_image.filter(ImageFilter.MinFilter(erode_range *2 + 1))
 
     # 将原始图像与腐蚀后的图像进行比较，将相同位置的像素设置为黑色
     result_image = Image.new('RGB', image.size)
@@ -85,10 +85,10 @@ def erode_image(image: Image.Image, erode_range: int):
     return result_image
 
 def gray_pixel_filter_min(image: Image.Image, xy: tuple[int, int], ignore: list[int]):
-    if image.getpixel(xy) in ignore:
-        return image.getpixel(xy)
     kernel_half = image.getpixel(xy)
-    min = image.getpixel(xy)
+    if kernel_half in ignore:
+        return kernel_half
+    min = kernel_half
     for i in range(xy[0]-kernel_half if xy[0]-kernel_half >=0 else 0, xy[0]+kernel_half+1 if xy[0]+kernel_half+1 <= image.size[0] else image.size[0]):
         for j in range(xy[1]-kernel_half if xy[1]-kernel_half >=0 else 0, xy[1]+kernel_half+1 if xy[1]+kernel_half+1 <= image.size[1] else image.size[1]):
             min = image.getpixel((i, j)) if image.getpixel((i, j)) < min else min

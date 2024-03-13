@@ -130,9 +130,9 @@ def auto_black_keywords(image: Image.Image, mask_images: dict, keys_words: list[
         for y in range(image.height):
             if shrinked_gray_image.getpixel((x, y)) == 0:
                 try:
-                    image.putpixel((x, y), [0, 0, 0])
+                    image.putpixel((x, y), (0, 0, 0))
                 except:
-                    image.putpixel((x, y), [0, 0, 0, 255])
+                    image.putpixel((x, y), (0, 0, 0, 255))
     return image
     # # 打开所有L模式的图像
     # if reverse == False:

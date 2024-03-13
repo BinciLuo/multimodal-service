@@ -22,7 +22,7 @@ face为修改面部，paras为一个列表，第一个元素表示如何调整�
 [
     {
         "command" : "change",
-        "paras" : [ ["Background","Upper-clothes"] , "blue sky, clouds, red T-shirt"]
+        "paras" : [ ["Background","Upper-clothes"] , "blue sky, red T-shirt"]
     },
     {
         "command" : "face",

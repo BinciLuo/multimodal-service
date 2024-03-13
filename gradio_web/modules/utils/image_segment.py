@@ -143,8 +143,7 @@ def auto_black_keywords(image: Image.Image, mask_images: dict, keys_words: list[
     l_pixels_255 = [l_array == 255 for l_array in l_arrays]
 
     # 在原始图像中将对应位置的像素值设置为纯黑色（0）
-
-    new_array = np.zeros(original_array.shape)
+    new_array = np.zeros_like(original_array, dtype=np.uint8)
 
     for l_pixel_255 in l_pixels_255:
         new_array[l_pixel_255] = original_array[l_pixel_255]

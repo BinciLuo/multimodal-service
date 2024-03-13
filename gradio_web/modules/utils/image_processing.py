@@ -89,15 +89,16 @@ def shrink_gray_image_255(image: Image.Image, erode_range: int):
     
     shrinked_image = image.filter(ImageFilter.MinFilter(erode_range))
 
-    # 将原始图像与腐蚀后的图像进行比较，将相同位置的像素设置为黑色
-    result_image = Image.new('L', image.size)
-    for x in range(image.width):
-        for y in range(image.height):
-            eroded_pixel = shrinked_image.getpixel((x, y))
+    # # 将原始图像与腐蚀后的图像进行比较，将相同位置的像素设置为白色
+    # result_image = Image.new('L', image.size)
+    # for x in range(image.width):
+    #     for y in range(image.height):
+    #         shrinked_image = image.getpixel((x, y))
 
-            if eroded_pixel == 0:
-                result_image.putpixel((x, y), 0)  # 设置为黑色
-            else:
-                result_image.putpixel((x, y), image.getpixel((x, y)))
+    #         if shrinked_image == 0:
+    #             result_image.putpixel((x, y), 0)  # 设置白黑色
+    #         else:
+    #             result_image.putpixel((x, y), image.getpixel((x, y)))
 
-    return result_image
+    # return result_image
+    return shrinked_image

@@ -35,6 +35,7 @@ A demo is deployed in Azure. [Try it here](https://gradio-app.azurewebsites.net)
 - [x] Clear commands when updating base image
 - [ ] Combine and sort commands (only finish 'face' and 'change')
 - [x] Refactor multimodal architecture
+- [ ] Solve incorrect segmentation
 
 ## Architecture
 ```

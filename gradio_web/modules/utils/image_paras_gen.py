@@ -140,9 +140,7 @@ def form_post_img2img_paras(init_img_str:str , query: str , loras:list[str]=[], 
         "init_images": [init_img_str],
         "prompt": kwargv.get("prompt", template_paras.get("prompt", None)),
         "negative_prompt": kwargv.get("negative_prompt", template_paras.get("negative_prompt", None)),
-        "denoising_strength": template_paras.get("denoising_strength", kwargv.get("denoising_strength", None)),
-        # FIXME: Search in template_paras first
-        #"denoising_strength": kwargv.get("denoising_strength", template_paras.get("denoising_strength", None)),
+        "denoising_strength": kwargv.get("denoising_strength", None) if kwargv.get("template", None) == "inpaintSD" else template_paras.get("denoising_strength", None),
         "sampler_index": kwargv.get("sampler_index", template_paras.get("sampler_index", None)),
         "seed": kwargv.get("seed", template_paras.get("seed", None)),
         "steps": kwargv.get("steps", template_paras.get("steps", None)),
@@ -170,7 +168,7 @@ def form_post_img2img_paras(init_img_str:str , query: str , loras:list[str]=[], 
     for key in IMG2IMG_DEFAULT_PARAS.keys():
         paras[key] = paras[key] if paras.get(key, None) != None else default_paras[key]
         if key == "prompt":
-            paras[key] = query + paras[key]
+            paras[key] = f"({query}:2)" + paras[key]
     
     # ------------------------------------------------------
     return paras, None

@@ -48,8 +48,6 @@ def extract_chat_process(chatbot, command_dropdown):
         else:
             extracted_commands_string += f'操作为: {cmd["command"]} 参数为: {cmd["paras"]}\n'
     extracted_commands_string += advice
-    #extracted_commands_string = json.dumps(extracted_commands, ensure_ascii=False)
-
     
     chatbot[-1][-1] = extracted_commands_string if extracted_commands_string != "" else chatbot[-1][-1]
     print(commands)

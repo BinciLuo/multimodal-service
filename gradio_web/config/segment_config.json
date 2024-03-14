@@ -1,0 +1,13 @@
+{
+    "erode":{
+        "Hair": {
+            "rate": 40
+        },
+        "Upper-clothes": {
+            "rate": 80
+        },
+        "Dress": {
+            "rate": 80
+        }
+    }
+}

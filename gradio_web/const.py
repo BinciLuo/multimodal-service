@@ -16,6 +16,8 @@ with open("config/img2img_default_paras.json", 'r') as json_file:
     IMG2IMG_DEFAULT_PARAS:dict = json.load(json_file)
 with open("example/examples.json", 'r') as json_file:
     examples_jmap:dict = json.load(json_file)
+with open("config/segment_config.json", 'r') as json_file:
+    segment_config:dict = json.load(json_file)
 
 # ---------------------------------------------------------------
 # Read MIDDLEWARE_ENV from $MIDDLEWARE_ENV
@@ -58,3 +60,7 @@ else:
 # ---------------------------------------------------------------
 PATTERN_FILE_PATH = global_variables["pattern_file_path"]
 INSTRUCTION_PROMPT_FILES_INFO = chat_config["prompt_templates"]["instruction_gen"]
+
+# ---------------------------------------------------------------
+# |<----->| pixcels / rate = half kernel size
+MASK_ERODE_RATE = 60

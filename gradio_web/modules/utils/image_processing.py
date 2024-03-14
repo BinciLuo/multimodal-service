@@ -112,10 +112,10 @@ def get_gray_mask_0(key_and_images: tuple[(str, Image.Image)], size):
                 if image.getpixel((x, y)) == 255:
                     gray_image.putpixel((x, y), int(size[0]/segment_config['erode'][key]['rate']) if key in segment_config['erode'].keys() else 255)
     # debug
-    gray_image.save("/Users/binciluo/Desktop/multimodal-service/gradio_web/debug/gray_image.png")
+    gray_image.save("debug/gray_image.png")
 
     eroded_image = erode_gray_image(gray_image, int(size[0]/MASK_ERODE_RATE))
-    eroded_image.save("/Users/binciluo/Desktop/multimodal-service/gradio_web/debug/eroded_image.png")
+    eroded_image.save("debug/eroded_image.png")
 
     filtered_image = Image.new('L', size)
     for x in range(size[0]):
@@ -123,6 +123,6 @@ def get_gray_mask_0(key_and_images: tuple[(str, Image.Image)], size):
             min = gray_pixel_filter_min(gray_image, (x,y), [0, 255]) if gray_image.getpixel((x, y)) not in [0, 255] and eroded_image.getpixel((x, y)) == 0 else gray_image.getpixel((x, y))
             filtered_image.putpixel((x, y), min if min == 0 else 255)
     # debug
-    filtered_image.save("/Users/binciluo/Desktop/multimodal-service/gradio_web/debug/filtered_image.png")
+    filtered_image.save("debug/filtered_image.png")
 
     return filtered_image

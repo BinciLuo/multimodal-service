@@ -6,4 +6,4 @@ __pycache__/
 gradio_web/gradio_cached_examples
 mac_runner.sh
 gradio_web/output_masks.json
-gradio_web/debug
+gradio_web/debug/*

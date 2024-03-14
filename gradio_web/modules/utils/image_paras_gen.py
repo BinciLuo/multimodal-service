@@ -141,8 +141,6 @@ def form_post_img2img_paras(init_img_str:str , query: str , loras:list[str]=[], 
         "prompt": kwargv.get("prompt", template_paras.get("prompt", None)),
         "negative_prompt": kwargv.get("negative_prompt", template_paras.get("negative_prompt", None)),
         "denoising_strength": kwargv.get("denoising_strength", None) if kwargv.get("template", None) == "inpaintSD" else template_paras.get("denoising_strength", None),
-        # FIXME: Search in template_paras first
-        #"denoising_strength": kwargv.get("denoising_strength", template_paras.get("denoising_strength", None)),
         "sampler_index": kwargv.get("sampler_index", template_paras.get("sampler_index", None)),
         "seed": kwargv.get("seed", template_paras.get("seed", None)),
         "steps": kwargv.get("steps", template_paras.get("steps", None)),

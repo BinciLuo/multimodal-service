@@ -136,7 +136,7 @@ def auto_black_keywords(image: Image.Image, mask_images: dict, keys_words: list[
                     image.putpixel((x, y), (0, 0, 0, 255))
     return image
 
-@functools.lru_cache(32)
+@functools.lru_cache
 # TODO: change instruction
 def auto_black_by_keywords(image: str, base_image: str, keywords: str, reverse: bool = False):
     """

@@ -26,7 +26,7 @@ class TestSD(unittest.TestCase):
         paras, e = form_post_img2img_paras(init_img_str,'test1',[], template="inpaintSD", prompt = "test2")
         self.assertEqual(None, e, e)
         self.assertEqual("SD", paras["source"], f"form_post_img2img_paras failed with template: inpaintSD")
-        self.assertEqual("test1test2", paras["prompt"], f"form_post_img2img_paras failed with template: inpaintSD")
+        self.assertEqual("(test1:2)test2", paras["prompt"], f"form_post_img2img_paras failed with template: inpaintSD")
         print("\t😃inpaintSD func success")
 
         # face
@@ -34,7 +34,7 @@ class TestSD(unittest.TestCase):
         self.assertEqual(None, e, e)
         self.assertEqual("SD", paras["source"], f"form_post_img2img_paras failed with template: face")
         self.assertEqual(0.2, paras["denoising_strength"], f"form_post_img2img_paras failed with template: face")
-        self.assertEqual("test1test2", paras["prompt"], f"form_post_img2img_paras failed with template: face")
+        self.assertEqual("(test1:2)test2", paras["prompt"], f"form_post_img2img_paras failed with template: face")
         self.assertEqual(paras["alwayson_scripts"]["controlnet"]["args"][0]["input_image"], init_img_str, "Init_img_str not applied")
         print("\t😃face func success")
 

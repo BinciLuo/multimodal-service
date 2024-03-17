@@ -137,7 +137,7 @@ with gr.Blocks() as demo:
 
     picGenBtn.click(generate_pic_process,[img_input, Settings_IMG2IMG_LoRaDropdown, Settings_Size_WidthSlider, Settings_Size_HeightSlider],[BaseIMG_BaseIMGViewer], show_progress=True)
     
-    picChangeBtn.click(change_pic_process,[BaseIMG_BaseIMGViewer, img_input, Settings_IMG2IMG_LoRaDropdown, img_gen_template_dropdown, EditIMG_Editor_MaskViewer, EditIMG_Editor_ImageEditor], [EditedIMG_EditedIMGViewer], show_progress=True)
+    picChangeBtn.click(change_pic_process,[BaseIMG_BaseIMGViewer, img_input, Settings_IMG2IMG_LoRaDropdown, img_gen_template_dropdown, EditIMG_MaskViewer, EditIMG_Editor_ImageEditor], [EditedIMG_EditedIMGViewer], show_progress=True)
     
     CheckBtn.click(check_status_process,[],[])
 
@@ -145,7 +145,7 @@ with gr.Blocks() as demo:
 
     EditedIMG_SetBaseImageBtn.click(set_base_image,[EditedIMG_EditedIMGViewer],[BaseIMG_BaseIMGViewer])
 
-    EditIMG_SubmitMaskBtn.click(submit_mask_process,[EditIMG_Editor_ImageEditor],[EditIMG_Editor_MaskViewer, EditIMG_Editor_ImageEditor])
+    EditIMG_SubmitMaskBtn.click(submit_mask_process,[EditIMG_Editor_ImageEditor],[EditIMG_MaskViewer, EditIMG_Editor_ImageEditor])
 
     EditIMG_Editor_AutoFillBtn.click(auto_mask_process,[EditIMG_Editor_ImageEditor, BaseIMG_BaseIMGViewer],[EditIMG_Editor_ImageEditor])
 
@@ -153,8 +153,8 @@ with gr.Blocks() as demo:
 
     EditIMG_ChangeFace_ChangeFaceBtn.click(change_face_process, [BaseIMG_BaseIMGViewer, EditIMG_ChangeFace_FaceTargetViewer], [EditedIMG_EditedIMGViewer], show_progress=True)
 
-    OperationBoard_ExecSelectedBtn.click(exec_commands_process,[OperationBoard_CommandDropdown, BaseIMG_BaseIMGViewer, EditIMG_Editor_ImageEditor, EditIMG_Editor_MaskViewer, EditedIMG_EditedIMGViewer, img_input, Settings_IMG2IMG_LoRaDropdown, Settings_IMG2IMG_DenoisingInpaintSlider], [EditIMG_Editor_ImageEditor, EditIMG_Editor_MaskViewer, EditedIMG_EditedIMGViewer])
-    OperationBoard_ExecAllBtn.click(exec_all_commands_process,[BaseIMG_BaseIMGViewer, EditIMG_Editor_ImageEditor, EditIMG_Editor_MaskViewer, EditedIMG_EditedIMGViewer, img_input, Settings_IMG2IMG_LoRaDropdown, Settings_IMG2IMG_DenoisingInpaintSlider], [EditIMG_Editor_ImageEditor, EditIMG_Editor_MaskViewer, EditedIMG_EditedIMGViewer])
+    OperationBoard_ExecSelectedBtn.click(exec_commands_process,[OperationBoard_CommandDropdown, BaseIMG_BaseIMGViewer, EditIMG_Editor_ImageEditor, EditIMG_MaskViewer, EditedIMG_EditedIMGViewer, img_input, Settings_IMG2IMG_LoRaDropdown, Settings_IMG2IMG_DenoisingInpaintSlider], [EditIMG_Editor_ImageEditor, EditIMG_MaskViewer, EditedIMG_EditedIMGViewer])
+    OperationBoard_ExecAllBtn.click(exec_all_commands_process,[BaseIMG_BaseIMGViewer, EditIMG_Editor_ImageEditor, EditIMG_MaskViewer, EditedIMG_EditedIMGViewer, img_input, Settings_IMG2IMG_LoRaDropdown, Settings_IMG2IMG_DenoisingInpaintSlider], [EditIMG_Editor_ImageEditor, EditIMG_MaskViewer, EditedIMG_EditedIMGViewer])
     OperationBoard_ClearCmdsBtn.click(clear_commands_process,[],[OperationBoard_CommandDropdown])
 
     #sendToEditorBtn.click(send_to_editor_process,[base_image],[image_editor])

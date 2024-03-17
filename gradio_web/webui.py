@@ -49,21 +49,23 @@ with gr.Blocks() as demo:
     with gr.Accordion("Operation Board"):
         with gr.Row():
             with gr.Column(scale=5):
-                command_dropdown = gr.Dropdown(choices=commands, type='index', label="command", multiselect=True)
+                OperationBoard_CommandDropdown = gr.Dropdown(choices=commands, type='index', label="command", multiselect=True)
             with gr.Column(scale=1):
-                execSelectedBtn = gr.Button("Exec Selected Commands", variant="primary")
-                execAllBtn = gr.Button("Exec All Commands", variant='primary')
-                clearCmdsBtn = gr.Button("Clear Commands", variant='stop')
+                OperationBoard_ExecSelectedBtn = gr.Button("Exec Selected Commands", variant="primary")
+                OperationBoard_ExecAllBtn = gr.Button("Exec All Commands", variant='primary')
+                OperationBoard_ClearCmdsBtn = gr.Button("Clear Commands", variant='stop')
+        # TODO: not used now
         extractBtn = gr.Button("Extract Instruction", visible=False)
     with gr.Accordion("Settings", open=False):
         with gr.Tab("Pic"):
             with gr.Tab("img2img"):
-                denoisingInpaintSlider = gr.Slider(0, 1, label='img2img_denoising_strength', value=0.6, step=0.05)
-                lora_dropdown = gr.Dropdown(choices=loras, type='value', label="lora", multiselect=True)
-                loraRefreshBtn = gr.Button("Refresh loras", variant="primary", scale=1, size='sm')
+                Settings_IMG2IMG_DenoisingInpaintSlider = gr.Slider(0, 1, label='img2img_denoising_strength', value=0.6, step=0.05)
+                Settings_IMG2IMG_LoRaDropdown = gr.Dropdown(choices=loras, type='value', label="lora", multiselect=True)
+                Settings_IMG2IMG_LoRaRefreshBtn = gr.Button("Refresh loras", variant="primary", scale=1, size='sm')
             with gr.Tab("Size"):
-                widthSlider = gr.Slider(0, 1920, label='width', value=512, step=1)
-                heightSlider = gr.Slider(0, 1080, label='height', value=512, step=1)
+                # TODO: not used now
+                Settings_Size_WidthSlider = gr.Slider(0, 1920, label='width', value=512, step=1)
+                Settings_Size_HeightSlider = gr.Slider(0, 1080, label='height', value=512, step=1)
             
             
     
@@ -72,14 +74,14 @@ with gr.Blocks() as demo:
     with gr.Row():
         with gr.Column(scale=1):
             with gr.Tab("Base Image"):
-                base_image = gr.Image(label='Base Image', type='pil', interactive=True)
+                BaseIMG_BaseIMGViewer = gr.Image(label='Base Image', type='pil', interactive=True)
                 with gr.Accordion("Examples", open=False): 
-                    gr.Examples(["example/"+filename for filename in os.listdir("./example") if filename.split('.')[-1].lower() in ["jpeg","jpg","png"]], base_image)
+                    gr.Examples(["example/"+filename for filename in os.listdir("./example") if filename.split('.')[-1].lower() in ["jpeg","jpg","png"]], BaseIMG_BaseIMGViewer)
 
             with gr.Tab("Edited Image"):
-                edited_image = gr.Image(label='Edited Image', type='pil', interactive=False)
-                setBaseImageBtn = gr.Button("Set as Base Image", variant="primary")
-            checkBtn = gr.Button("Check Server Status", variant="primary")
+                EditedIMG_EditedIMGViewer = gr.Image(label='Edited Image', type='pil', interactive=False)
+                EditedIMG_SetBaseImageBtn = gr.Button("Set as Base Image", variant="primary")
+            CheckBtn = gr.Button("Check Server Status", variant="primary")
             #sendToEditorBtn = gr.Button("Send to Editor", variant='primary')
 
 
@@ -87,36 +89,37 @@ with gr.Blocks() as demo:
             with gr.Tab("Chat"):
                 with gr.Accordion("Chat"):
                     with gr.Column():
-                        chatbot = gr.Chatbot(height= 300)
-                        user_input = gr.Textbox(show_label=False, placeholder="输入命令", container=False, show_copy_button=True, lines=3)
+                        Chat_Chatbot = gr.Chatbot(height= 300)
+                        Chat_UserInput = gr.Textbox(show_label=False, placeholder="输入命令", container=False, show_copy_button=True, lines=3)
                         with gr.Accordion("Examples", open=False):
-                            gr.Examples(examples_jmap["query"], user_input)
+                            gr.Examples(examples_jmap["query"], Chat_UserInput)
                     with gr.Row():
-                        model_select_box = gr.Dropdown(choices=chat_config["models"].keys(), type='value', label="model", value="gpt3dot5turbo")
-                        instruction_template_dropdown = gr.Dropdown(choices=[info["description"] for info in INSTRUCTION_PROMPT_FILES_INFO], type='index', label="prompt", value=0)
+                        Chat_ModelSelectDropdown = gr.Dropdown(choices=chat_config["models"].keys(), type='value', label="model", value="gpt3dot5turbo")
+                        Chat_InstructionTemplateDropdown = gr.Dropdown(choices=[info["description"] for info in INSTRUCTION_PROMPT_FILES_INFO], type='index', label="prompt", value=0)
                     with gr.Row():
-                        submitBtn = gr.Button("Submit", variant="primary")
-                        emptyBtn = gr.Button("Clear History", variant="stop")
+                        Chat_SubmitBtn = gr.Button("Submit", variant="primary")
+                        Chat_EmptyBtn = gr.Button("Clear History", variant="stop", visible=False)
 
             with gr.Tab("Edit Image"):
                 with gr.Accordion("Editor"):
                     with gr.Row():
-                        imageEditor = gr.ImageMask(label='Edit', type='pil', interactive=True, show_download_button= True)
-                        maskImage = gr.Image(label='Mask Image', type='pil', interactive=False, image_mode='RGBA')
+                        EditIMG_Editor_ImageEditor = gr.ImageMask(label='Edit', type='pil', interactive=True, show_download_button= True)
+                        EditIMG_MaskViewer = gr.Image(label='Mask Image', type='pil', interactive=False, image_mode='RGBA')
                     with gr.Row():
                         with gr.Column():
-                            autoFillBtn = gr.Button("Auto Fill", variant='primary', size='sm')
-                            undoAutoFillBtn = gr.Button("Undo Auto Fill", variant='primary', size='sm')
-                        submitMaskBtn = gr.Button("Get Mask", variant='primary')
+                            EditIMG_Editor_AutoFillBtn = gr.Button("Auto Fill", variant='primary', size='sm')
+                            EditIMG_Editor_UndoAutoFillBtn = gr.Button("Undo Auto Fill", variant='primary', size='sm')
+                        EditIMG_SubmitMaskBtn = gr.Button("Get Mask", variant='primary')
                 with gr.Accordion("Change Face"):
-                    faceTargetImage = gr.Image(label='Target', type='pil', interactive=True)
-                    changeFaceBtn = gr.Button("Change Face", variant='primary')
+                    EditIMG_ChangeFace_FaceTargetViewer = gr.Image(label='Target', type='pil', interactive=True)
+                    EditIMG_ChangeFace_ChangeFaceBtn = gr.Button("Change Face", variant='primary')
                     with gr.Accordion("Examples", open=False):
-                        gr.Examples(["example/"+filename for filename in os.listdir("./example") if filename.split('.')[-1].lower() in ["jpeg","jpg","png"]], faceTargetImage)
-                img_gen_template_dropdown = gr.Dropdown(choices=img_gen_template_dict.keys(), type='value', label="img template", value="default")
-                img_input = gr.Textbox(show_label=False, placeholder="输入生成图像指令", lines=1, container=False, show_copy_button=True)
-                picGenBtn = gr.Button("Generate a Picture", variant="primary")
-                picChangeBtn = gr.Button("Change Picture", variant="primary")
+                        gr.Examples(["example/"+filename for filename in os.listdir("./example") if filename.split('.')[-1].lower() in ["jpeg","jpg","png"]], EditIMG_ChangeFace_FaceTargetViewer)
+                # TODO: not used now
+                img_gen_template_dropdown = gr.Dropdown(choices=img_gen_template_dict.keys(), type='value', label="img template", value="default", visible=False)
+                img_input = gr.Textbox(show_label=False, placeholder="输入生成图像指令", lines=1, container=False, show_copy_button=True, visible=False)
+                picGenBtn = gr.Button("Generate a Picture", variant="primary", visible=False)
+                picChangeBtn = gr.Button("Change Picture", variant="primary", visible=False)
 
     with gr.Accordion("Manual", open=False):
         gr.Markdown(open('man.md', 'r').read())
@@ -124,41 +127,41 @@ with gr.Blocks() as demo:
     history = gr.State([])
 
     # Btn
-    submitBtn.click(chat_process, [user_input, model_select_box, instruction_template_dropdown, chatbot], [chatbot, history],
+    Chat_SubmitBtn.click(chat_process, [Chat_UserInput, Chat_ModelSelectDropdown, Chat_InstructionTemplateDropdown, Chat_Chatbot], [Chat_Chatbot, history],
                     show_progress=True)
-    submitBtn.click(reset_user_input, [], [user_input])
+    Chat_SubmitBtn.click(reset_user_input, [], [Chat_UserInput])
 
-    emptyBtn.click(reset_state, outputs=[chatbot, history, command_dropdown, base_image], show_progress=True)
+    Chat_EmptyBtn.click(reset_state, outputs=[Chat_Chatbot, history, OperationBoard_CommandDropdown, BaseIMG_BaseIMGViewer], show_progress=True)
 
-    extractBtn.click(extract_chat_process, [chatbot, command_dropdown], [chatbot, command_dropdown], show_progress=True)
+    extractBtn.click(extract_chat_process, [Chat_Chatbot, OperationBoard_CommandDropdown], [Chat_Chatbot, OperationBoard_CommandDropdown], show_progress=True)
 
-    picGenBtn.click(generate_pic_process,[img_input, lora_dropdown, widthSlider, heightSlider],[base_image], show_progress=True)
+    picGenBtn.click(generate_pic_process,[img_input, Settings_IMG2IMG_LoRaDropdown, Settings_Size_WidthSlider, Settings_Size_HeightSlider],[BaseIMG_BaseIMGViewer], show_progress=True)
     
-    picChangeBtn.click(change_pic_process,[base_image, img_input, lora_dropdown, img_gen_template_dropdown, maskImage, imageEditor], [edited_image], show_progress=True)
+    picChangeBtn.click(change_pic_process,[BaseIMG_BaseIMGViewer, img_input, Settings_IMG2IMG_LoRaDropdown, img_gen_template_dropdown, EditIMG_Editor_MaskViewer, EditIMG_Editor_ImageEditor], [EditedIMG_EditedIMGViewer], show_progress=True)
     
-    checkBtn.click(check_status_process,[],[])
+    CheckBtn.click(check_status_process,[],[])
 
-    loraRefreshBtn.click(refresh_loras,[],[lora_dropdown])
+    Settings_IMG2IMG_LoRaRefreshBtn.click(refresh_loras,[],[Settings_IMG2IMG_LoRaDropdown])
 
-    setBaseImageBtn.click(set_base_image,[edited_image],[base_image])
+    EditedIMG_SetBaseImageBtn.click(set_base_image,[EditedIMG_EditedIMGViewer],[BaseIMG_BaseIMGViewer])
 
-    submitMaskBtn.click(submit_mask_process,[imageEditor],[maskImage, imageEditor])
+    EditIMG_SubmitMaskBtn.click(submit_mask_process,[EditIMG_Editor_ImageEditor],[EditIMG_Editor_MaskViewer, EditIMG_Editor_ImageEditor])
 
-    autoFillBtn.click(auto_mask_process,[imageEditor, base_image],[imageEditor])
+    EditIMG_Editor_AutoFillBtn.click(auto_mask_process,[EditIMG_Editor_ImageEditor, BaseIMG_BaseIMGViewer],[EditIMG_Editor_ImageEditor])
 
-    undoAutoFillBtn.click(undo_auto_mask_process,[],[imageEditor])
+    EditIMG_Editor_UndoAutoFillBtn.click(undo_auto_mask_process,[],[EditIMG_Editor_ImageEditor])
 
-    changeFaceBtn.click(change_face_process, [base_image, faceTargetImage], [edited_image], show_progress=True)
+    EditIMG_ChangeFace_ChangeFaceBtn.click(change_face_process, [BaseIMG_BaseIMGViewer, EditIMG_ChangeFace_FaceTargetViewer], [EditedIMG_EditedIMGViewer], show_progress=True)
 
-    execSelectedBtn.click(exec_commands_process,[command_dropdown, base_image, imageEditor, maskImage, edited_image, img_input, lora_dropdown, denoisingInpaintSlider], [imageEditor, maskImage, edited_image])
-    execAllBtn.click(exec_all_commands_process,[base_image, imageEditor, maskImage, edited_image, img_input, lora_dropdown, denoisingInpaintSlider], [imageEditor, maskImage, edited_image])
-    clearCmdsBtn.click(clear_commands_process,[],[command_dropdown])
+    OperationBoard_ExecSelectedBtn.click(exec_commands_process,[OperationBoard_CommandDropdown, BaseIMG_BaseIMGViewer, EditIMG_Editor_ImageEditor, EditIMG_Editor_MaskViewer, EditedIMG_EditedIMGViewer, img_input, Settings_IMG2IMG_LoRaDropdown, Settings_IMG2IMG_DenoisingInpaintSlider], [EditIMG_Editor_ImageEditor, EditIMG_Editor_MaskViewer, EditedIMG_EditedIMGViewer])
+    OperationBoard_ExecAllBtn.click(exec_all_commands_process,[BaseIMG_BaseIMGViewer, EditIMG_Editor_ImageEditor, EditIMG_Editor_MaskViewer, EditedIMG_EditedIMGViewer, img_input, Settings_IMG2IMG_LoRaDropdown, Settings_IMG2IMG_DenoisingInpaintSlider], [EditIMG_Editor_ImageEditor, EditIMG_Editor_MaskViewer, EditedIMG_EditedIMGViewer])
+    OperationBoard_ClearCmdsBtn.click(clear_commands_process,[],[OperationBoard_CommandDropdown])
 
     #sendToEditorBtn.click(send_to_editor_process,[base_image],[image_editor])
 
     # events
-    base_image.change(change_base_image_process,[base_image, chatbot],[imageEditor, chatbot, command_dropdown])
-    chatbot.change(extract_chat_process,[chatbot, command_dropdown],[chatbot, command_dropdown])
+    BaseIMG_BaseIMGViewer.change(change_base_image_process,[BaseIMG_BaseIMGViewer, Chat_Chatbot],[EditIMG_Editor_ImageEditor, Chat_Chatbot, OperationBoard_CommandDropdown])
+    Chat_Chatbot.change(extract_chat_process,[Chat_Chatbot, OperationBoard_CommandDropdown],[Chat_Chatbot, OperationBoard_CommandDropdown])
 
 
 

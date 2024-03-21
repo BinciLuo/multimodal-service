@@ -34,6 +34,28 @@ func PostGPT3Dot5Turbo(query string, history jarray) (jmap, error) {
 	return r, nil
 }
 
+func PostGPT4(query string, history jarray) (jmap, error) {
+	r := make(jmap)
+
+	FormChatGPTMessages(ChatGPTHead, history)
+	UpdateChatGPTUserChatMessages(query)
+	resp, err := OpenAIClient2.CreateChatCompletion(
+		context.Background(),
+		openai.ChatCompletionRequest{
+			Model:    openai.GPT4,
+			Messages: ChatGPTMessages,
+		},
+	)
+
+	if err != nil {
+		log.Printf("ChatCompletion client2 error: %v\n, ", err)
+		return nil, err
+	}
+
+	r["chat"] = resp.Choices[0].Message.Content
+	return r, nil
+}
+
 func PostChatGLM2_6B(params jmap) (jmap, error) {
 	r := make(jmap)
 

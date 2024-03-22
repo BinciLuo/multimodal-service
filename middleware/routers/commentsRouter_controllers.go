@@ -94,4 +94,13 @@ func init() {
 			Filters:          nil,
 			Params:           nil})
 
+	beego.GlobalControllerRouter["middleware/controllers:ChatController"] = append(beego.GlobalControllerRouter["middleware/controllers:ChatController"],
+		beego.ControllerComments{
+			Method:           "PostGPT4V",
+			Router:           "/gpt4v",
+			AllowHTTPMethods: []string{"post"},
+			MethodParams:     param.Make(),
+			Filters:          nil,
+			Params:           nil})
+
 }

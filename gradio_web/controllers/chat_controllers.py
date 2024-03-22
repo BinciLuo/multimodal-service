@@ -35,6 +35,7 @@ def advise_process(inputs, prompt_index=0, chatbot=None, base_image=None):
     """
     adviseBtn process function
     """
+    inputs = "请给出修改的建议"
     global history
     prompt_file_name = INSTRUCTION_PROMPT_FILES_INFO[prompt_index]["file_path"]
     with open(prompt_file_name,'r') as f:

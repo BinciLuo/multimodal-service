@@ -65,6 +65,7 @@ with gr.Blocks() as demo:
             with gr.Tab("Chat"):
                 Settings_Chat_ModelSelectDropdown = gr.Dropdown(choices=chat_config["models"].keys(), type='value', label="model", value="gpt3dot5turbo")
                 Settings_Chat_InstructionTemplateDropdown = gr.Dropdown(choices=[info["description"] for info in INSTRUCTION_PROMPT_FILES_INFO], type='index', label="prompt", value=0)
+                Settings_Chat_AdviseTemplateDropdown = gr.Dropdown(choices=[info["description"] for info in INSTRUCTION_PROMPT_FILES_INFO], type='index', label="prompt", value=2)
             with gr.Tab("Size"):
                 # TODO: not used now
                 Settings_Size_WidthSlider = gr.Slider(0, 1920, label='width', value=512, step=1)
@@ -130,7 +131,7 @@ with gr.Blocks() as demo:
     # Btn
     Chat_SubmitBtn.click(chat_process, [Chat_UserInput, Settings_Chat_ModelSelectDropdown, Settings_Chat_InstructionTemplateDropdown, Chat_Chatbot], [Chat_Chatbot, history],show_progress=True)
 
-    Chat_AdviseBtn.click(advise_process, [Chat_UserInput, Settings_Chat_InstructionTemplateDropdown, Chat_Chatbot, BaseIMG_BaseIMGViewer], [Chat_Chatbot, history],show_progress=True)
+    Chat_AdviseBtn.click(advise_process, [Chat_UserInput, Settings_Chat_AdviseTemplateDropdown, Chat_Chatbot, BaseIMG_BaseIMGViewer], [Chat_Chatbot, history],show_progress=True)
 
     Chat_SubmitBtn.click(reset_user_input, [], [Chat_UserInput])
 

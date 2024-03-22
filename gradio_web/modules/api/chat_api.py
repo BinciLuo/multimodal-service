@@ -59,7 +59,9 @@ def post_gpt4v(query: str, sever_url:str, init_image_str: str, history: list[tup
         return "", f"[Chat] route of model [{model_name}] not found"
     
     post_data = {"query": query, "history": history, "init_image": init_image_str}
-
+    print("-----------------------POST GPT4V---------------------")
+    print(f'query: {post_data["query"]}')
+    print("------------------------------------------------------\n\n")
     response=requests.post(sever_url+model_info[model_name]["route"], data=json.dumps(post_data))
     if response.status_code != 200:
         return "", f"[Chat] {model_name} failed"

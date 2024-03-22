@@ -31,6 +31,10 @@
                 "description" : "Give template and examples",
                 "file_path" : "prompts/instruction_generate_prompt.txt",
                 "user_input_replace" : "HERE IS USER INPUT"
+            },
+            {
+                "description" : "GPT4V Legality Statement",
+                "file_path" : "prompts/legality_statement.txt"
             }
         ]
     }

@@ -64,8 +64,8 @@ with gr.Blocks() as demo:
                 Settings_IMG2IMG_LoRaRefreshBtn = gr.Button("Refresh loras", variant="primary", scale=1, size='sm')
             with gr.Tab("Chat"):
                 Settings_Chat_ModelSelectDropdown = gr.Dropdown(choices=chat_config["models"].keys(), type='value', label="model", value="gpt3dot5turbo")
-                Settings_Chat_InstructionTemplateDropdown = gr.Dropdown(choices=[info["description"] for info in INSTRUCTION_PROMPT_FILES_INFO], type='index', label="prompt", value=0)
-                Settings_Chat_AdviseTemplateDropdown = gr.Dropdown(choices=[info["description"] for info in INSTRUCTION_PROMPT_FILES_INFO], type='index', label="prompt", value=2)
+                Settings_Chat_InstructionTemplateDropdown = gr.Dropdown(choices=[info["description"] for info in INSTRUCTION_PROMPT_FILES_INFO], type='value', label="chat prompt", value='Default')
+                Settings_Chat_AdviseTemplateDropdown = gr.Dropdown(choices=[info["description"] for info in INSTRUCTION_PROMPT_FILES_INFO], type='value', label="gpt4v prompt", value='GPT4V Legality Statement')
             with gr.Tab("Size"):
                 # TODO: not used now
                 Settings_Size_WidthSlider = gr.Slider(0, 1920, label='width', value=512, step=1)

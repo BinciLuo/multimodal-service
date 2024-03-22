@@ -10,15 +10,20 @@ commands = []
 global history
 history = []
 
-def chat_process(inputs, model_name, prompt_index=0, chatbot=None):
+def chat_process(inputs, model_name, prompt_description, chatbot=None):
     """
     submitBtn process function
     """
     global history
-    prompt_file_name = INSTRUCTION_PROMPT_FILES_INFO[prompt_index]["file_path"]
+    prompt_file_name = None
+    for file_info in INSTRUCTION_PROMPT_FILES_INFO:
+        if file_info['description'] == prompt_description:
+            prompt_file_name = file_info["file_path"]
+            break
+
     with open(prompt_file_name,'r') as f:
         infer_text = f.read()
-    infer_text = infer_text.replace(INSTRUCTION_PROMPT_FILES_INFO[prompt_index]["user_input_replace"], inputs)
+    infer_text = infer_text.replace(INSTRUCTION_PROMPT_FILES_INFO[prompt_description]["user_input_replace"], inputs)
     answer, e = post_chat(model_name, infer_text, SERVER_URL, history)
     print(answer)
     if e != None:
@@ -31,16 +36,20 @@ def chat_process(inputs, model_name, prompt_index=0, chatbot=None):
 
     return chatbot, None
 
-def advise_process(inputs, prompt_index=0, chatbot=None, base_image=None):
+def advise_process(inputs, prompt_description, chatbot=None, base_image=None):
     """
     adviseBtn process function
     """
     inputs = inputs+"  请给出修改的建议"
     global history
-    prompt_file_name = INSTRUCTION_PROMPT_FILES_INFO[prompt_index]["file_path"]
+    prompt_file_name = None
+    for file_info in INSTRUCTION_PROMPT_FILES_INFO:
+        if file_info['description'] == prompt_description:
+            prompt_file_name = file_info["file_path"]
+            break
     with open(prompt_file_name,'r') as f:
         infer_text = f.read()
-    infer_text = infer_text.replace(INSTRUCTION_PROMPT_FILES_INFO[prompt_index]["user_input_replace"], inputs)
+    infer_text = infer_text.replace(INSTRUCTION_PROMPT_FILES_INFO[prompt_description]["user_input_replace"], inputs)
     answer, e = post_gpt4v(infer_text, SERVER_URL, trans_image_to_str(base_image),history)
     print(answer)
     if e != None:

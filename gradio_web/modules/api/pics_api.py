@@ -43,9 +43,11 @@ def post_img2img(paras: dict, source: str):
     """
     # ------------------------------------------------------
     # log paras
+    print("------------------POST IMG2IMG------------------------")
     for key in paras.keys():
         if key not in ["init_images","mask","mask_image","alwayson_scripts"]:
             print(f"{key}: {paras[key]}")
+    print("------------------------------------------------------\n\n")
     # ------------------------------------------------------
     # Begin check route
     if "route" not in picture_process_info["img2img"].keys():

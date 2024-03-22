@@ -44,7 +44,7 @@ gradio_web(Image preprocessing, GUI)
      api       |---api---> StableDiffusion
       |        |
 middleware <===|---api---> OpenAI
-               |          (GPT3.5turbo, DALLE)
+               |          (GPT3.5turbo/GPT4, DALLE)
                |
                |---api---> ChatGLM2-6B
 ```

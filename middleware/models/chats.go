@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"strconv"
@@ -21,6 +22,28 @@ func PostGPT3Dot5Turbo(query string, history jarray) (jmap, error) {
 		context.Background(),
 		openai.ChatCompletionRequest{
 			Model:    openai.GPT3Dot5Turbo,
+			Messages: ChatGPTMessages,
+		},
+	)
+
+	if err != nil {
+		log.Printf("ChatCompletion client2 error: %v\n, ", err)
+		return nil, err
+	}
+
+	r["chat"] = resp.Choices[0].Message.Content
+	return r, nil
+}
+
+func PostGPT4(query string, history jarray) (jmap, error) {
+	r := make(jmap)
+
+	FormChatGPTMessages(ChatGPTHead, history)
+	UpdateChatGPTUserChatMessages(query)
+	resp, err := OpenAIClient2.CreateChatCompletion(
+		context.Background(),
+		openai.ChatCompletionRequest{
+			Model:    openai.GPT4,
 			Messages: ChatGPTMessages,
 		},
 	)
@@ -61,4 +84,53 @@ func PostChatGLM2_6B(params jmap) (jmap, error) {
 
 	return r, nil
 
+}
+
+func PostGPT4V(query string, history jarray, init_image string) (jmap, error) {
+	r := make(jmap)
+	apiURL := "https://api.openai.com/v1/chat/completions"
+	openaiAPIKey := OpenAIKey
+
+	// 构建请求体数据
+	data := jmap{
+		"model":      "gpt-4-vision-preview",
+		"messages":   FormGPT4VMessages(ChatGPTHead, query, init_image, history),
+		"max_tokens": 300,
+	}
+
+	// 将请求体数据转换为JSON格式
+	payload, err := json.Marshal(data)
+	if err != nil {
+		return nil, err
+	}
+
+	// 发送POST请求到OpenAI API
+	req, err := http.NewRequest("POST", apiURL, bytes.NewBuffer(payload))
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", openaiAPIKey))
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	// 读取API响应
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	// 解析响应数据为JSON格式
+	var result jmap
+	err = json.Unmarshal(body, &result)
+	if err != nil {
+		return nil, err
+	}
+	r["chat"] = result["choices"].(jarray)[0].(jmap)["message"].(jmap)["content"]
+	return r, nil
 }

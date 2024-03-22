@@ -1,7 +1,8 @@
 import gradio as gr
 
-from modules.api.chat_api import post_chat
+from modules.api.chat_api import post_chat, post_gpt4v
 from modules.utils.instruction_processing import extract_instructions
+from modules.utils.image_io import trans_image_to_str
 
 from const import *
 
@@ -9,16 +10,47 @@ commands = []
 global history
 history = []
 
-def chat_process(inputs, model_name, prompt_index=0, chatbot=None):
+def chat_process(inputs, model_name, prompt_description, chatbot=None):
     """
     submitBtn process function
     """
     global history
-    prompt_file_name = INSTRUCTION_PROMPT_FILES_INFO[prompt_index]["file_path"]
-    with open(prompt_file_name,'r') as f:
+    prompt_file_info = None
+    for file_info in INSTRUCTION_PROMPT_FILES_INFO:
+        if file_info['description'] == prompt_description:
+            prompt_file_info = file_info
+            break
+
+    with open(prompt_file_info['file_path'],'r') as f:
         infer_text = f.read()
-    infer_text = infer_text.replace(INSTRUCTION_PROMPT_FILES_INFO[prompt_index]["user_input_replace"], inputs)
+    infer_text = infer_text.replace(prompt_file_info["user_input_replace"], inputs)
     answer, e = post_chat(model_name, infer_text, SERVER_URL, history)
+    print(answer)
+    if e != None:
+        gr.Warning(e)
+        return chatbot, None
+    chatbot.append((inputs,""))
+    history.append((inputs, answer))
+    history = history[-10:] if len(history) > 10 else history
+    chatbot[-1] = (inputs, answer)
+
+    return chatbot, None
+
+def advise_process(inputs, prompt_description, chatbot=None, base_image=None):
+    """
+    adviseBtn process function
+    """
+    inputs = inputs+"  请给出修改的建议"
+    global history
+    prompt_file_info = None
+    for file_info in INSTRUCTION_PROMPT_FILES_INFO:
+        if file_info['description'] == prompt_description:
+            prompt_file_info = file_info
+            break
+    with open(prompt_file_info['file_path'],'r') as f:
+        infer_text = f.read()
+    infer_text = infer_text.replace(prompt_file_info["user_input_replace"], inputs)
+    answer, e = post_gpt4v(infer_text, SERVER_URL, trans_image_to_str(base_image),history)
     print(answer)
     if e != None:
         gr.Warning(e)

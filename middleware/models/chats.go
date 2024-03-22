@@ -87,6 +87,7 @@ func PostChatGLM2_6B(params jmap) (jmap, error) {
 }
 
 func PostGPT4V(query string, history jarray, init_image string) (jmap, error) {
+	r := make(jmap)
 	apiURL := "https://api.openai.com/v1/chat/completions"
 	openaiAPIKey := OpenAIKey
 
@@ -130,6 +131,6 @@ func PostGPT4V(query string, history jarray, init_image string) (jmap, error) {
 	if err != nil {
 		return nil, err
 	}
-
+	r["chat"] = result["choices"].(jarray)[0].(jmap)["message"].(jmap)["content"]
 	return result, nil
 }

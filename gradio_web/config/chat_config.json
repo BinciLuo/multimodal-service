@@ -12,6 +12,10 @@
         "glm2_6b":
         {
             "route":"/v1/chat/glm2_6b"
+        },
+        "gpt4v":
+        {
+            "route":"/v1/chat/gpt4v"
         }
     },
     "prompt_templates":

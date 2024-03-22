@@ -62,6 +62,9 @@ with gr.Blocks() as demo:
                 Settings_IMG2IMG_DenoisingInpaintSlider = gr.Slider(0, 1, label='img2img_denoising_strength', value=0.6, step=0.05)
                 Settings_IMG2IMG_LoRaDropdown = gr.Dropdown(choices=loras, type='value', label="lora", multiselect=True)
                 Settings_IMG2IMG_LoRaRefreshBtn = gr.Button("Refresh loras", variant="primary", scale=1, size='sm')
+            with gr.Tab("Chat"):
+                Settings_Chat_ModelSelectDropdown = gr.Dropdown(choices=chat_config["models"].keys(), type='value', label="model", value="gpt3dot5turbo")
+                Settings_Chat_InstructionTemplateDropdown = gr.Dropdown(choices=[info["description"] for info in INSTRUCTION_PROMPT_FILES_INFO], type='index', label="prompt", value=0)
             with gr.Tab("Size"):
                 # TODO: not used now
                 Settings_Size_WidthSlider = gr.Slider(0, 1920, label='width', value=512, step=1)
@@ -94,10 +97,8 @@ with gr.Blocks() as demo:
                         with gr.Accordion("Examples", open=False):
                             gr.Examples(examples_jmap["query"], Chat_UserInput)
                     with gr.Row():
-                        Chat_ModelSelectDropdown = gr.Dropdown(choices=chat_config["models"].keys(), type='value', label="model", value="gpt3dot5turbo")
-                        Chat_InstructionTemplateDropdown = gr.Dropdown(choices=[info["description"] for info in INSTRUCTION_PROMPT_FILES_INFO], type='index', label="prompt", value=0)
-                    with gr.Row():
                         Chat_SubmitBtn = gr.Button("Submit", variant="primary")
+                        Chat_AdviseBtn = gr.Button("Advise", variant="primary")
                         Chat_EmptyBtn = gr.Button("Clear History", variant="stop", visible=False)
 
             with gr.Tab("Edit Image"):
@@ -127,8 +128,10 @@ with gr.Blocks() as demo:
     history = gr.State([])
 
     # Btn
-    Chat_SubmitBtn.click(chat_process, [Chat_UserInput, Chat_ModelSelectDropdown, Chat_InstructionTemplateDropdown, Chat_Chatbot], [Chat_Chatbot, history],
-                    show_progress=True)
+    Chat_SubmitBtn.click(chat_process, [Chat_UserInput, Settings_Chat_ModelSelectDropdown, Settings_Chat_InstructionTemplateDropdown, Chat_Chatbot], [Chat_Chatbot, history],show_progress=True)
+
+    Chat_AdviseBtn.click(advise_process, [Chat_UserInput, Settings_Chat_InstructionTemplateDropdown, Chat_Chatbot, BaseIMG_BaseIMGViewer], [Chat_Chatbot, history],show_progress=True)
+
     Chat_SubmitBtn.click(reset_user_input, [], [Chat_UserInput])
 
     Chat_EmptyBtn.click(reset_state, outputs=[Chat_Chatbot, history, OperationBoard_CommandDropdown, BaseIMG_BaseIMGViewer], show_progress=True)

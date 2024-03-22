@@ -132,5 +132,5 @@ func PostGPT4V(query string, history jarray, init_image string) (jmap, error) {
 		return nil, err
 	}
 	r["chat"] = result["choices"].(jarray)[0].(jmap)["message"].(jmap)["content"]
-	return result, nil
+	return r, nil
 }

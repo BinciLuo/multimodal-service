@@ -3,7 +3,7 @@ import gradio as gr
 from PIL import Image
 
 from modules.api.pics_api import get_loras
-from controllers.chat_controllers import chat_process, extract_chat_process, reset_state, commands
+from controllers.chat_controllers import chat_process, advise_process ,extract_chat_process, reset_state, commands
 from controllers.pics_controller import change_pic_process, generate_pic_process, set_base_image, change_face_process
 from controllers.utils_controller import auto_mask_process, check_status_process, submit_mask_process, change_base_image_process, undo_auto_mask_process, clear_commands_process
 from controllers.mutimodal_controllers import exec_commands_process, exec_all_commands_process

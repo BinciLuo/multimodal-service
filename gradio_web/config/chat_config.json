@@ -34,7 +34,8 @@
             },
             {
                 "description" : "GPT4V Legality Statement",
-                "file_path" : "prompts/legality_statement.txt"
+                "file_path" : "prompts/legality_statement.txt",
+                "user_input_replace" : "HERE IS USER INPUT"
             }
         ]
     }

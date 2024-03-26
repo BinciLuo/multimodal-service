@@ -85,7 +85,7 @@ def clear_commands_process():
     return gr.Dropdown(choices=[])
 
 def auto_gen_chat_data_process(pic_paths: list[str], num: float):
-    thread_num = 16
+    thread_num = 8
 
     threads_list= [threading.Thread(target=auto_gen_chat_data, args=(pic_paths, int(num/thread_num), i)) for i in range(thread_num)]
     

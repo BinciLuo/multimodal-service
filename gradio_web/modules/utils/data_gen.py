@@ -36,5 +36,6 @@ def auto_gen_chat_data(pic_paths: list[str], num, thread_id):
             data_json["history"] = history
             with open(f"{EXTRACTED_HISTORY_SAVE_PATH}/THREAD{str(thread_id)}_{datetime.now().strftime('%Y-%m-%d_%H:%M:%S')}.json", 'w', encoding='utf-8') as json_file:
                 json.dump(data_json, json_file, ensure_ascii=False, indent=4)
+                json_file.close()
             
 

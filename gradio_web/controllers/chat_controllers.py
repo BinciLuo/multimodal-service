@@ -1,4 +1,6 @@
 import gradio as gr
+import json
+from datetime import datetime
 
 from modules.api.chat_api import post_chat, post_gpt4v
 from modules.utils.instruction_processing import extract_instructions
@@ -62,7 +64,7 @@ def advise_process(inputs, prompt_description, chatbot=None, base_image=None):
 
     return chatbot, None
 
-def extract_chat_process(chatbot, command_dropdown):
+def extract_chat_process(chatbot, command_dropdown, save_extracted_chat):
     """
     extractBtn process function
     """
@@ -85,7 +87,17 @@ def extract_chat_process(chatbot, command_dropdown):
     print(commands)
     command_dropdown = gr.Dropdown(choices=[f'操作为: {cmd["command"]} 参数为: {cmd["paras"]}' for cmd in commands], type='index', label="command", multiselect=True)
     
-
+    if save_extracted_chat:
+        history = []
+        for i in range(len(chatbot)-1):
+            history.append([chatbot[i][0], chatbot[i][1]])
+        data_json = {}
+        data_json["instruction"] = chatbot[-1][0]
+        data_json["input"] = ""
+        data_json["output"] = chatbot[-1][-1]
+        data_json["history"] = history
+        with open(EXTRACTED_HISTORY_SAVE_PATH+datetime.now().strftime('%Y-%m-%d_%H:%M:%S'), 'w') as json_file:
+            json.dump(data_json, json_file)
     return chatbot, command_dropdown
 
 def reset_state():

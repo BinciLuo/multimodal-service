@@ -5,7 +5,7 @@ from PIL import Image
 from modules.api.pics_api import get_loras
 from controllers.chat_controllers import chat_process, advise_process ,extract_chat_process, reset_state, commands
 from controllers.pics_controller import change_pic_process, generate_pic_process, set_base_image, change_face_process
-from controllers.utils_controller import auto_mask_process, check_status_process, submit_mask_process, change_base_image_process, undo_auto_mask_process, clear_commands_process
+from controllers.utils_controller import auto_mask_process, check_status_process, submit_mask_process, change_base_image_process, undo_auto_mask_process, clear_commands_process, auto_gen_chat_data_process
 from controllers.mutimodal_controllers import exec_commands_process, exec_all_commands_process
 
 from const import *
@@ -125,6 +125,12 @@ with gr.Blocks() as demo:
                 picGenBtn = gr.Button("Generate a Picture", variant="primary", visible=False)
                 picChangeBtn = gr.Button("Change Picture", variant="primary", visible=False)
 
+    with gr.Accordion("Auto", open=False):
+        with gr.Tab("Gen_Chat"):
+            Auto_GenChat_FileExplorer = gr.FileExplorer("*.[jpeg,png,jpg]", label="Choose Files")
+            Auto_GenChat_NumSlider = gr.Slider(20, 1000, label='width', value=50, step=10)
+            Auto_GenChat_StartBtn = gr.Button("Start", variant="primary")
+
     with gr.Accordion("Manual", open=False):
         gr.Markdown(open('man.md', 'r').read())
     
@@ -162,6 +168,8 @@ with gr.Blocks() as demo:
     OperationBoard_ExecSelectedBtn.click(exec_commands_process,[OperationBoard_CommandDropdown, BaseIMG_BaseIMGViewer, EditIMG_Editor_ImageEditor, EditIMG_MaskViewer, EditedIMG_EditedIMGViewer, img_input, Settings_IMG2IMG_LoRaDropdown, Settings_IMG2IMG_DenoisingInpaintSlider], [EditIMG_Editor_ImageEditor, EditIMG_MaskViewer, EditedIMG_EditedIMGViewer])
     OperationBoard_ExecAllBtn.click(exec_all_commands_process,[BaseIMG_BaseIMGViewer, EditIMG_Editor_ImageEditor, EditIMG_MaskViewer, EditedIMG_EditedIMGViewer, img_input, Settings_IMG2IMG_LoRaDropdown, Settings_IMG2IMG_DenoisingInpaintSlider], [EditIMG_Editor_ImageEditor, EditIMG_MaskViewer, EditedIMG_EditedIMGViewer])
     OperationBoard_ClearCmdsBtn.click(clear_commands_process,[],[OperationBoard_CommandDropdown])
+
+    Auto_GenChat_StartBtn.click(auto_gen_chat_data_process,[Auto_GenChat_FileExplorer, Auto_GenChat_NumSlider],[])
 
     #sendToEditorBtn.click(send_to_editor_process,[base_image],[image_editor])
 

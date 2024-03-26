@@ -9,6 +9,7 @@ from modules.utils.image_segment import auto_fill_by_blackpoints, replace_black_
 from modules.api.pics_api import post_hgface_img_segment
 from modules.utils.image_io import trans_image_to_str
 from controllers.chat_controllers import history, commands
+from modules.utils.data_gen import *
 
 last_editor = []
 
@@ -82,3 +83,19 @@ def clear_commands_process():
     global commands
     commands.clear()
     return gr.Dropdown(choices=[])
+
+def auto_gen_chat_data_process(pic_paths: list[str], num: float):
+    thread_num = 16
+
+    threads_list= [threading.Thread(target=auto_gen_chat_data, args=(pic_paths, int(num/thread_num), i)) for i in range(thread_num)]
+    
+    for each_thread in threads_list:
+        each_thread.start()
+    for each_thread in threads_list:
+        each_thread.join()
+    
+    gr.Warning(f"Successfully Gen {int(num)} chat data")
+
+    
+
+

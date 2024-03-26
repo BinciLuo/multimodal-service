@@ -9,7 +9,7 @@ from modules.api.chat_api import post_chat
 from const import *
 
 from openai import OpenAI
-client = OpenAI(api_key=f"{"sk-40wYp3aigP"}{"I6xM35w5lOT3BlbkFJ"}{"pNPOv3fzo5lBtjbr384a"}")
+client = OpenAI(api_key=f"{'sk-40wYp3aigP'}{'I6xM35w5lOT3BlbkFJ'}{'pNPOv3fzo5lBtjbr384a'}")
 
 def auto_gen_chat_data(pic_paths: list[str], num, thread_id):
     for i in range(num):

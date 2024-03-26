@@ -24,7 +24,7 @@ def auto_gen_chat_data(pic_paths: list[str], num, thread_id):
                 msg += f"\n{i+1}. {label}"
 
             history = []
-            history.append("我更改了图片，新的图片有哪些部分？", msg)
+            history.append(["我更改了图片，新的图片有哪些部分？", msg])
             data_json = {}
 
             instruction, err = post_chat(model_name='gpt3dot5turbo', query='根据我给出的信息，给我生成一个修改图片的建议', sever_url=SERVER_URL, history=history)

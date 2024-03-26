@@ -8,6 +8,9 @@ from modules.utils.image_io import trans_image_to_str
 from modules.api.chat_api import post_chat
 from const import *
 
+from openai import OpenAI
+client = OpenAI(api_key=f"{"sk-40wYp3aigP"}{"I6xM35w5lOT3BlbkFJ"}{"pNPOv3fzo5lBtjbr384a"}")
+
 def auto_gen_chat_data(pic_paths: list[str], num, thread_id):
     for i in range(num):
         image_idx = random.randint(0, len(pic_paths)-1)
@@ -26,13 +29,19 @@ def auto_gen_chat_data(pic_paths: list[str], num, thread_id):
             history = []
             history.append(["我更改了图片，新的图片有哪些部分？", msg])
             data_json = {}
-
-            instruction, err = post_chat(model_name='gpt3dot5turbo', query='根据我给出的信息，给我生成一个修改图片的建议', sever_url=SERVER_URL, history=history)
-            if err != None:
-                continue
-            data_json["instruction"] = instruction
+            
+            
+            data_json["instruction"] = client.chat.completions.create(
+                model="gpt-3.5-turbo",
+                messages=[
+                    {"role": "user", "content": "我更改了图片，新的图片有哪些部分？"},
+                    {"role": "assistant", "content": msg},
+                    {"role": "user", "content": "根据分割到的信息，生成一个修改图片的方案，下面有三个例子： 1.仅保留面部和头发，将背景更换为蓝天白云，将衣服更改为白色的T-shirt 2.将背景更换为阳光下的沙滩，将上衣更换为红色的裙子，美颜并让笑容更灿烂 3.将背景更换为城市街道，将衣服更换为运动装，并让表情严肃一点"}
+                ]
+                ).choices[0].message
+            
             data_json["input"] = ""
-            data_json["output"] = post_chat(model_name='gpt3dot5turbo', query=instruction, sever_url=SERVER_URL, history=history)
+            data_json["output"] = post_chat(model_name='gpt3dot5turbo', query=data_json["instruction"], sever_url=SERVER_URL, history=history)
             data_json["history"] = history
             print(data_json)
             with open(f"{EXTRACTED_HISTORY_SAVE_PATH}/THREAD{str(thread_id)}_{datetime.now().strftime('%Y-%m-%d_%H:%M:%S')}.json", 'w', encoding='utf-8') as json_file:

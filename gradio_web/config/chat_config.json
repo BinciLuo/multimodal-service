@@ -40,6 +40,6 @@
         ]
     },
     "paths":{
-        "extracted_history": "data/"
+        "extracted_history": "data"
     }
 }

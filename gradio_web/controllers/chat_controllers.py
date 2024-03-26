@@ -87,7 +87,7 @@ def extract_chat_process(chatbot, command_dropdown, save_extracted_chat):
     print(commands)
     command_dropdown = gr.Dropdown(choices=[f'操作为: {cmd["command"]} 参数为: {cmd["paras"]}' for cmd in commands], type='index', label="command", multiselect=True)
     
-    if save_extracted_chat:
+    if save_extracted_chat and len(chatbot) > 1:
         history = []
         for i in range(len(chatbot)-1):
             history.append([chatbot[i][0], chatbot[i][1]])
@@ -96,7 +96,7 @@ def extract_chat_process(chatbot, command_dropdown, save_extracted_chat):
         data_json["input"] = ""
         data_json["output"] = chatbot[-1][-1]
         data_json["history"] = history
-        with open(EXTRACTED_HISTORY_SAVE_PATH+datetime.now().strftime('%Y-%m-%d_%H:%M:%S'), 'w') as json_file:
+        with open(f"{EXTRACTED_HISTORY_SAVE_PATH}/{datetime.now().strftime('%Y-%m-%d_%H:%M:%S')}.json", 'w', encoding='utf-8') as json_file:
             json.dump(data_json, json_file)
     return chatbot, command_dropdown
 

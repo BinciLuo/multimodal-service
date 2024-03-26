@@ -97,7 +97,7 @@ def extract_chat_process(chatbot, command_dropdown, save_extracted_chat):
         data_json["output"] = chatbot[-1][-1]
         data_json["history"] = history
         with open(f"{EXTRACTED_HISTORY_SAVE_PATH}/{datetime.now().strftime('%Y-%m-%d_%H:%M:%S')}.json", 'w', encoding='utf-8') as json_file:
-            json.dump(data_json, json_file)
+            json.dump(data_json, json_file, ensure_ascii=False)
     return chatbot, command_dropdown
 
 def reset_state():

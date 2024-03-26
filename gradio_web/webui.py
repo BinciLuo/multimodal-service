@@ -127,7 +127,7 @@ with gr.Blocks() as demo:
 
     with gr.Accordion("Auto", open=False):
         with gr.Tab("Gen_Chat"):
-            Auto_GenChat_FileExplorer = gr.File(label="Choose Files", file_count = 'directory')
+            Auto_GenChat_FileExplorer = gr.File(label="Choose Files", file_count = 'directory', interactive= True)
             Auto_GenChat_NumSlider = gr.Slider(10, 1000, label='width', value=10, step=10)
             Auto_GenChat_StartBtn = gr.Button("Start", variant="primary")
 

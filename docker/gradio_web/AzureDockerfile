@@ -5,7 +5,7 @@ RUN apt-get update && \
 RUN git clone  https://github.com/BinciLuo/multimodal-service.git --depth=1
 WORKDIR /root/multimodal-service/gradio_web/
 RUN pip install --upgrade pip && \
-    pip install gradio
+    pip install gradio openai
 EXPOSE 80
 
 CMD  export GR_PORT=80 && python webui.py

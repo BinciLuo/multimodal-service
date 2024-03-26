@@ -21,7 +21,7 @@ WORKDIR /root/multimodal-service/
 # 创建虚拟环境并安装 Gradio
 RUN python3 -m venv venv && \
     . venv/bin/activate && \
-    pip install gradio transformers && \
+    pip install gradio transformers openai && \
     pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu && \
     echo '. venv/bin/activate' >> /root/.bashrc
 

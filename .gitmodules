@@ -1,0 +1,3 @@
+[submodule "chatglm2-6b/ChatGLM-Efficient-Tuning"]
+	path = chatglm2-6b/ChatGLM-Efficient-Tuning
+	url = https://github.com/hiyouga/ChatGLM-Efficient-Tuning.git

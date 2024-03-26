@@ -34,6 +34,7 @@ def auto_gen_chat_data(pic_paths: list[str], num, thread_id):
             data_json["input"] = ""
             data_json["output"] = post_chat(model_name='gpt3dot5turbo', query=instruction, sever_url=SERVER_URL, history=history)
             data_json["history"] = history
+            print(data_json)
             with open(f"{EXTRACTED_HISTORY_SAVE_PATH}/THREAD{str(thread_id)}_{datetime.now().strftime('%Y-%m-%d_%H:%M:%S')}.json", 'w', encoding='utf-8') as json_file:
                 json.dump(data_json, json_file, ensure_ascii=False, indent=4)
                 json_file.close()

@@ -38,7 +38,10 @@ def auto_gen_chat_data(pic_paths: list[str], num, thread_id):
                     {"role": "assistant", "content": msg},
                     {"role": "user", "content": "根据分割到的信息，生成一个修改图片的方案，下面有三个例子： 1.仅保留面部和头发，将背景更换为蓝天白云，将衣服更改为白色的T-shirt 2.将背景更换为阳光下的沙滩，将上衣更换为红色的裙子，美颜并让笑容更灿烂 3.将背景更换为城市街道，将衣服更换为运动装，并让表情严肃一点"}
                 ]
-                ).choices[0].message
+                ).choices[0].message.content
+            
+            if data_json["instruction"] == None:
+                continue
             
             data_json["input"] = ""
             data_json["output"] = post_chat(model_name='gpt3dot5turbo', query=data_json["instruction"], sever_url=SERVER_URL, history=history)

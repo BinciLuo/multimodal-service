@@ -20,6 +20,7 @@ if __name__ == '__main__':
         if len(uncheck_commands) == 0 or len(uncheck_commands) != len(checked_commands):
             print(uncheck_commands,"\n",checked_commands,"\n\n\n")
             continue
+        data['output'] = data['output'][0]
         valid_data_list.append(data)
     
     with open("chat_dataset.json", 'w') as file:

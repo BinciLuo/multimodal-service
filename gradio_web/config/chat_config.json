@@ -38,5 +38,8 @@
                 "user_input_replace" : "HERE IS USER INPUT"
             }
         ]
+    },
+    "paths":{
+        "extracted_history": "data"
     }
 }

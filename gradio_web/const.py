@@ -60,6 +60,7 @@ else:
 # ---------------------------------------------------------------
 PATTERN_FILE_PATH = global_variables["pattern_file_path"]
 INSTRUCTION_PROMPT_FILES_INFO = chat_config["prompt_templates"]["instruction_gen"]
+EXTRACTED_HISTORY_SAVE_PATH = chat_config["paths"]["extracted_history"]
 
 # ---------------------------------------------------------------
 # |<----->| pixcels / rate = half kernel size

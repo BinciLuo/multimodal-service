@@ -5,7 +5,7 @@ from PIL import Image
 from modules.api.pics_api import get_loras
 from controllers.chat_controllers import chat_process, advise_process ,extract_chat_process, reset_state, commands
 from controllers.pics_controller import change_pic_process, generate_pic_process, set_base_image, change_face_process
-from controllers.utils_controller import auto_mask_process, check_status_process, submit_mask_process, change_base_image_process, undo_auto_mask_process, clear_commands_process
+from controllers.utils_controller import auto_mask_process, check_status_process, submit_mask_process, change_base_image_process, undo_auto_mask_process, clear_commands_process, auto_gen_chat_data_process
 from controllers.mutimodal_controllers import exec_commands_process, exec_all_commands_process
 
 from const import *
@@ -62,14 +62,16 @@ with gr.Blocks() as demo:
                 Settings_IMG2IMG_DenoisingInpaintSlider = gr.Slider(0, 1, label='img2img_denoising_strength', value=0.6, step=0.05)
                 Settings_IMG2IMG_LoRaDropdown = gr.Dropdown(choices=loras, type='value', label="lora", multiselect=True)
                 Settings_IMG2IMG_LoRaRefreshBtn = gr.Button("Refresh loras", variant="primary", scale=1, size='sm')
-            with gr.Tab("Chat"):
-                Settings_Chat_ModelSelectDropdown = gr.Dropdown(choices=chat_config["models"].keys(), type='value', label="model", value="gpt3dot5turbo")
-                Settings_Chat_InstructionTemplateDropdown = gr.Dropdown(choices=[info["description"] for info in INSTRUCTION_PROMPT_FILES_INFO], type='value', label="chat prompt", value='Default')
-                Settings_Chat_AdviseTemplateDropdown = gr.Dropdown(choices=[info["description"] for info in INSTRUCTION_PROMPT_FILES_INFO], type='value', label="gpt4v prompt", value='GPT4V Legality Statement')
-            with gr.Tab("Size"):
-                # TODO: not used now
-                Settings_Size_WidthSlider = gr.Slider(0, 1920, label='width', value=512, step=1)
-                Settings_Size_HeightSlider = gr.Slider(0, 1080, label='height', value=512, step=1)
+        with gr.Tab("Chat"):
+            Settings_Chat_ModelSelectDropdown = gr.Dropdown(choices=chat_config["models"].keys(), type='value', label="model", value="gpt3dot5turbo")
+            Settings_Chat_InstructionTemplateDropdown = gr.Dropdown(choices=[info["description"] for info in INSTRUCTION_PROMPT_FILES_INFO], type='value', label="chat prompt", value='Default')
+            Settings_Chat_AdviseTemplateDropdown = gr.Dropdown(choices=[info["description"] for info in INSTRUCTION_PROMPT_FILES_INFO], type='value', label="gpt4v prompt", value='GPT4V Legality Statement')
+        with gr.Tab("Size"):
+            # TODO: not used now
+            Settings_Size_WidthSlider = gr.Slider(0, 1920, label='width', value=512, step=1)
+            Settings_Size_HeightSlider = gr.Slider(0, 1080, label='height', value=512, step=1)
+        with gr.Tab("Data"):
+            Settings_Data_SaveExtractedChatCheckbox = gr.Checkbox(value= True, label="Save Extracted Chat")
             
             
     
@@ -123,6 +125,12 @@ with gr.Blocks() as demo:
                 picGenBtn = gr.Button("Generate a Picture", variant="primary", visible=False)
                 picChangeBtn = gr.Button("Change Picture", variant="primary", visible=False)
 
+    with gr.Accordion("Auto", open=False):
+        with gr.Tab("Gen_Chat"):
+            Auto_GenChat_FileExplorer = gr.FileExplorer("*.jp*g", label="Choose Files")
+            Auto_GenChat_NumSlider = gr.Slider(10, 1000, label='width', value=10, step=10)
+            Auto_GenChat_StartBtn = gr.Button("Start", variant="primary")
+
     with gr.Accordion("Manual", open=False):
         gr.Markdown(open('man.md', 'r').read())
     
@@ -137,7 +145,7 @@ with gr.Blocks() as demo:
 
     Chat_EmptyBtn.click(reset_state, outputs=[Chat_Chatbot, history, OperationBoard_CommandDropdown, BaseIMG_BaseIMGViewer], show_progress=True)
 
-    extractBtn.click(extract_chat_process, [Chat_Chatbot, OperationBoard_CommandDropdown], [Chat_Chatbot, OperationBoard_CommandDropdown], show_progress=True)
+    extractBtn.click(extract_chat_process, [Chat_Chatbot, OperationBoard_CommandDropdown, Settings_Data_SaveExtractedChatCheckbox], [Chat_Chatbot, OperationBoard_CommandDropdown], show_progress=True)
 
     picGenBtn.click(generate_pic_process,[img_input, Settings_IMG2IMG_LoRaDropdown, Settings_Size_WidthSlider, Settings_Size_HeightSlider],[BaseIMG_BaseIMGViewer], show_progress=True)
     
@@ -161,11 +169,13 @@ with gr.Blocks() as demo:
     OperationBoard_ExecAllBtn.click(exec_all_commands_process,[BaseIMG_BaseIMGViewer, EditIMG_Editor_ImageEditor, EditIMG_MaskViewer, EditedIMG_EditedIMGViewer, img_input, Settings_IMG2IMG_LoRaDropdown, Settings_IMG2IMG_DenoisingInpaintSlider], [EditIMG_Editor_ImageEditor, EditIMG_MaskViewer, EditedIMG_EditedIMGViewer])
     OperationBoard_ClearCmdsBtn.click(clear_commands_process,[],[OperationBoard_CommandDropdown])
 
+    Auto_GenChat_StartBtn.click(auto_gen_chat_data_process,[Auto_GenChat_FileExplorer, Auto_GenChat_NumSlider],[])
+
     #sendToEditorBtn.click(send_to_editor_process,[base_image],[image_editor])
 
     # events
     BaseIMG_BaseIMGViewer.change(change_base_image_process,[BaseIMG_BaseIMGViewer, Chat_Chatbot],[EditIMG_Editor_ImageEditor, Chat_Chatbot, OperationBoard_CommandDropdown])
-    Chat_Chatbot.change(extract_chat_process,[Chat_Chatbot, OperationBoard_CommandDropdown],[Chat_Chatbot, OperationBoard_CommandDropdown])
+    Chat_Chatbot.change(extract_chat_process,[Chat_Chatbot, OperationBoard_CommandDropdown, Settings_Data_SaveExtractedChatCheckbox],[Chat_Chatbot, OperationBoard_CommandDropdown])
 
 
 

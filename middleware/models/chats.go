@@ -85,7 +85,9 @@ func PostChatGLM2_6B(query string, history jarray) (jmap, error) {
 
 	if response.StatusCode != 200 {
 		err = fmt.Errorf(" PostChatGLM2_6B not avliable, status code : " + strconv.Itoa(response.StatusCode))
-		fmt.Println(response)
+		// 读取并打印响应结果
+		responseBody, _ := ioutil.ReadAll(response.Body)
+		fmt.Println("POST请求的响应结果:", string(responseBody))
 		return nil, err
 	}
 	err = json.NewDecoder(response.Body).Decode(&r)

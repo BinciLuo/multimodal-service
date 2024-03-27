@@ -173,7 +173,8 @@ func FormChatGLM2Messages(head, query string, history jarray) jarray {
 	var (
 		messgaes jarray
 	)
-	messgaes = append(messgaes, jmap{"role": "assistant", "content": head})
+	messgaes = append(messgaes, jmap{"role": "user", "content": head})
+	messgaes = append(messgaes, jmap{"role": "assistant", "content": "好的。"})
 	for _, round := range history {
 		messgaes = append(messgaes, jmap{"role": "user", "content": round.(jarray)[0].(string)})
 		messgaes = append(messgaes, jmap{"role": "assistant", "content": round.(jarray)[1].(string)})

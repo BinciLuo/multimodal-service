@@ -98,7 +98,7 @@ func PostChatGLM2_6B(query string, history jarray) (jmap, error) {
 
 	resp["chat"] = r["choices"].(jarray)[0].(jmap)["message"].(jmap)["content"]
 
-	return r, nil
+	return resp, nil
 
 }
 

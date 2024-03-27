@@ -392,5 +392,14 @@
       "prompt": "content"
     },
     "folder": "python"
+  },
+  "chat_dataset":{
+    "file_name": "chat_dataset.json",
+    "columns": {
+      "prompt": "instruction",
+      "query": "input",
+      "response": "output",
+      "history": "history"
+    }
   }
 }

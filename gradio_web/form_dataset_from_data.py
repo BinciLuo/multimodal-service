@@ -15,7 +15,7 @@ if __name__ == '__main__':
     for json_file_path in json_files_list:
         with open(json_file_path,'r') as f:
             data = json.load(f)
-        uncheck_commands = extract_jarray(data['output'][0])
+        uncheck_commands = [cmd for jarrays in extract_jarray(data['output'][0]) for cmd in jarrays ]
         checked_commands = extract_instructions("config/cmd_pattern.json", data['output'][0])
         if len(uncheck_commands) == 0 or len(uncheck_commands) != len(checked_commands):
             print(uncheck_commands,"\n",checked_commands,"\n\n\n")

@@ -169,6 +169,20 @@ func FormGPT4VMessages(head, query, init_image string, history jarray) jarray {
 	return messgaes
 }
 
+func FormChatGLM2Messages(head, query string, history jarray) jarray {
+	var (
+		messgaes jarray
+	)
+	// messgaes = append(messgaes, jmap{"role": "user", "content": head})
+	// messgaes = append(messgaes, jmap{"role": "assistant", "content": "好的。"})
+	for _, round := range history {
+		messgaes = append(messgaes, jmap{"role": "user", "content": round.(jarray)[0].(string)})
+		messgaes = append(messgaes, jmap{"role": "assistant", "content": round.(jarray)[1].(string)})
+	}
+	messgaes = append(messgaes, jmap{"role": "user", "content": query})
+	return messgaes
+}
+
 func getLastNChatGPTMessages(n int) []openai.ChatCompletionMessage {
 	// 如果消息数量小于N，返回所有消息
 	if len(ChatGPTMessages) <= n {

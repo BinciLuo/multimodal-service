@@ -57,14 +57,25 @@ func PostGPT4(query string, history jarray) (jmap, error) {
 	return r, nil
 }
 
-func PostChatGLM2_6B(params jmap) (jmap, error) {
+func PostChatGLM2_6B(query string, history jarray) (jmap, error) {
 	r := make(jmap)
+	paras := make(jmap)
+	resp := make(jmap)
 
-	requestBody, err := json.Marshal(params)
+	paras["model"] = "chatglm2-6b"
+	paras["messages"] = FormChatGLM2Messages(ChatGPTHead, query, history)
+	paras["temperature"] = 0.7
+	paras["top_p"] = 0.5
+	paras["n"] = 1
+	paras["max_tokens"] = 128
+	paras["stream"] = false
+
+	requestBody, err := json.Marshal(paras)
 	if err != nil {
 		log.Println("Json Marshak err:", err)
 		return nil, err
 	}
+
 	response, err := http.Post(GlmChatURL, "application/json", bytes.NewBuffer(requestBody))
 	if err != nil {
 		log.Println("HTTP POST request failed:", err)
@@ -74,6 +85,9 @@ func PostChatGLM2_6B(params jmap) (jmap, error) {
 
 	if response.StatusCode != 200 {
 		err = fmt.Errorf(" PostChatGLM2_6B not avliable, status code : " + strconv.Itoa(response.StatusCode))
+		// 读取并打印响应结果
+		responseBody, _ := ioutil.ReadAll(response.Body)
+		fmt.Println("POST请求的响应结果:", string(responseBody))
 		return nil, err
 	}
 	err = json.NewDecoder(response.Body).Decode(&r)
@@ -82,7 +96,9 @@ func PostChatGLM2_6B(params jmap) (jmap, error) {
 		return nil, err
 	}
 
-	return r, nil
+	resp["chat"] = r["choices"].(jarray)[0].(jmap)["message"].(jmap)["content"]
+
+	return resp, nil
 
 }
 

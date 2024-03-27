@@ -63,7 +63,7 @@ func PostChatGLM2_6B(query string, history jarray) (jmap, error) {
 	resp := make(jmap)
 
 	paras["model"] = "chatglm2-6b"
-	paras["message"] = FormChatGLM2Messages(ChatGPTHead, query, history)
+	paras["messages"] = FormChatGLM2Messages(ChatGPTHead, query, history)
 	paras["temperature"] = 0.7
 	paras["top_p"] = 0.5
 	paras["n"] = 1

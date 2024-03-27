@@ -2,7 +2,7 @@ import os
 import glob
 import json
 
-from modules.utils.instruction_processing import *
+from modules.utils.instruction_processing import extract_jarray, extract_instructions
 
 def get_json_files(folder_path):
     json_files = glob.glob(os.path.join(folder_path, '*.json'))
@@ -18,6 +18,7 @@ if __name__ == '__main__':
         uncheck_commands = extract_jarray(data['output'])
         checked_commands = extract_instructions("config/cmd_pattern.json", data['output'])
         if len(uncheck_commands) == 0 or len(uncheck_commands) != len(checked_commands):
+            print(uncheck_commands,"\n",checked_commands,"\n\n\n")
             continue
         valid_data_list.append(data)
     

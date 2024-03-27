@@ -23,3 +23,9 @@ CUDA_VISIBLE_DEVICES=0 python3 src/web_demo.py \
     --adapter_name_or_path loras/checkpoint-300 \
     --template default \
     --finetuning_type lora
+
+CUDA_VISIBLE_DEVICES=0 API_PORT=27777 python3 src/api_demo.py \
+    --model_name_or_path /home/user/netdisk/data/chatglm2-6b \
+    --adapter_name_or_path loras/checkpoint-300 \
+    --template default \
+    --finetuning_type lora

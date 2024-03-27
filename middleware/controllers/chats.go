@@ -80,7 +80,12 @@ func (c *ChatController) PostChatGLM2_6B() {
 		c.Abort("RequestParams")
 	}
 
-	r, err := models.PostChatGLM2_6B(body)
+	if _, ok := body["history"].(jarray); !ok {
+		c.Ctx.ResponseWriter.WriteHeader(http.StatusBadRequest)
+		c.Abort("RequestParams")
+	}
+
+	r, err := models.PostChatGLM2_6B(body["query"].(string), body["history"].(jarray))
 	if err != nil {
 		c.Ctx.ResponseWriter.WriteHeader(http.StatusInternalServerError)
 		c.Abort("ControllerError")

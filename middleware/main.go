@@ -43,7 +43,7 @@ func main() {
 	models.OpenAIClient2 = openai.NewClient(OpenAITokenTwo)
 	models.OpenAIKey = OpenAITokenTwo
 	GlmServer, _ := config.String("GLMSERVER")
-	models.GlmChatURL = GlmServer + "/chat/chatglm2-6b"
+	models.GlmChatURL = GlmServer + "/v1/chat/completions"
 
 	chatGPTHead, err := models.ReadTextFile("prompt/chatGPT_head.txt")
 	models.ChatGPTHead = chatGPTHead

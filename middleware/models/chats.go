@@ -57,14 +57,25 @@ func PostGPT4(query string, history jarray) (jmap, error) {
 	return r, nil
 }
 
-func PostChatGLM2_6B(params jmap) (jmap, error) {
+func PostChatGLM2_6B(query string, history jarray) (jmap, error) {
 	r := make(jmap)
+	paras := make(jmap)
+	resp := make(jmap)
 
-	requestBody, err := json.Marshal(params)
+	paras["model"] = "chatglm2-6b"
+	paras["message"] = FormChatGLM2Messages(ChatGPTHead, query, history)
+	paras["temperature"] = 0.7
+	paras["top_p"] = 0.5
+	paras["n"] = 1
+	paras["max_tokens"] = 512
+	paras["stream"] = false
+
+	requestBody, err := json.Marshal(paras)
 	if err != nil {
 		log.Println("Json Marshak err:", err)
 		return nil, err
 	}
+
 	response, err := http.Post(GlmChatURL, "application/json", bytes.NewBuffer(requestBody))
 	if err != nil {
 		log.Println("HTTP POST request failed:", err)
@@ -81,6 +92,8 @@ func PostChatGLM2_6B(params jmap) (jmap, error) {
 		log.Println("[models/PostChatGLM2_6] Error decoding JSON response:", err)
 		return nil, err
 	}
+
+	resp["chat"] = r["choices"].(jarray)[0].(jmap)["message"].(jmap)["content"]
 
 	return r, nil
 

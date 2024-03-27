@@ -70,6 +70,8 @@ func PostChatGLM2_6B(query string, history jarray) (jmap, error) {
 	paras["max_tokens"] = 512
 	paras["stream"] = false
 
+	fmt.Println(paras)
+
 	requestBody, err := json.Marshal(paras)
 	if err != nil {
 		log.Println("Json Marshak err:", err)

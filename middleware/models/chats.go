@@ -67,7 +67,7 @@ func PostChatGLM2_6B(query string, history jarray) (jmap, error) {
 	paras["temperature"] = 0.7
 	paras["top_p"] = 0.5
 	paras["n"] = 1
-	paras["max_tokens"] = 512
+	paras["max_tokens"] = 128
 	paras["stream"] = false
 
 	requestBody, err := json.Marshal(paras)

@@ -70,8 +70,6 @@ func PostChatGLM2_6B(query string, history jarray) (jmap, error) {
 	paras["max_tokens"] = 512
 	paras["stream"] = false
 
-	fmt.Println(paras)
-
 	requestBody, err := json.Marshal(paras)
 	if err != nil {
 		log.Println("Json Marshak err:", err)
@@ -87,6 +85,7 @@ func PostChatGLM2_6B(query string, history jarray) (jmap, error) {
 
 	if response.StatusCode != 200 {
 		err = fmt.Errorf(" PostChatGLM2_6B not avliable, status code : " + strconv.Itoa(response.StatusCode))
+		fmt.Println(response)
 		return nil, err
 	}
 	err = json.NewDecoder(response.Body).Decode(&r)

@@ -17,3 +17,9 @@ CUDA_VISIBLE_DEVICES=0 python3 src/train_bash.py \
     --num_train_epochs 3.0 \
     --plot_loss \
     --fp16
+
+CUDA_VISIBLE_DEVICES=0 python3 src/web_demo.py \
+    --model_name_or_path /home/user/netdisk/data/chatglm2-6b \
+    --adapter_name_or_path loras/checkpoint-300 \
+    --template default \
+    --finetuning_type lora

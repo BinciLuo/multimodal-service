@@ -28,14 +28,14 @@ A demo is deployed in Azure. [Try it here](https://gradio-app.azurewebsites.net)
 - [x] Auto mask image by segment result
 - [x] Use ChatGLM2-6B and enable history (histort not implement)
 - [x] Use roop to replace face
-- [ ] Enable advice 
+- [x] Use GPT4V to generate advice 
 - [ ] Add control net paras
 
 `FIXME`
 - [x] Clear commands when updating base image
-- [ ] Combine and sort commands (only finish 'face' and 'change')
+- [x] Combine and sort commands (only finish 'face' and 'change')
 - [x] Refactor multimodal architecture
-- [ ] Solve incorrect segmentation
+- [x] Solve incorrect segmentation
 
 ## Architecture
 ```

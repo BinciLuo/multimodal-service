@@ -195,6 +195,7 @@ def get_gray_mask_0(key_and_images: tuple[(str, Image.Image)], size):
     filtered_image = copy.deepcopy(gray_image)
     for xy, kernelHalf in tqdm(ConfigPixcels, desc='Expanding'):
         if xy in innerRangePixcels:
+            print(f"😀",end='')
             expand_gray_pixcel(filtered_image, xy, 0, kernelHalf)
     # debug
     filtered_image.save("debug/filtered_image.png")

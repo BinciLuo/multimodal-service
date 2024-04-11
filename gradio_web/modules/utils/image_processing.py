@@ -1,4 +1,5 @@
 from PIL import Image, ImageFilter
+import copy
 from const import MASK_ERODE_RATE, segment_config
 
 def generate_mask_from_black(image: Image.Image):
@@ -85,6 +86,13 @@ def erode_gray_image(image: Image.Image, erode_range: int):
 
     return eroded_image
 
+def shrink_range_black2white(image: Image.Image, erode_range: int):
+    # 使用滤波器进行腐蚀操作
+    gray_image = image.filter(ImageFilter.MinFilter(3))
+    eroded_image = gray_image.filter(ImageFilter.MaxFilter(erode_range * 2 + 1))
+
+    return eroded_image
+
 def gray_pixel_filter_min(image: Image.Image, xy: tuple[int, int], ignore: list[int]):
     kernel_half = image.getpixel(xy)
     if kernel_half in ignore:
@@ -95,25 +103,97 @@ def gray_pixel_filter_min(image: Image.Image, xy: tuple[int, int], ignore: list[
             min = image.getpixel((i, j)) if image.getpixel((i, j)) < min else min
     return min
 
+def expand_gray_pixcel(image: Image.Image, xy: tuple[int, int], color: int, kernel_half: int):
+    expand_pixcels = []
+    size = image.size
+    for i in range(xy[0]-kernel_half if xy[0]-kernel_half >=0 else 0, xy[0]+kernel_half+1 if xy[0]+kernel_half+1 <= size[0] else size[0]):
+        for j in range(xy[1]-kernel_half if xy[1]-kernel_half >=0 else 0, xy[1]+kernel_half+1 if xy[1]+kernel_half+1 <= size[1] else size[1]):
+            expand_pixcels.append((i, j))
+    expand_pixcels = list(set(expand_pixcels))
+    for xy in expand_pixcels:
+        image.putpixel(xy, color)
+
+# def get_gray_mask_0(key_and_images: tuple[(str, Image.Image)], size):
+#     '''
+#     Mask Optimization
+#     TODO: This function need optimization and better annotation
+#     1. 获取Rate灰度图
+#     2. 获取原遮罩内边缘
+#     3. 对内边缘且Rate不为0、255的像素进行周边确认
+#     '''
+#     # Create Rate Gray Image
+#     gray_image = Image.new('L', size)
+#     for key,image in key_and_images:
+#         for x in range(size[0]):
+#             for y in range(size[1]):
+#                 if image.getpixel((x, y)) == 255:
+#                     gray_image.putpixel((x, y), int(size[0]/segment_config['erode'][key]['rate']) if key in segment_config['erode'].keys() else 255)
+#     # debug
+#     gray_image.save("debug/gray_image.png")
+
+#     eroded_image = erode_gray_image(gray_image, int(size[0]/MASK_ERODE_RATE))
+#     eroded_image.save("debug/eroded_image.png")
+
+#     filtered_image = Image.new('L', size)
+#     for x in range(size[0]):
+#         for y in range(size[1]):
+#             min = gray_pixel_filter_min(gray_image, (x,y), [0, 255]) if gray_image.getpixel((x, y)) not in [0, 255] and eroded_image.getpixel((x, y)) == 0 else gray_image.getpixel((x, y))
+#             filtered_image.putpixel((x, y), min if min == 0 else 255)
+#     # debug
+#     filtered_image.save("debug/filtered_image.png")
+
+#     return filtered_image
+
 def get_gray_mask_0(key_and_images: tuple[(str, Image.Image)], size):
-    # 使用滤波器进行腐蚀操作
+    '''
+    Mask Optimization
+    TODO: This function need optimization and better annotation
+    1. 获取Rate灰度图
+    2. 获取原遮罩内边缘
+    3. 对内边缘且Rate不为0、255的像素进行周边确认
+    '''
+    # Create Origin Gray Image, 0: unmask, 255: mask
     gray_image = Image.new('L', size)
-    for key,image in key_and_images:
+    for y in range(size[1]):
         for x in range(size[0]):
-            for y in range(size[1]):
+            for key,image in key_and_images:
                 if image.getpixel((x, y)) == 255:
-                    gray_image.putpixel((x, y), int(size[0]/segment_config['erode'][key]['rate']) if key in segment_config['erode'].keys() else 255)
-    # debug
+                    gray_image.putpixel(255)
+                    break
+    gray_image_pixcels = gray_image.load()
+    #debug
     gray_image.save("debug/gray_image.png")
 
-    eroded_image = erode_gray_image(gray_image, int(size[0]/MASK_ERODE_RATE))
-    eroded_image.save("debug/eroded_image.png")
+    # Get Pixcels from config and Origin
+    ConfigPixcels = [] #[((x,y), kernelHalf),]
+    for key, image in key_and_images:
+        if key in segment_config['erode'].keys():
+            for y in range(size[1]):
+                for x in range(size[0]):
+                    if image.getpixel((x, y)) == 255:
+                        ConfigPixcels.append(
+                            ((x, y), int(size[0]/segment_config['erode'][key]['rate']))
+                            )
 
-    filtered_image = Image.new('L', size)
-    for x in range(size[0]):
-        for y in range(size[1]):
-            min = gray_pixel_filter_min(gray_image, (x,y), [0, 255]) if gray_image.getpixel((x, y)) not in [0, 255] and eroded_image.getpixel((x, y)) == 0 else gray_image.getpixel((x, y))
-            filtered_image.putpixel((x, y), min if min == 0 else 255)
+    # Shrink inner range from 0to255
+    range_black_shrinked_image = shrink_range_black2white(gray_image, int(size[0]/MASK_ERODE_RATE))
+    range_black_shrinked_image_pixcels = range_black_shrinked_image.load()
+    
+    # Get inner range pixcels
+    innerRangePixcels = [] # [(x, y),]
+    for y in range(size[1]):
+        for x in range(size[0]):
+            if gray_image_pixcels[x, y] != range_black_shrinked_image_pixcels[x, y]:
+                innerRangePixcels.append((x, y))
+
+    # debug
+    range_black_shrinked_image.save("debug/shrinked_image.png")
+
+    # Copy from origin
+    filtered_image = copy.deepcopy(gray_image)
+    for xy, kernelHalf in ConfigPixcels:
+        if xy in innerRangePixcels:
+            expand_gray_pixcel(filtered_image, xy, 0)
     # debug
     filtered_image.save("debug/filtered_image.png")
 

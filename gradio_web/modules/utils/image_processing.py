@@ -165,17 +165,6 @@ def get_gray_mask_0(key_and_images: tuple[(str, Image.Image)], size):
     #debug
     gray_image.save("debug/gray_image.png")
 
-    # Get Pixcels from config and Origin
-    ConfigPixcels = [] #[((x,y), kernelHalf),]
-    for key, image in tqdm(key_and_images, desc='Get Config Pixcels'):
-        if key in segment_config['erode'].keys():
-            for y in range(size[1]):
-                for x in range(size[0]):
-                    if image.getpixel((x, y)) == 255:
-                        ConfigPixcels.append(
-                            ((x, y), int(size[0]/segment_config['erode'][key]['rate']))
-                            )
-
     # Shrink inner range from 255to0
     range_black_shrinked_image = erode_gray_image(gray_image, 1)#int(size[0]/MASK_ERODE_RATE))
     range_black_shrinked_image_pixcels = range_black_shrinked_image.load()
@@ -187,14 +176,24 @@ def get_gray_mask_0(key_and_images: tuple[(str, Image.Image)], size):
             if gray_image_pixcels[x, y] != range_black_shrinked_image_pixcels[x, y]:
                 outerRangePixcels.append((x, y))
 
+    # Get Pixcels from config and Origin
+    ConfigPixcels = [] #[((x,y), kernelHalf),]
+    for key, image in tqdm(key_and_images, desc='Get Config Pixcels'):
+        if key in segment_config['erode'].keys():
+            for y in range(size[1]):
+                for x in range(size[0]):
+                    if image.getpixel((x, y)) == 255 and (x, y) in outerRangePixcels:
+                        ConfigPixcels.append(
+                            ((x, y), int(size[0]/segment_config['erode'][key]['rate']))
+                            )
+
     # debug
     range_black_shrinked_image.save("debug/shrinked_image.png")
 
     # Copy from origin
     filtered_image = copy.deepcopy(gray_image)
     for xy, kernelHalf in tqdm(ConfigPixcels, desc='Expanding'):
-        if xy in outerRangePixcels:
-            expand_gray_pixcel(filtered_image, xy, 0, kernelHalf)
+        expand_gray_pixcel(filtered_image, xy, 0, kernelHalf)
     # debug
     filtered_image.save("debug/filtered_image.png")
 

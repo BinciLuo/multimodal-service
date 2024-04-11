@@ -188,6 +188,7 @@ def get_gray_mask_0(key_and_images: tuple[(str, Image.Image)], size):
                 innerRangePixcels.append((x, y))
 
     # debug
+    print(f'Inner Pixcels Len: {len(innerRangePixcels)}')
     range_black_shrinked_image.save("debug/shrinked_image.png")
 
     # Copy from origin

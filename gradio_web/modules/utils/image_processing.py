@@ -177,7 +177,7 @@ def get_gray_mask_0(key_and_images: tuple[(str, Image.Image)], size):
                             )
 
     # Shrink inner range from 255to0
-    range_black_shrinked_image = shrink_range_white2black(gray_image, 3)#int(size[0]/MASK_ERODE_RATE))
+    range_black_shrinked_image = shrink_range_white2black(gray_image, 2)#int(size[0]/MASK_ERODE_RATE))
     range_black_shrinked_image_pixcels = range_black_shrinked_image.load()
     
     # Get outer range pixcels

@@ -158,7 +158,7 @@ def get_gray_mask_0(key_and_images: tuple[(str, Image.Image)], size):
         for x in range(size[0]):
             for key,image in key_and_images:
                 if image.getpixel((x, y)) == 255:
-                    gray_image.putpixel(255)
+                    gray_image.putpixel((x, y), 255)
                     break
     gray_image_pixcels = gray_image.load()
     #debug

@@ -149,10 +149,10 @@ def get_gray_mask_0(key_and_images: tuple[(str, Image.Image)], size):
     Mask Optimization
     TODO: This function need optimization and better annotation
     1. 获取Rate灰度图
-    2. 获取原遮罩内边缘
+    2. 获取原遮罩外边缘
     3. 对内边缘且Rate不为0、255的像素进行周边确认
     '''
-    # Create Origin Gray Image, 0: unmask, 255: mask
+    # Create Origin Gray Image, 0: mask, 255: unmask
     gray_image = Image.new('L', size)
     for y in range(size[1]):
         for x in range(size[0]):
@@ -175,16 +175,16 @@ def get_gray_mask_0(key_and_images: tuple[(str, Image.Image)], size):
                             ((x, y), int(size[0]/segment_config['erode'][key]['rate']))
                             )
 
-    # Shrink inner range from 0to255
-    range_black_shrinked_image = shrink_range_black2white(gray_image, int(size[0]/MASK_ERODE_RATE))
+    # Shrink outer range from 0to255
+    range_black_shrinked_image = shrink_range_black2white(gray_image, 3)#int(size[0]/MASK_ERODE_RATE))
     range_black_shrinked_image_pixcels = range_black_shrinked_image.load()
     
-    # Get inner range pixcels
-    innerRangePixcels = [] # [(x, y),]
+    # Get outer range pixcels
+    outerRangePixcels = [] # [(x, y),]
     for y in range(size[1]):
         for x in range(size[0]):
             if gray_image_pixcels[x, y] != range_black_shrinked_image_pixcels[x, y]:
-                innerRangePixcels.append((x, y))
+                outerRangePixcels.append((x, y))
 
     # debug
     range_black_shrinked_image.save("debug/shrinked_image.png")
@@ -192,7 +192,7 @@ def get_gray_mask_0(key_and_images: tuple[(str, Image.Image)], size):
     # Copy from origin
     filtered_image = copy.deepcopy(gray_image)
     for xy, kernelHalf in ConfigPixcels:
-        if xy in innerRangePixcels:
+        if xy in outerRangePixcels:
             expand_gray_pixcel(filtered_image, xy, 0, kernelHalf)
     # debug
     filtered_image.save("debug/filtered_image.png")

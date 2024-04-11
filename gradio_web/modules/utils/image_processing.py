@@ -1,6 +1,7 @@
 from PIL import Image, ImageFilter
 import copy
 from const import MASK_ERODE_RATE, segment_config
+from tqdm import tqdm
 
 def generate_mask_from_black(image: Image.Image):
     """
@@ -166,7 +167,7 @@ def get_gray_mask_0(key_and_images: tuple[(str, Image.Image)], size):
 
     # Get Pixcels from config and Origin
     ConfigPixcels = [] #[((x,y), kernelHalf),]
-    for key, image in key_and_images:
+    for key, image in tqdm(key_and_images, desc='Get Config Pixcels'):
         if key in segment_config['erode'].keys():
             for y in range(size[1]):
                 for x in range(size[0]):
@@ -191,7 +192,7 @@ def get_gray_mask_0(key_and_images: tuple[(str, Image.Image)], size):
 
     # Copy from origin
     filtered_image = copy.deepcopy(gray_image)
-    for xy, kernelHalf in ConfigPixcels:
+    for xy, kernelHalf in tqdm(ConfigPixcels, desc='Expanding'):
         if xy in outerRangePixcels:
             expand_gray_pixcel(filtered_image, xy, 0, kernelHalf)
     # debug

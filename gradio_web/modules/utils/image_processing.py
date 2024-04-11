@@ -59,27 +59,6 @@ def convert_unblack_to_white(image: Image.Image):
             rgb_image.putpixel((x, y), (255, 255, 255))
     return rgb_image
 
-def erode_image(image: Image.Image, erode_range: int):
-    # 将图像转换为灰度图
-    gray_image = image.convert('L')
-
-    # 使用滤波器进行腐蚀操作
-    gray_image = gray_image.filter(ImageFilter.MaxFilter(3))
-    eroded_image = gray_image.filter(ImageFilter.MinFilter(erode_range *2 + 1))
-
-    # 将原始图像与腐蚀后的图像进行比较，将相同位置的像素设置为黑色
-    result_image = Image.new('RGB', image.size)
-    for x in range(image.width):
-        for y in range(image.height):
-            eroded_pixel = eroded_image.getpixel((x, y))
-
-            if eroded_pixel == 0:
-                result_image.putpixel((x, y), (0, 0, 0))  # 设置为黑色
-            else:
-                result_image.putpixel((x, y), image.getpixel((x, y)))
-
-    return result_image
-
 def shrink_range_white2black(image: Image.Image, erode_range: int):
     # 使用滤波器进行腐蚀操作
     gray_image = image.filter(ImageFilter.MaxFilter(3))
@@ -94,7 +73,7 @@ def shrink_range_black2white(image: Image.Image, erode_range: int):
 
     return eroded_image
 
-def gray_pixel_filter_min(image: Image.Image, xy: tuple[int, int], ignore: list[int]):
+def gray_MinFilter(image: Image.Image, xy: tuple[int, int], ignore: list[int]):
     kernel_half = image.getpixel(xy)
     if kernel_half in ignore:
         return kernel_half
@@ -104,7 +83,7 @@ def gray_pixel_filter_min(image: Image.Image, xy: tuple[int, int], ignore: list[
             min = image.getpixel((i, j)) if image.getpixel((i, j)) < min else min
     return min
 
-def expand_gray_pixcel(image: Image.Image, xy: tuple[int, int], color: int, kernel_half: int):
+def gray_Erode(image: Image.Image, xy: tuple[int, int], color: int, kernel_half: int):
     expand_pixcels = []
     size = image.size
     for i in range(xy[0]-kernel_half if xy[0]-kernel_half >=0 else 0, xy[0]+kernel_half+1 if xy[0]+kernel_half+1 <= size[0] else size[0]):
@@ -114,44 +93,15 @@ def expand_gray_pixcel(image: Image.Image, xy: tuple[int, int], color: int, kern
     for xy in expand_pixcels:
         image.putpixel(xy, color)
 
-# def get_gray_mask_0(key_and_images: tuple[(str, Image.Image)], size):
-#     '''
-#     Mask Optimization
-#     TODO: This function need optimization and better annotation
-#     1. 获取Rate灰度图
-#     2. 获取原遮罩内边缘
-#     3. 对内边缘且Rate不为0、255的像素进行周边确认
-#     '''
-#     # Create Rate Gray Image
-#     gray_image = Image.new('L', size)
-#     for key,image in key_and_images:
-#         for x in range(size[0]):
-#             for y in range(size[1]):
-#                 if image.getpixel((x, y)) == 255:
-#                     gray_image.putpixel((x, y), int(size[0]/segment_config['erode'][key]['rate']) if key in segment_config['erode'].keys() else 255)
-#     # debug
-#     gray_image.save("debug/gray_image.png")
-
-#     eroded_image = erode_gray_image(gray_image, int(size[0]/MASK_ERODE_RATE))
-#     eroded_image.save("debug/eroded_image.png")
-
-#     filtered_image = Image.new('L', size)
-#     for x in range(size[0]):
-#         for y in range(size[1]):
-#             min = gray_pixel_filter_min(gray_image, (x,y), [0, 255]) if gray_image.getpixel((x, y)) not in [0, 255] and eroded_image.getpixel((x, y)) == 0 else gray_image.getpixel((x, y))
-#             filtered_image.putpixel((x, y), min if min == 0 else 255)
-#     # debug
-#     filtered_image.save("debug/filtered_image.png")
-
-#     return filtered_image
-
-def get_gray_mask_0(key_and_images: tuple[(str, Image.Image)], size):
+def get_optimized_mask(key_and_images: tuple[(str, Image.Image)], size):
     '''
     Mask Optimization
-    TODO: This function need optimization and better annotation
-    1. 获取Rate灰度图
-    2. 获取原遮罩外边缘
-    3. 对内边缘且Rate不为0、255的像素进行周边确认
+    
+    1. Create Origin Gray Image, 0: mask, 255: unmask
+    2. Shrink inner range from 255to0
+    3. Get outer range pixcels
+    4. Get ConfigPixcels from config and Origin and innerRangePixcels
+    5. Apply ConfigPixcels Erode
     '''
     # Create Origin Gray Image, 0: mask, 255: unmask
     gray_image = Image.new('L', size)
@@ -176,7 +126,7 @@ def get_gray_mask_0(key_and_images: tuple[(str, Image.Image)], size):
             if gray_image_pixcels[x, y] != range_black_shrinked_image_pixcels[x, y]:
                 innerRangePixcels.append((x, y))
 
-    # Get Pixcels from config and Origin and innerRangePixcels
+    # Get ConfigPixcels from config and Origin and innerRangePixcels
     ConfigPixcels = [] #[((x,y), kernelHalf),]
     for key, image in tqdm(key_and_images, desc='Get Config Pixcels'):
         if key in segment_config['erode'].keys():
@@ -187,8 +137,6 @@ def get_gray_mask_0(key_and_images: tuple[(str, Image.Image)], size):
                             ((x, y), int(size[0]/segment_config['erode'][key]['rate']))
                             )
 
-    
-
     # debug
     print(f'Inner Pixcels Len: {len(innerRangePixcels)}')
     range_black_shrinked_image.save("debug/shrinked_image.png")
@@ -196,7 +144,7 @@ def get_gray_mask_0(key_and_images: tuple[(str, Image.Image)], size):
     # Copy from origin
     filtered_image = copy.deepcopy(gray_image)
     for xy, kernelHalf in tqdm(ConfigPixcels, desc='Expanding'):
-        expand_gray_pixcel(filtered_image, xy, 0, kernelHalf)
+        gray_Erode(filtered_image, xy, 0, kernelHalf)
     # debug
     filtered_image.save("debug/filtered_image.png")
 

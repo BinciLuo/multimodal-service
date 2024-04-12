@@ -59,7 +59,7 @@ def advise_process(inputs, prompt_description, chatbot=None, base_image=None):
     chatbot.append(("根据我提供的图片提供修改的建议。"+inputs, ""))
     history.append(("根据我提供的图片提供修改的建议。"+inputs, answer))
     history = history[-10:] if len(history) > 10 else history
-    chatbot[-1] = (inputs, answer)
+    chatbot[-1] = ("根据我提供的图片提供修改的建议。"+inputs, answer)
 
     return chatbot, None
 

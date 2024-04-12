@@ -9,7 +9,7 @@ import functools
 from modules.api.pics_api import post_hgface_img_segment
 from modules.utils.image_io import trans_image_to_str, trans_str_to_image
 from const import MASK_ERODE_RATE, segment_config
-from modules.utils.image_processing import get_gray_mask_0
+from modules.utils.image_processing import get_optimized_mask
 
 def replace_black_pixels(image: Image):
     """
@@ -125,7 +125,7 @@ def auto_black_keywords(image: Image.Image, mask_images: dict, keys_words: list[
     ```
     """
     # 对于不同的部分进行腐蚀
-    shrinked_gray_image = get_gray_mask_0([(key,mask_images[key]) for key in mask_images.keys() if key not in keys_words], image.size)
+    shrinked_gray_image = get_optimized_mask([(key,mask_images[key]) for key in mask_images.keys() if key not in keys_words], image.size)
 
     for x in range(image.width):
         for y in range(image.height):

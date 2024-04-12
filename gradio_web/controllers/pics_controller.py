@@ -7,7 +7,6 @@ from modules.api.pics_api import post_txt2img, post_img2img
 from modules.utils.image_paras_gen import form_post_txt2img_paras, form_post_img2img_paras
 from modules.utils.image_io import trans_image_to_str, trans_str_to_image
 from modules.utils.image_processing import convert_unblack_to_white
-from modules.utils.image_processing import erode_image
 from const import MASK_ERODE_RATE
 
 base_image = None

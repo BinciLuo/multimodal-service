@@ -42,7 +42,6 @@ def advise_process(inputs, prompt_description, chatbot=None, base_image=None):
     """
     adviseBtn process function
     """
-    inputs = inputs+"  请给出修改的建议"
     global history
     prompt_file_info = None
     for file_info in INSTRUCTION_PROMPT_FILES_INFO:

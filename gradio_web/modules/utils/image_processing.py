@@ -116,14 +116,14 @@ def get_optimized_mask(key_and_images: tuple[(str, Image.Image)], size):
     gray_image.save("debug/gray_image.png")
 
     # Shrink inner range from 255to0
-    range_black_shrinked_image = shrink_range_white2black(gray_image, 2)
-    range_black_shrinked_image_pixcels = range_black_shrinked_image.load()
+    range_white_shrinked_image = shrink_range_white2black(gray_image, 2)
+    range_white_shrinked_image_pixcels = range_white_shrinked_image.load()
     
     # Get outer range pixcels
     innerRangePixcels = [] # [(x, y),]
     for y in range(size[1]):
         for x in range(size[0]):
-            if gray_image_pixcels[x, y] != range_black_shrinked_image_pixcels[x, y]:
+            if gray_image_pixcels[x, y] != range_white_shrinked_image_pixcels[x, y]:
                 innerRangePixcels.append((x, y))
 
     # Get ConfigPixcels from config and Origin and innerRangePixcels
@@ -139,7 +139,7 @@ def get_optimized_mask(key_and_images: tuple[(str, Image.Image)], size):
 
     # debug
     print(f'Inner Pixcels Len: {len(innerRangePixcels)}')
-    range_black_shrinked_image.save("debug/shrinked_image.png")
+    range_white_shrinked_image.save("debug/shrinked_image.png")
 
     # Copy from origin
     filtered_image = copy.deepcopy(gray_image)

@@ -2,6 +2,7 @@ import random
 import gradio as gr
 from PIL import Image
 from datetime import datetime
+from tqdm import tqdm
 
 from modules.api.pics_api import post_hgface_img_segment
 from modules.utils.image_io import trans_image_to_str
@@ -12,7 +13,7 @@ from openai import OpenAI
 client = OpenAI(api_key=f"{'sk-40wYp3aigP'}{'I6xM35w5lOT3BlbkFJ'}{'pNPOv3fzo5lBtjbr384a'}")
 
 def auto_gen_chat_data(pic_paths: list[str], num, thread_id):
-    for i in range(num):
+    def gen_one():
         image_idx = random.randint(0, len(pic_paths)-1)
         image_path = pic_paths[image_idx]
         image = Image.open(image_path)
@@ -41,7 +42,7 @@ def auto_gen_chat_data(pic_paths: list[str], num, thread_id):
                 ).choices[0].message.content
             
             if data_json["instruction"] == None:
-                continue
+                return
             
             data_json["input"] = ""
             data_json["output"] = post_chat(model_name='gpt3dot5turbo', query=data_json["instruction"], sever_url=SERVER_URL, history=history)
@@ -50,5 +51,12 @@ def auto_gen_chat_data(pic_paths: list[str], num, thread_id):
             with open(f"{EXTRACTED_HISTORY_SAVE_PATH}/THREAD{str(thread_id)}_{datetime.now().strftime('%Y-%m-%d_%H:%M:%S')}.json", 'w', encoding='utf-8') as json_file:
                 json.dump(data_json, json_file, ensure_ascii=False, indent=4)
                 json_file.close()
+    if thread_id == 0:
+        for i in tqdm(range(num)):
+            gen_one()
+    else:
+        for i in range(num):
+            gen_one()
+
             
 

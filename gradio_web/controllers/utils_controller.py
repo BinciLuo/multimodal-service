@@ -84,8 +84,9 @@ def clear_commands_process():
     commands.clear()
     return gr.Dropdown(choices=[])
 
-def auto_gen_chat_data_process(pic_paths: list[str], num: float):
-    thread_num = 8
+def auto_gen_chat_data_process(pic_paths: list[str], num: float, thread_num: float):
+    thread_num = int(thread_num)
+    gr.Info(f'Start Generate Data\nNum: {int(num)}\nThreads: {thread_num}')
 
     threads_list= [threading.Thread(target=auto_gen_chat_data, args=(pic_paths, int(num/thread_num), i)) for i in range(thread_num)]
     
@@ -94,7 +95,7 @@ def auto_gen_chat_data_process(pic_paths: list[str], num: float):
     for each_thread in threads_list:
         each_thread.join()
     
-    gr.Warning(f"Successfully Gen {int(num)} chat data")
+    gr.Info(f"Successfully Gen {int(num)} chat data")
 
     
 

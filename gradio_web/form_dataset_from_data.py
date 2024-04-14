@@ -25,7 +25,7 @@ if __name__ == '__main__':
     
     with open("chat_dataset.json", 'w') as file:
         json.dump(valid_data_list, file, indent=4, ensure_ascii= False)
-    print(f"Valid Data Rate: {len(valid_data_list)/len(json_files_list)*100}%")
+    print(f"Total: {len(json_files_list)} Valid: {len(valid_data_list)}\nValid Data Rate: {len(valid_data_list)/len(json_files_list)*100}%")
 
 
         

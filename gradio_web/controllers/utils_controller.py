@@ -111,7 +111,7 @@ def auto_test_llm_process(pic_paths: list[str], num: float, thread_num: float, m
     for each_thread in threads_list:
         each_thread.join()
 
-    result = f'Finish Test LLM\n'+f'Total: {num}        Valid: {sum(valid_nums)}'+f'Model: {model_name}     Score: {sum(valid_nums)/num * 100}%'
+    result = f'Finish Test LLM\n'+f'Total: {num}        Valid: {sum(valid_nums)}\n'+f'Model: {model_name}     Score: {sum(valid_nums)/num * 100}%'
     print(result)
     gr.Info(result)
     

@@ -4,6 +4,7 @@ from PIL import Image
 from datetime import datetime
 from tqdm import tqdm
 
+from modules.utils.instruction_processing import extract_instructions, extract_jarray
 from modules.api.pics_api import post_hgface_img_segment
 from modules.utils.image_io import trans_image_to_str
 from modules.api.chat_api import post_chat
@@ -47,7 +48,7 @@ def auto_gen_chat_data(pic_paths: list[str], num, thread_id):
             data_json["input"] = ""
             data_json["output"] = post_chat(model_name='gpt3dot5turbo', query=data_json["instruction"], sever_url=SERVER_URL, history=history)
             data_json["history"] = history
-            print(data_json)
+
             with open(f"{EXTRACTED_HISTORY_SAVE_PATH}/THREAD{str(thread_id)}_{datetime.now().strftime('%Y-%m-%d_%H:%M:%S')}.json", 'w', encoding='utf-8') as json_file:
                 json.dump(data_json, json_file, ensure_ascii=False, indent=4)
                 json_file.close()
@@ -58,5 +59,46 @@ def auto_gen_chat_data(pic_paths: list[str], num, thread_id):
         for i in range(num):
             gen_one()
 
-            
+def auto_test_llm(pic_paths: list[str], num: int, thread_id: int, model_name: str, valid_nums: list):
+    def gen_one():
+        image_idx = random.randint(0, len(pic_paths)-1)
+        image_path = pic_paths[image_idx]
+        image = Image.open(image_path)
+        response_json,err = post_hgface_img_segment(trans_image_to_str(image))
+        
+        if err != None:
+            gr.Warning(err)
+        if err == None:
+            labels = [image_package['label'] for image_package in response_json["image_packages"]]
+            msg = "分割得到的标签有:"
+            for i, label in enumerate(labels):
+                msg += f"\n{i+1}. {label}"
 
+            history = []
+            history.append(["我更改了图片，新的图片有哪些部分？", msg])
+            data_json = {}
+            
+            data_json["instruction"] = random.choice(examples_jmap["query"])
+            
+            if data_json["instruction"] == None:
+                return
+            
+            data_json["input"] = ""
+            data_json["output"] = post_chat(model_name=model_name, query=data_json["instruction"], sever_url=SERVER_URL, history=history)
+            data_json["history"] = history
+            uncheck_commands = [cmd for jarrays in extract_jarray(data_json['output'][0]) for cmd in jarrays ]
+            checked_commands = extract_instructions("config/cmd_pattern.json", data_json['output'][0])
+            if len(uncheck_commands) == 0 or len(uncheck_commands) != len(checked_commands):
+                print(uncheck_commands,"\n",checked_commands,"\n\n\n")
+                return 0
+            return 1
+
+    valid_num = 0
+    if thread_id == 0:
+        for i in tqdm(range(num)):
+            valid_num += gen_one()
+    else:
+        for i in range(num):
+            valid_num += gen_one()
+    
+    valid_nums[thread_id] = valid_num

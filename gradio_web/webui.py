@@ -5,7 +5,7 @@ from PIL import Image
 from modules.api.pics_api import get_loras
 from controllers.chat_controllers import chat_process, advise_process ,extract_chat_process, reset_state, commands
 from controllers.pics_controller import change_pic_process, generate_pic_process, set_base_image, change_face_process
-from controllers.utils_controller import auto_mask_process, check_status_process, submit_mask_process, change_base_image_process, undo_auto_mask_process, clear_commands_process, auto_gen_chat_data_process
+from controllers.utils_controller import auto_mask_process, check_status_process, submit_mask_process, change_base_image_process, undo_auto_mask_process, clear_commands_process, auto_gen_chat_data_process, auto_test_llm_process
 from controllers.mutimodal_controllers import exec_commands_process, exec_all_commands_process
 
 from const import *
@@ -126,11 +126,18 @@ with gr.Blocks() as demo:
                 picChangeBtn = gr.Button("Change Picture", variant="primary", visible=False)
 
     with gr.Accordion("Auto", open=False):
-        with gr.Tab("Gen_Chat"):
+        with gr.Tab("Gen Data"):
             Auto_GenChat_FileExplorer = gr.FileExplorer("*.jp*g", label="Choose Files")
             Auto_GenChat_CoreSlider = gr.Slider(1, 8, label='thread', value=4, step=1)
             Auto_GenChat_NumSlider = gr.Slider(10, 1000, label='num', value=10, step=10)
             Auto_GenChat_StartBtn = gr.Button("Start", variant="primary")
+        with gr.Tab("Test LLM"):
+            Auto_TestLLM_FileExplorer = gr.FileExplorer("*.jp*g", label="Choose Files")
+            Auto_TestLLM_CoreSlider = gr.Slider(1, 8, label='thread', value=4, step=1)
+            Auto_TestLLM_NumSlider = gr.Slider(10, 1000, label='num', value=10, step=10)
+            Auto_TestLLM_ModelDropdown = gr.Dropdown(choices=chat_config["models"].keys(), type='value', label="model", value="chatglm2_6b")
+            Auto_TestLLM_StartBtn = gr.Button("Start", variant="primary")
+
 
     with gr.Accordion("Manual", open=False):
         gr.Markdown(open('man.md', 'r').read())
@@ -171,6 +178,7 @@ with gr.Blocks() as demo:
     OperationBoard_ClearCmdsBtn.click(clear_commands_process,[],[OperationBoard_CommandDropdown])
 
     Auto_GenChat_StartBtn.click(auto_gen_chat_data_process,[Auto_GenChat_FileExplorer, Auto_GenChat_NumSlider, Auto_GenChat_CoreSlider],[])
+    Auto_TestLLM_StartBtn.click(auto_test_llm_process,[Auto_TestLLM_FileExplorer, Auto_TestLLM_NumSlider, Auto_TestLLM_CoreSlider, Auto_TestLLM_ModelDropdown])
 
     #sendToEditorBtn.click(send_to_editor_process,[base_image],[image_editor])
 

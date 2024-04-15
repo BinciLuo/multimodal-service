@@ -86,16 +86,35 @@ def clear_commands_process():
 
 def auto_gen_chat_data_process(pic_paths: list[str], num: float, thread_num: float):
     thread_num = int(thread_num)
+    num = int(num)
     gr.Info(f'Start Generate Data\nNum: {int(num)}\nThreads: {thread_num}')
 
-    threads_list= [threading.Thread(target=auto_gen_chat_data, args=(pic_paths, int(num/thread_num), i)) for i in range(thread_num)]
+    threads_list= [threading.Thread(target=auto_gen_chat_data, args=(pic_paths, int(num/thread_num) if i!=0 else int(num/thread_num)+num%thread_num, i)) for i in range(thread_num)]
     
     for each_thread in threads_list:
         each_thread.start()
     for each_thread in threads_list:
         each_thread.join()
     
-    gr.Info(f"Successfully Gen {int(num)} chat data")
+    gr.Info(f"Successfully Gen {num} chat data")
+
+def auto_test_llm_process(pic_paths: list[str], num: float, thread_num: float, model_name: str):
+    thread_num = int(thread_num)
+    num = int(num)
+    valid_nums = [0 for i in range(thread_num)]
+    gr.Info(f'Start Test LLM\nNum: {int(num)}\nThreads: {thread_num}\nModel: {model_name}')
+
+    for each_thread in threads_list:
+        each_thread.start()
+    for each_thread in threads_list:
+        each_thread.join()
+
+    threads_list= [threading.Thread(target=auto_test_llm, args=(pic_paths, int(num/thread_num) if i!=0 else int(num/thread_num)+num%thread_num, i, model_name, valid_nums)) for i in range(thread_num)]
+
+    result = f'Finish Test LLM\n'+f'Total: {num}        Valid: {sum(valid_nums)}'+f'Model: {model_name}     Score: {sum(valid_nums)/num * 100}%'
+    print(result)
+    gr.Info(result)
+    
 
     
 

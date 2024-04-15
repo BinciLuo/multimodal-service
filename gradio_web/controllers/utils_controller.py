@@ -104,12 +104,12 @@ def auto_test_llm_process(pic_paths: list[str], num: float, thread_num: float, m
     valid_nums = [0 for i in range(thread_num)]
     gr.Info(f'Start Test LLM\nNum: {int(num)}\nThreads: {thread_num}\nModel: {model_name}')
 
+    threads_list= [threading.Thread(target=auto_test_llm, args=(pic_paths, int(num/thread_num) if i!=0 else int(num/thread_num)+num%thread_num, i, model_name, valid_nums)) for i in range(thread_num)]
+
     for each_thread in threads_list:
         each_thread.start()
     for each_thread in threads_list:
         each_thread.join()
-
-    threads_list= [threading.Thread(target=auto_test_llm, args=(pic_paths, int(num/thread_num) if i!=0 else int(num/thread_num)+num%thread_num, i, model_name, valid_nums)) for i in range(thread_num)]
 
     result = f'Finish Test LLM\n'+f'Total: {num}        Valid: {sum(valid_nums)}'+f'Model: {model_name}     Score: {sum(valid_nums)/num * 100}%'
     print(result)

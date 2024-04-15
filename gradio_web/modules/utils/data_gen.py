@@ -62,7 +62,7 @@ def auto_gen_chat_data(pic_paths: list[str], num, thread_id):
 def auto_test_llm(pic_paths: list[str], num: int, thread_id: int, model_name: str, valid_nums: list):
     with open(chat_config['paths']['dataset'], 'r') as json_file:
         dataset:dict = json.load(json_file)
-    instructions = [data['instruction'] for data in dataset[3000:]]
+    instructions = [data['instruction'] for data in dataset]
     def gen_one():
         image_idx = random.randint(0, len(pic_paths)-1)
         image_path = pic_paths[image_idx]

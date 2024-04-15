@@ -60,6 +60,9 @@ def auto_gen_chat_data(pic_paths: list[str], num, thread_id):
             gen_one()
 
 def auto_test_llm(pic_paths: list[str], num: int, thread_id: int, model_name: str, valid_nums: list):
+    with open(chat_config['paths']['dataset'], 'r') as json_file:
+        dataset:dict = json.load(json_file)
+    instructions = [data['instruction'] for data in dataset[3000:]]
     def gen_one():
         image_idx = random.randint(0, len(pic_paths)-1)
         image_path = pic_paths[image_idx]
@@ -78,7 +81,7 @@ def auto_test_llm(pic_paths: list[str], num: int, thread_id: int, model_name: st
             history.append(["我更改了图片，新的图片有哪些部分？", msg])
             data_json = {}
             
-            data_json["instruction"] = random.choice(examples_jmap["query"])
+            data_json["instruction"] = random.choice(instructions)
             
             if data_json["instruction"] == None:
                 return

@@ -89,7 +89,7 @@ def auto_gen_chat_data_process(pic_paths: list[str], num: float, thread_num: flo
     num = int(num)
     gr.Info(f'Start Generate Data\nNum: {int(num)}\nThreads: {thread_num}')
 
-    threads_list= [threading.Thread(target=auto_gen_chat_data, args=(pic_paths, int(num/thread_num) if i!=0 else int(num/thread_num)+num%thread_num, i)) for i in range(thread_num)]
+    threads_list= [threading.Thread(target=auto_gen_chat_data, args=(pic_paths, int(num/thread_num)+1 if i<num%thread_num else int(num/thread_num), i)) for i in range(thread_num)]
     
     for each_thread in threads_list:
         each_thread.start()
@@ -106,7 +106,7 @@ def auto_test_llm_process(pic_paths: list[str], num: float, thread_num: float, m
     print(f'Start Test LLM\nNum: {int(num)}\nThreads: {thread_num}\nModel: {model_name}')
     gr.Info(f'Start Test LLM\nNum: {int(num)}\nThreads: {thread_num}\nModel: {model_name}')
 
-    threads_list= [threading.Thread(target=auto_test_llm, args=(pic_paths, int(num/thread_num) if i!=0 else int(num/thread_num)+num%thread_num, i, model_name, valid_nums)) for i in range(thread_num)]
+    threads_list= [threading.Thread(target=auto_test_llm, args=(pic_paths, int(num/thread_num)+1 if i<num%thread_num else int(num/thread_num), i, model_name, valid_nums)) for i in range(thread_num)]
 
     for each_thread in threads_list:
         each_thread.start()

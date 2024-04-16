@@ -15,7 +15,7 @@ from openai import OpenAI
 
 def auto_gen_chat_data(pic_paths: list[str], num, thread_id, openai_key: str, err_flags: list[bool]):
     client = OpenAI(api_key= openai_key)
-    def gen_one():
+    def gen_one(err_flags: list[bool]):
         image_idx = random.randint(0, len(pic_paths)-1)
         image_path = pic_paths[image_idx]
         image = Image.open(image_path)
@@ -57,14 +57,16 @@ def auto_gen_chat_data(pic_paths: list[str], num, thread_id, openai_key: str, er
             with open(f"{EXTRACTED_HISTORY_SAVE_PATH}/THREAD{str(thread_id)}_{datetime.now().strftime('%Y-%m-%d_%H:%M:%S')}.json", 'w', encoding='utf-8') as json_file:
                 json.dump(data_json, json_file, ensure_ascii=False, indent=4)
                 json_file.close()
+    
+    
     if thread_id == 0:
         for i in tqdm(range(num)):
             if err_flags.get("OpenAI Client",False) == False:
-                gen_one()
+                gen_one(err_flags)
     else:
         for i in range(num):
             if err_flags.get("OpenAI Client",False) == False:
-                gen_one()
+                gen_one(err_flags)
 
 def auto_test_llm(pic_paths: list[str], num: int, thread_id: int, model_name: str, valid_nums: list):
     with open(chat_config['paths']['dataset'], 'r') as json_file:

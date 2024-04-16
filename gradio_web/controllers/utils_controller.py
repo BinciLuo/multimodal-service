@@ -87,7 +87,7 @@ def clear_commands_process():
 def auto_gen_chat_data_process(pic_paths: list[str], num: float, thread_num: float, openai_key: str):
     thread_num = int(thread_num)
     num = int(num)
-    err_flags = {} # OpenAI Client
+    err_flags = []
     gr.Info(f'Start Generate Data\nNum: {int(num)}\nThreads: {thread_num}')
 
     threads_list= [threading.Thread(target=auto_gen_chat_data, args=(pic_paths, int(num/thread_num)+1 if i<num%thread_num else int(num/thread_num), i, openai_key, err_flags)) for i in range(thread_num)]
@@ -97,9 +97,10 @@ def auto_gen_chat_data_process(pic_paths: list[str], num: float, thread_num: flo
     for each_thread in threads_list:
         each_thread.join()
     
-    for key in err_flags.keys():
-        gr.Error(f'{key} has an error.')
-    for key in err_flags.keys():
+    for err in err_flags:
+        print(err)
+        gr.Error(err)
+    if len(err_flags) != 0:
         return
     gr.Info(f"Successfully Gen {num} chat data")
 

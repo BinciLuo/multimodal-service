@@ -13,9 +13,9 @@ from const import *
 from openai import OpenAI
 
 
-def auto_gen_chat_data(pic_paths: list[str], num, thread_id, openai_key: str, err_flags: list[bool]):
+def auto_gen_chat_data(pic_paths: list[str], num, thread_id, openai_key: str, err_flags: list):
     client = OpenAI(api_key= openai_key)
-    def gen_one(err_flags: list[bool]):
+    def gen_one(err_flags: list):
         image_idx = random.randint(0, len(pic_paths)-1)
         image_path = pic_paths[image_idx]
         image = Image.open(image_path)
@@ -44,7 +44,7 @@ def auto_gen_chat_data(pic_paths: list[str], num, thread_id, openai_key: str, er
                     ).choices[0].message.content
             except Exception as E:
                 if thread_id == 0:
-                    err_flags["OpenAI Client"] = E
+                    err_flags.append(E)
                 return
             
             if data_json["instruction"] == None:
@@ -58,14 +58,14 @@ def auto_gen_chat_data(pic_paths: list[str], num, thread_id, openai_key: str, er
                 json.dump(data_json, json_file, ensure_ascii=False, indent=4)
                 json_file.close()
     
-    
+
     if thread_id == 0:
         for i in tqdm(range(num)):
-            if err_flags.get("OpenAI Client",False) == False:
+            if len(err_flags) == 0:
                 gen_one(err_flags)
     else:
         for i in range(num):
-            if err_flags.get("OpenAI Client",False) == False:
+            if len(err_flags) == 0:
                 gen_one(err_flags)
 
 def auto_test_llm(pic_paths: list[str], num: int, thread_id: int, model_name: str, valid_nums: list):

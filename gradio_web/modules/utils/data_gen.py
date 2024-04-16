@@ -46,6 +46,7 @@ def auto_gen_chat_data(pic_paths: list[str], num, thread_id, openai_key: str, er
                 if thread_id == 0:
                     gr.Warning(E.__str__())
                     err_flags["OpenAI Client"] = True
+                return
             
             if data_json["instruction"] == None:
                 return

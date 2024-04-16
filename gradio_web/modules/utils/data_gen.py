@@ -14,12 +14,7 @@ from openai import OpenAI
 
 
 def auto_gen_chat_data(pic_paths: list[str], num, thread_id, openai_key: str, err_flags: list[bool]):
-    try:
-        client = OpenAI(api_key= openai_key)
-    except Exception as E:
-        err_flags["OpenAI Client"] = True
-        if thread_id == 0:
-            gr.Warning(E.__str__())
+    client = OpenAI(api_key= openai_key)
     def gen_one():
         image_idx = random.randint(0, len(pic_paths)-1)
         image_path = pic_paths[image_idx]
@@ -38,15 +33,19 @@ def auto_gen_chat_data(pic_paths: list[str], num, thread_id, openai_key: str, er
             history.append(["我更改了图片，新的图片有哪些部分？", msg])
             data_json = {}
             
-            
-            data_json["instruction"] = client.chat.completions.create(
-                model="gpt-3.5-turbo",
-                messages=[
-                    {"role": "user", "content": "我更改了图片，新的图片有哪些部分？"},
-                    {"role": "assistant", "content": msg},
-                    {"role": "user", "content": "根据分割到的信息，生成一个修改图片的方案，请注意，我只要关于方案的句子，请不要回答其他信息，回答如：将背景更换为阳光下的沙滩，将上衣更换为红色的裙子，美颜并让笑容更灿烂"}
-                ]
-                ).choices[0].message.content
+            try:
+                data_json["instruction"] = client.chat.completions.create(
+                    model="gpt-3.5-turbo",
+                    messages=[
+                        {"role": "user", "content": "我更改了图片，新的图片有哪些部分？"},
+                        {"role": "assistant", "content": msg},
+                        {"role": "user", "content": "根据分割到的信息，生成一个修改图片的方案，请注意，我只要关于方案的句子，请不要回答其他信息，回答如：将背景更换为阳光下的沙滩，将上衣更换为红色的裙子，美颜并让笑容更灿烂"}
+                    ]
+                    ).choices[0].message.content
+            except Exception as E:
+                if thread_id == 0:
+                    gr.Warning(E.__str__())
+                    err_flags["OpenAI Client"] = True
             
             if data_json["instruction"] == None:
                 return
@@ -60,10 +59,12 @@ def auto_gen_chat_data(pic_paths: list[str], num, thread_id, openai_key: str, er
                 json_file.close()
     if thread_id == 0:
         for i in tqdm(range(num)):
-            gen_one()
+            if err_flags["OpenAI Client"] != True:
+                gen_one()
     else:
         for i in range(num):
-            gen_one()
+            if err_flags["OpenAI Client"] != True:
+                gen_one()
 
 def auto_test_llm(pic_paths: list[str], num: int, thread_id: int, model_name: str, valid_nums: list):
     with open(chat_config['paths']['dataset'], 'r') as json_file:

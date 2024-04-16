@@ -99,7 +99,7 @@ def auto_gen_chat_data_process(pic_paths: list[str], num: float, thread_num: flo
     
     for err in err_flags:
         print(err)
-        gr.Error(err)
+        gr.Warning(err)
     if len(err_flags) != 0:
         return
     gr.Info(f"Successfully Gen {num} chat data")

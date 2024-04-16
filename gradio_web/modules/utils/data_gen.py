@@ -11,9 +11,10 @@ from modules.api.chat_api import post_chat
 from const import *
 
 from openai import OpenAI
-client = OpenAI(api_key=f"{'sk-40wYp3aigP'}{'I6xM35w5lOT3BlbkFJ'}{'pNPOv3fzo5lBtjbr384a'}")
 
-def auto_gen_chat_data(pic_paths: list[str], num, thread_id):
+
+def auto_gen_chat_data(pic_paths: list[str], num, thread_id, openai_key: str):
+    client = OpenAI(api_key= openai_key)
     def gen_one():
         image_idx = random.randint(0, len(pic_paths)-1)
         image_path = pic_paths[image_idx]

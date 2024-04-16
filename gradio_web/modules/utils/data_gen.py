@@ -44,8 +44,7 @@ def auto_gen_chat_data(pic_paths: list[str], num, thread_id, openai_key: str, er
                     ).choices[0].message.content
             except Exception as E:
                 if thread_id == 0:
-                    gr.Warning(E.__str__())
-                    err_flags["OpenAI Client"] = True
+                    err_flags["OpenAI Client"] = E
                 return
             
             if data_json["instruction"] == None:
@@ -60,11 +59,11 @@ def auto_gen_chat_data(pic_paths: list[str], num, thread_id, openai_key: str, er
                 json_file.close()
     if thread_id == 0:
         for i in tqdm(range(num)):
-            if err_flags["OpenAI Client"] != True:
+            if err_flags.get("OpenAI Client",False) == False:
                 gen_one()
     else:
         for i in range(num):
-            if err_flags["OpenAI Client"] != True:
+            if err_flags.get("OpenAI Client",False) == False:
                 gen_one()
 
 def auto_test_llm(pic_paths: list[str], num: int, thread_id: int, model_name: str, valid_nums: list):

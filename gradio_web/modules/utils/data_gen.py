@@ -13,8 +13,13 @@ from const import *
 from openai import OpenAI
 
 
-def auto_gen_chat_data(pic_paths: list[str], num, thread_id, openai_key: str):
-    client = OpenAI(api_key= openai_key)
+def auto_gen_chat_data(pic_paths: list[str], num, thread_id, openai_key: str, err_flags: list[bool]):
+    try:
+        client = OpenAI(api_key= openai_key)
+    except Exception as E:
+        err_flags["OpenAI Client"] = True
+        if thread_id == 0:
+            gr.Warning(E.__str__())
     def gen_one():
         image_idx = random.randint(0, len(pic_paths)-1)
         image_path = pic_paths[image_idx]

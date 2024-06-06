@@ -54,7 +54,7 @@ def form_post_txt2img_paras(query: str, loras:list[str]=[], **kwargv):
         "prompt": query + kwargv.get("prompt", ",(recherche details) ,(ultra details),8k resolution,excellent quality,beautiful cinematic lighting,engaging atmosphere"), # TODO : remove this hard code
         "negative_prompt": kwargv.get("negative_prompt", "(worst quality, low quality, cgi, bad eye, worst eye, illustration, cartoon),deformed,distorted,disfigured,poorly drawn,bad anatomy,wrong anatomy"), # TODO : remove this hard code
         "denoising_strength": kwargv.get("denoising_strength", 0.2),
-        "sampler_index": kwargv.get("sampler_index", "DPM++ 2M Karras"),
+        "sampler_index": kwargv.get("sampler_index", "DPM++ 2M"),
         "seed": kwargv.get("seed", -1),
         "steps": kwargv.get("steps", 40),
         "width": kwargv.get("width", 512),

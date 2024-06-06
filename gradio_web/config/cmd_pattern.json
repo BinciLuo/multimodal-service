@@ -1,0 +1,86 @@
+{
+    "mask_selected": {
+        "paras_type": [
+            "<class 'list'>"
+        ],
+        "paras_enum": null,
+        "paras_min": null,
+        "paras_max": null,
+        "combine": true,
+        "priority": 2
+    },
+    "mask_unselected": {
+        "paras_type": [
+            "<class 'list'>"
+        ],
+        "paras_enum": null,
+        "paras_min": null,
+        "paras_max": null,
+        "combine": true,
+        "priority": 2
+    },
+    "beauty": {
+        "paras_type": null,
+        "paras_enum": null,
+        "paras_min": null,
+        "paras_max": null,
+        "combine": true,
+        "priority": 0
+    },
+    "change_masked": {
+        "paras_type": [
+            "<class 'str'>",
+            "<class 'str'>"
+        ],
+        "paras_enum": [
+            [
+                "SD",
+                "DALLE"
+            ],
+            null
+        ],
+        "paras_min": null,
+        "paras_max": null,
+        "combine": true,
+        "priority": 2
+    },
+    "face": {
+        "paras_type": [
+            "<class 'str'>"
+        ],
+        "paras_enum": null,
+        "paras_min": null,
+        "paras_max": null,
+        "combine": true,
+        "priority": 1
+    },
+    "others": {
+        "paras_type": "<class 'str'>",
+        "paras_enum": null,
+        "paras_min": null,
+        "paras_max": null,
+        "combine": true,
+        "priority": 0
+    },
+    "advice": {
+        "paras_type":[
+            "<class 'str'>"
+        ],
+        "paras_enum": null,
+        "paras_min": null,
+        "paras_max": null,
+        "combine": false,
+        "priority": -1
+    },
+    "change": {
+        "paras_type": [
+            "<class 'list'>",
+            "<class 'str'>"
+        ],
+        "paras_enum": null,
+        "paras_min": null,
+        "paras_max": null,
+        "combine": true,
+        "priority": 1
+    }
+}

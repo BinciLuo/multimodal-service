@@ -1,0 +1,46 @@
+{
+    "models":
+    {
+        "gpt3dot5turbo":
+        {
+            "route":"/v1/chat/gpt3dot5turbo"
+        },
+        "gpt4":
+        {
+            "route":"/v1/chat/gpt4"
+        },
+        "chatglm2_6b":
+        {
+            "route":"/v1/chat/glm2_6b"
+        },
+        "gpt4v":
+        {
+            "route":"/v1/chat/gpt4v"
+        }
+    },
+    "prompt_templates":
+    {
+        "instruction_gen":
+        [
+            {
+                "description" : "Default",
+                "file_path" : "prompts/default.txt",
+                "user_input_replace" : "HERE IS USER INPUT"
+            },
+            {
+                "description" : "Give template and examples",
+                "file_path" : "prompts/instruction_generate_prompt.txt",
+                "user_input_replace" : "HERE IS USER INPUT"
+            },
+            {
+                "description" : "GPT4V Legality Statement",
+                "file_path" : "prompts/legality_statement.txt",
+                "user_input_replace" : "HERE IS USER INPUT"
+            }
+        ]
+    },
+    "paths":{
+        "extracted_history": "data",
+        "dataset": "chat_dataset.json"
+    }
+}

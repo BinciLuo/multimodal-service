@@ -1,0 +1,27 @@
+name: Docker Image CI Lanrui
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Docker login lanrui
+      uses: docker/login-action@v1
+      with:
+        registry: reg.lanrui-ai.com
+        username: ${{ secrets.LANRUI_DOCKERHUB_USERNAME }}
+        password: ${{ secrets.LANRUI_DOCKERHUB_PASSWORD }}
+    
+    - name: Build the Docker image chatglm2-6b
+      run: docker build . --file docker/chatglm2-6b/Dockerfile --tag reg.lanrui-ai.com/${{ secrets.LANRUI_DOCKERHUB_USERNAME }}/chatglm2-6b:latest
+    
+    - name: Docker image push chatglm2-6b
+      run: docker push reg.lanrui-ai.com/${{ secrets.LANRUI_DOCKERHUB_USERNAME }}/chatglm2-6b:latest    

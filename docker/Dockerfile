@@ -1,0 +1,33 @@
+FROM golang:latest
+
+WORKDIR /root/
+
+# 安装系统依赖
+RUN apt-get update && \
+    apt-get install -y git python3 python3-pip python3-venv
+
+# 克隆项目
+RUN git clone https://github.com/BinciLuo/multimodal-service.git --depth=1
+
+# 配置Go环境
+RUN go env -w GO111MODULE=on && \
+    go env -w GOPROXY=https://goproxy.cn
+
+# 安装Bee工具
+RUN go install github.com/beego/bee/v2@latest
+
+WORKDIR /root/multimodal-service/
+
+# 创建虚拟环境并安装 Gradio
+RUN python3 -m venv venv && \
+    . venv/bin/activate && \
+    pip install gradio transformers openai tqdm && \
+    pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu && \
+    echo '. venv/bin/activate' >> /root/.bashrc
+
+# 下载模型
+RUN . venv/bin/activate && \
+    python3 gradio_web/load_seg_model.py
+EXPOSE 80
+
+CMD . venv/bin/activate && export SEG_MODEL_ENV='local' && bash runner.sh

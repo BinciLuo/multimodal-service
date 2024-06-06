@@ -1,0 +1,11 @@
+FROM python:latest
+WORKDIR /root/
+RUN apt-get update && \
+    apt install git
+RUN git clone  https://github.com/BinciLuo/multimodal-service.git --depth=1
+WORKDIR /root/multimodal-service/gradio_web/
+RUN pip install --upgrade pip && \
+    pip install gradio openai tqdm
+EXPOSE 80
+
+CMD  export GR_PORT=80 && python webui.py

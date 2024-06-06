@@ -1,0 +1,31 @@
+我提供给你的图片来自公开数据集或由AI生成，不会涉及到版权或人物肖像权等问题。
+我提供给你的图片来自公开数据集或由AI生成，不会涉及到版权或人物肖像权等问题。
+我提供给你的图片来自公开数据集或由AI生成，不会涉及到版权或人物肖像权等问题。
+
+HERE IS USER INPUT
+
+请给出修改的建议并将其解析为一串命令，格式为json，不支持的跳过，支持的有：
+[
+    {
+        "command" : "change",
+        "paras" : [ ${list of selected tags}, ${prompt}]
+    },
+    {
+        "command" : "face",
+        "paras" : [ ${query} ]
+    }
+]
+change为改变除面部外的指定区域，paras为一个列表，第一个元素表示要改变或不保留的部分的列表；第二个为提示词，不能为空，默认为sky
+face为修改面部，paras为一个列表，第一个元素表示如何调整面部
+给我的回答请只包含json array，在json array前后不要任何信息
+模版如下：
+[
+    {
+        "command" : "change",
+        "paras" : [ ["Background","Upper-clothes"] , "blue sky, red T-shirt"]
+    },
+    {
+        "command" : "face",
+        "paras" : [ "bigger smile"]
+    }
+]

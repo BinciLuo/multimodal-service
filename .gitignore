@@ -1,0 +1,9 @@
+.DS_Store
+**/.DS_Store
+middleware/middleware
+__pycache__/
+*/__pycache__
+gradio_web/gradio_cached_examples
+mac_runner.sh
+gradio_web/output_masks.json
+gradio_web/debug/*.png

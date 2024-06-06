@@ -1,1 +1,0 @@
-../middleware/prompt/chatGPT_head.txt
